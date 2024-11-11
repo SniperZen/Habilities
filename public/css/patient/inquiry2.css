@@ -1,0 +1,204 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+
+.tcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 120px);
+}
+
+
+.main-content {
+        padding: 20px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        height: calc(100vh - 120px);
+        width: 80vw;
+}
+
+button:hover, .button-group a:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+label{
+    display: block;
+    font-size: 16px;
+    color: #395886;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.main-content h2 {
+    color: #395886;
+    font-size: 38px;
+}
+
+.main-content p {
+    font-size: 20px;
+    color: #7E7E92;
+    margin: 10px 0 33px;
+    width: 600px;
+    text-align: center;
+}
+
+.form-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
+    margin: 20px auto;
+}
+
+.progress-bar {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 50px;
+}
+
+.progress-bar .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form-group{
+    margin-bottom: 17px;
+}
+.progress-bar .step-number {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #8AAEE0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.progress-bar .step.inactive .step-number {
+    background-color: #E5E5E5;
+}
+
+.progress-bar .step-line {
+    width: 50px;
+    height: 4px;
+    background-color: #8AAEE0;
+}
+
+.progress-bar .step.inactive .step-line {
+    background-color: #E5E5E5;
+}
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    border: 1px dashed #D9D9D9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.file-upload input[type="file"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: gray;
+    font-size: 16px;
+}
+
+.file-upload span {
+    margin-left: 10px;
+    color: #7E7E92;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+
+.button-group button{
+    display: inline-block;
+    background-color: #395886;
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.button-group a{
+    display: inline-block;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 15px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+    border: black 1.5px solid;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .tcontainer {
+        height: auto;
+        padding: 20px;
+    }
+
+    .main-content {
+        width: 100vw;
+        padding: 15px;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    .progress-bar {
+        flex-direction: row;
+    }
+
+    .progress-bar .step {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .progress-bar .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .progress-bar .step-line {
+        width: 30px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
+}

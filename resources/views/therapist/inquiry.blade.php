@@ -1,0 +1,454 @@
+
+        @php
+            use Illuminate\Support\Str;
+            use Carbon\Carbon;
+        @endphp
+<x-therapist-layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habilities Center for Intervention</title>
+    <link rel="stylesheet" href="{{ asset('css/therapist/inquiry.css')}}">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+</head>
+<style>/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.modal-content {
+    display: block;
+    background-color: white;
+    margin: 15% auto;
+    border-radius: 10px;
+    width: 450px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.heads{
+    width: 100%;
+    background-color: #635c91;
+    height: 15px;
+    border-radius: 10px 10px 0 0;
+}
+
+.mod-cont{
+    padding: 20px;
+}
+
+
+.top{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #afafaf;
+    width: 100%;
+    h2{
+        margin: 0;
+    }
+}
+.bot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: justify;
+    padding: 0 10px;
+}
+.inner{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    border-top: 1px solid #afafaf;
+    padding-top: 20px;
+    gap: 20px;
+}
+
+.confirm-btn {
+    background-color: #6b6b92;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.confirm-btn:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-btn {
+    color: #6b6b92;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+    border: #6b6b92 1px solid;
+}
+.cancel-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+</style>
+<body>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="content-header">
+            <h1>Inquiries</h1>
+        </header>
+
+        <section class="inquiry-table">
+        <div class="head-cont">
+        <h2>Pending Inquiries</h2>
+            <div class="filter-buttons">
+                <div>
+                    <button class="filter-btn">
+                        <span class="filter-icon">🔍</span> Filters
+                    </button>
+                </div>
+
+                <div class="filter-buttons">
+                    <form id="pendingFilterForm" action="{{ route('therapist.inquiry') }}" method="GET">
+                        <div class="dropdown-wrapper">
+                            <button type="button" class="dropdown-btn">
+                                {{ ucfirst(str_replace('_', ' ', request('pending_filter', 'all'))) }}
+                            </button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-filter="today">Today</a>
+                                    <a href="#" data-filter="yesterday">Yesterday</a>
+                                    <a href="#" data-filter="last_7_days">Last 7 Days</a>
+                                    <a href="#" data-filter="last_14_days">Last 14 Days</a>
+                                    <a href="#" data-filter="last_21_days">Last 21 Days</a>
+                                    <a href="#" data-filter="last_28_days">Last 28 Days</a>
+                                    <a href="#" data-filter="all">All</a>
+                                </div>
+                        </div>
+                        <input type="hidden" name="pending_filter" id="pendingFilterInput" value="{{ request('pending_filter', 'all') }}">
+                        <input type="hidden" name="history_filter" value="{{ request('history_filter', 'all') }}">
+                    </form>
+                </div>
+
+            </div>
+            </div>
+            <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sender</th>
+                        <th>Clinical / Working Diagnosis</th>
+                        <th>Description</th>
+                        <th>Received</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pendingInquiries as $inquiry)
+                        @if(is_null($inquiry->completed_at))
+                            <tr data-url="{{ route('inquiry.message', ['id' => $inquiry->id]) }}">
+                                <td>
+                                    @if($inquiry->user)
+                                        {{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}
+                                    @else
+                                        No user found
+                                    @endif
+                                </td>
+                                <td>{{ ucfirst($inquiry->concerns) }}</td>
+                                <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
+                                <td>{{ $inquiry->created_at->format('m/d/Y') }}</td>
+                                <td>
+                                    <form method="POST" action="{{ route('inquiry.complete', ['id' => $inquiry->id]) }}">
+                                        @csrf
+                                        <button type="submit" class="complete-btn">Complete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endif
+                    @empty
+                        <tr>
+                            <td colspan="5" style="
+                                text-align: center; 
+                                padding: 20px; 
+                                font-size: 16px; 
+                                color: #666; 
+                                background-color: #f9f9f9;
+                                border: none;
+                                font-family: Arial, sans-serif;
+                                border-radius: 4px;
+                                box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+                            ">No pending inquiries.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            </div>
+
+        </section>
+        <section class="inquiry-history-table">
+            <header class="content-header">
+                <h2>Inquiry History</h2>
+                <div class="head-cont2">
+                <button class="filter-btn">
+                        <span class="filter-icon">🔍</span> Filters
+                    </button>
+                <form id="historyFilterForm" action="{{ route('therapist.inquiry') }}" method="GET">
+                    <div class="dropdown-wrapper">
+                        <button type="button" class="dropdown-btn">
+                            {{ ucfirst(str_replace('_', ' ', request('history_filter', 'all'))) }}
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" data-filter="today">Today</a>
+                            <a href="#" data-filter="yesterday">Yesterday</a>
+                            <a href="#" data-filter="last_7_days">Last 7 Days</a>
+                            <a href="#" data-filter="last_14_days">Last 14 Days</a>
+                            <a href="#" data-filter="last_21_days">Last 21 Days</a>
+                            <a href="#" data-filter="last_28_days">Last 28 Days</a>
+                            <a href="#" data-filter="all">All</a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="history_filter" id="historyFilterInput" value="{{ request('history_filter', 'all') }}">
+                    <input type="hidden" name="pending_filter" value="{{ request('pending_filter', 'all') }}">
+                </form>
+                </div>
+            </header>
+            <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sender</th>
+                        <th>Clinical / Working Diagnosis</th>
+                        <th>Description</th>
+                        <th>Completed</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($completedInquiries as $inquiry)
+                        <tr data-url="{{ route('inquiry.message', ['id' => $inquiry->id]) }}">
+                            <td>
+                                @if($inquiry->user)
+                                    {{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}
+                                @else
+                                    No user found
+                                @endif
+                            </td>
+                            <td>{{ ucfirst($inquiry->concerns) }}</td>
+                            <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
+                            <td>{{ $inquiry->completed_at ? Carbon::parse($inquiry->completed_at)->format('m/d/Y') : 'N/A' }}</td>
+                            <td>Completed</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="
+                                text-align: center; 
+                                padding: 20px; 
+                                font-size: 16px; 
+                                color: #666; 
+                                background-color: #f9f9f9;
+                                border: none;
+                                font-family: Arial, sans-serif;
+                                border-radius: 4px;
+                                box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+                            ">No completed inquiries in history.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Confirm Completion</h2>
+                </div>
+                <div class="bot">
+                    <p>Are you sure you want to mark this inquiry as completed?</p>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancelComplete" class="cancel-btn">Cancel</button>
+                <button id="confirmComplete" class="confirm-btn">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Filter setup function
+    function setupFilter(formId, btnClass, contentClass, inputId) {
+        const form = document.getElementById(formId);
+        const filterButton = form.querySelector(`.${btnClass}`);
+        const dropdownContent = form.querySelector(`.${contentClass}`);
+        const dropdownItems = dropdownContent.querySelectorAll('a');
+        const filterInput = document.getElementById(inputId);
+
+        filterButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropdownContent.classList.toggle('open');
+            filterButton.classList.toggle('active');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!filterButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+                dropdownContent.classList.remove('open');
+                filterButton.classList.remove('active');
+            }
+        });
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                const filter = this.getAttribute('data-filter');
+                filterButton.textContent = this.textContent;
+                filterInput.value = filter;
+                form.submit();
+            });
+        });
+    }
+
+    // Setup filters for both sections
+    setupFilter('pendingFilterForm', 'dropdown-btn', 'dropdown-content', 'pendingFilterInput');
+    setupFilter('historyFilterForm', 'dropdown-btn', 'dropdown-content', 'historyFilterInput');
+
+    // Create and append modal to body
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+        <div id="confirmationModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>Confirm Completion</h2>
+                <p>Are you sure you want to mark this inquiry as completed?</p>
+                <div class="modal-buttons">
+                    <button id="confirmComplete" class="confirm-btn">Yes, Complete</button>
+                    <button id="cancelComplete" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Modal elements
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmBtn = document.getElementById('confirmComplete');
+    const cancelBtn = document.getElementById('cancelComplete');
+    let currentForm = null;
+    let currentRow = null;
+
+    // Table row click functionality
+    const rows = document.querySelectorAll('.inquiry-table tbody tr, .inquiry-history-table tbody tr');
+    rows.forEach(row => {
+        row.addEventListener('click', function (e) {
+            // Don't navigate if clicking the complete button
+            if (e.target.closest('.complete-btn')) return;
+            
+            const url = this.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+
+    // Complete button functionality
+    const completeButtons = document.querySelectorAll('.complete-btn');
+    completeButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            currentForm = this.closest('form');
+            currentRow = this.closest('tr');
+            confirmationModal.style.display = 'block';
+        });
+    });
+
+    // Confirm completion handler
+    confirmBtn.addEventListener('click', function() {
+        if (currentForm) {
+            fetch(currentForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(() => {
+                window.location.reload();
+            });
+        }
+    });
+
+    // Cancel button handler
+    cancelBtn.addEventListener('click', function() {
+        confirmationModal.style.display = 'none';
+        currentForm = null;
+        currentRow = null;
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === confirmationModal) {
+            confirmationModal.style.display = 'none';
+            currentForm = null;
+            currentRow = null;
+        }
+    });
+
+    // Add ESC key handler for modal
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && confirmationModal.style.display === 'block') {
+            confirmationModal.style.display = 'none';
+            currentForm = null;
+            currentRow = null;
+        }
+    });
+});
+
+</script>
+</html>
+</x-therapist-layout>

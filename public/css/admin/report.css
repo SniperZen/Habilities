@@ -1,0 +1,418 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f7f8fa;
+    padding: 0; 
+    margin: 0;
+
+}
+
+.dashboard-container {
+    max-width: 100vw; 
+    height: calc(100vh - 120px); 
+    margin: 0; 
+    padding: 20px;
+    overflow-y: auto;
+}
+
+h1, h2, h3 {
+    color: #303B1D;
+    margin-bottom: 10px;
+    font-size: 1.5rem; 
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px; 
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chart-card, .user-level {
+    width: 100%;
+}
+
+/* Header Section */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.search-filter {
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.filters{
+    display: flex;
+}
+
+.search-filter input {
+    padding: 12px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    width: 60%; 
+}
+
+.search-filter img {
+    height: 40px;
+}
+
+.filter-options button {
+    background-color: #e5f1df;
+    color: #4b6043;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-options span {
+    margin-right: 10px;
+    color: #4b6043;
+    font-size: 1.2rem;
+}
+
+/* System Reports Section */
+.system-reports {
+    display: flex;
+    flex-direction: row; 
+    gap: 20px;
+}
+
+.system-usage-report, .active-users, .gender-count {
+    flex: 1;
+}
+
+.gent-act {
+    display: flex;
+    flex-direction: column;
+    width: 520px; 
+}
+
+.system-usage-report .chart, 
+#system-usage-chart, 
+#onsite-appointments-chart, 
+#tele-therapy-appointments-chart {
+    height: 250px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.user-count {
+    font-size: 52px;
+    font-weight: bold;
+    color: #4b6043;
+}
+
+.user-growth {
+    color: #4b6043;
+    font-size: 16px; 
+}
+
+.gender-count {
+    min-height: 419px;
+    position: relative;
+    
+}
+
+.gender-icon {
+    width: 100% !important;
+    height: 331px !important
+}
+
+.active-users.card{
+    height: 200px;
+}
+.form-select {
+    width: 20%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.chart-container {
+    height: 300px;
+    margin-top: 20px;
+}
+.therapy-center-reports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.chart-card {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .chart-card {
+    flex: 1 1 100%;
+    }
+}
+
+#chart-container h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #303B1D;
+    text-align: center;
+}
+#chart-container {
+    width: 100%;
+    height: 98.4%;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.chart-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+#timeframeSelect {
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+#system-usage-chart {
+    width: 100%;
+    height: 100%;
+    height: 511px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#system-usage-chart canvas {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Account Reports Section */
+.account-reports {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    height: 179px;
+}
+
+.account-reports .report-card {
+    flex: 1;
+    text-align: center;
+    padding: 25px; 
+}
+
+.account-count {
+    font-size: 36px;
+    color: #4b6043;
+    margin-top: 34px;
+}
+
+/* activity logs */
+.activity-logs {
+    margin-top: 20px;
+    padding: 15px;
+}
+
+.activity-logs h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.activity-logs table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.activity-logs th, .activity-logs td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-filter, .log-type-filter, .date-filter {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.user-filter label, .log-type-filter label, .date-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.user-filter select, .log-type-filter select, .date-filter input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.user-filter input, .date-filter input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.user-filter input{
+    margin-right: 10px;
+}
+
+.date-filter input[type="date"] {
+    width: 180px;
+}
+
+/* Therapy Center Reports Section */
+.therapy-center-reports {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.chart-card {
+    width: 1000px; 
+}
+
+.user-feedback-reports {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.table-wrapper{
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.user-level {
+    width: 450px; 
+}
+
+.donut-chart {
+    height: 180px; 
+    background-color: #e5f1df;
+    border-radius: 8px;
+    margin: auto;
+}
+
+.rating-bars {
+    text-align: left;
+}
+
+.rating-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.rating-label {
+    width: 110px; 
+    color: #4b6043;
+    font-size: 1.1rem; 
+}
+
+.bar {
+    flex: 1;
+    height: 12px;
+    background-color: #ddd;
+    margin-left: 10px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.fill {
+    height: 100%;
+    background-color: #4b6043;
+    border-radius: 5px;
+}
+
+/* Feedback Table */
+.feedback-table {
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#filterButton{
+    background-color: #74A36B;
+    display: inline-block;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    height: 39px;
+    margin-left: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+#filterButton:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+table th, table td {
+    padding: 15px; 
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #e5f1df;
+    color: #4b6043;
+}
+
+table td a {
+    color: #4b6043;
+    text-decoration: none;
+}
+
+table td img {
+    width: 25px; 
+    height: 25px;
+}
+
+.user-experience{
+    width: 1200px;
+
+}
+
+.rating-bar{
+    margin-bottom: 10px;
+}

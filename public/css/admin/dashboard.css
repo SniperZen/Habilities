@@ -1,0 +1,342 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+}
+
+.header {
+    background: linear-gradient(180deg, #A6E999 0%, #E3FFA0 100%);
+    filter: saturate(1.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    color: #1E1D3B;
+    flex-wrap: wrap;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left .logo {
+    width: 100px;
+    margin-right: 15px;
+}
+
+.header-left h1 {
+    font-size: 30px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.arrowd{
+    width: 28px;
+    stroke: #fff;
+}
+
+.header-right .profile {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #74A36B;
+    border-radius: 11px;
+    cursor: pointer;
+}
+
+.header-right .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: white 3px solid;
+    overflow: hidden; 
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-right input {
+    margin-right: 15px;
+    padding: 5px 5px 5px 40px;
+    height: 45px;
+    width: 250px;
+    border-radius: 52px;
+    border: 1px solid #ddd;
+}
+
+.header-right p {
+    font-size: 20px;
+    color: #fff;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    height: calc(100vh - 120px); 
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 100%;
+    height: calc(100vh - 120px);
+    max-width: 300px;
+    background-color: #fff;
+    padding: 20px 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1.5px solid #000A67; 
+    overflow: hidden; 
+}
+
+.arrow{
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    transition: transform 0.3s ease;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+    display: none; /* Hide submenu by default */
+}
+.submenu a {
+    display: flex;
+}
+.profile:hover .dropdown {
+    display: block;
+}
+.footer-links {
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px 20px;
+}
+
+.sidebar ul img {
+    width: 15%;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+h3, h2, h1, p{
+    color: #303B1D;
+}
+th{
+    position: sticky;
+    top: 0;
+    z-index: 1; 
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    padding: 15px 5px;
+    border-radius: 0 15px 15px 0;
+    margin: 0;
+    align-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+    padding-left: 20px;
+}
+
+nav ul li a:hover {
+    background: linear-gradient(180deg, #5D8356 0%, #A6E999 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    svg path{
+        stroke: #fff;
+    }
+}
+
+.subnav{
+    border-radius: 15px;
+}
+
+nav ul li a.active {
+    font-weight: bold;
+    background: linear-gradient(180deg, #5D8356 0%, #A6E999 100%);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 100%;
+    svg path{
+        stroke: #fff; 
+    }
+}
+
+.dropdown {
+    position: absolute;
+    right: 20px;
+    top: 99px;
+    width: 227px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    color: gray;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-item:hover {
+    background: #e5f1df;
+    color: #133972;
+}
+
+
+.search-input {
+    width: 300px;
+    padding: 10px 40px 10px 20px; 
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    background: url('/images/icons/search.png') no-repeat left center; 
+    background-position: 10px center; 
+    background-size: 20px 20px;
+    background-color: white; 
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #728359; /* Optional: Change border color on focus */
+}
+
+.main {
+    background-color: #fff;
+    overflow: hidden;
+    flex-grow: 1;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    height: calc(100vh - 120px);  
+}
+
+.subnav.active {
+    font-weight: bold;
+    color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 100%;
+    svg path{
+        stroke: #000000; 
+    }
+}
+
+.subnav:hover{
+    background-color: #C1DB9B;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #b3b3b3;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #8b8b8b;
+}
+
+.fade-in {
+    animation: fadeIn 0.2s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .fade-out {
+    animation: fadeOut 0.2s ease forwards;
+  }
+  
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 300px;
+    }
+    .container {
+        flex-wrap: nowrap;
+    }
+    .notifications {
+        width: 250px;
+    }
+    .therapists-progress {
+        flex-wrap: nowrap;
+    }
+}
+
+@media (min-width: 1024px) {
+    .header-left h1 {
+        font-size: 36px;
+    }
+
+    .sidebar {
+        width: 300px;
+    }
+
+    .profile-info h2 {
+        font-size: 28px;
+    }
+
+    .profile-info p {
+        font-size: 18px;
+    }
+}

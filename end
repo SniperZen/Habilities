@@ -1,0 +1,15 @@
+[33mdf06ac0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to df06ac0d2acca6c2498a30ff2051a81319ab8c85
+[33mdf06ac0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: reset: moving to df06ac0d2acca6c2498a30ff2051a81319ab8c85
+[33m781d9be[m HEAD@{2}: reset: moving to 781d9beb15b772f0010f45c59edf0b6c7215d5f1
+[33m711fe7c[m HEAD@{3}: revert: Reapply "Update ProfileController.php"
+[33m781d9be[m HEAD@{4}: revert: Revert "Update ProfileController.php"
+[33mdf06ac0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{5}: commit: Update ProfileController.php
+[33m816d7e8[m HEAD@{6}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m405d815[m HEAD@{7}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m3c55bbe[m HEAD@{8}: commit: upload profile pic
+[33m7505a0f[m HEAD@{9}: commit: profile updates
+[33mdc6efed[m HEAD@{10}: commit: edit profile
+[33m223e251[m HEAD@{11}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m70d0508[m HEAD@{12}: commit: email verification and change pw
+[33m9bd8474[m HEAD@{13}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m70eee8a[m HEAD@{14}: clone: from https://github.com/kervss425/bago.git
