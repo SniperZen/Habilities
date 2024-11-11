@@ -15,6 +15,10 @@
 </style>
 <body>
     <div class="dashboard-container">
+
+        <div class="report-actions">
+            <button id="printReport" class="action-button">Print Report</button>
+        </div>
         <!-- Header Section -->
         <header class="dashboard-header">
             <h1>Reports</h1>
@@ -685,7 +689,84 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+document.getElementById('printReport').addEventListener('click', function () {
+    const printWindow = window.open('', '_blank');
+    const reportContent = document.querySelector('.dashboard-container').innerHTML;
 
+    // Function to convert chart canvases to images
+    function getChartImages() {
+        const charts = document.querySelectorAll('canvas');
+        const promises = [];
+        
+        charts.forEach((chart) => {
+            const canvas = chart;
+            promises.push(new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img.outerHTML);
+                img.src = canvas.toDataURL('image/png');
+            }));
+        });
+        
+        return Promise.all(promises);
+    }
+
+    // Add styles for printing
+    const styles = `
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            .chart {
+                page-break-after: always; /* Ensure each chart starts on a new page */
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `;
+
+    getChartImages().then((images) => {
+        const chartsHtml = images.join(''); // Combine all images into a single string
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Print Report</title>
+                    ${styles}
+                </head>
+                <body>
+                    <h1>Dashboard Reports</h1>
+                    ${reportContent}
+                    <div class="charts">${chartsHtml}</div>
+                </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        
+        printWindow.onload = function () {
+            printWindow.print();
+            printWindow.close();
+        };
+    });
+});
+
+    </script>
 
 </html>
 
