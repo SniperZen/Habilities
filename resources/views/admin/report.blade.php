@@ -76,146 +76,191 @@
             </div>
         </section>
 
-<section class="activity-logs card">
+
+
+
+<section class="activity-logs card" id="activityLogsSection">
     <h2>Activity Logs</h2>
     <div class="filters">
-        <div class="user-filter">
-            <select id="userFilterSelect">
-                <option value="all">All User Types</option>
-                <option value="user">Patient</option>
-                <option value="therapist">Therapist</option>
-                <option value="admin">Admin</option>
-                <option value="specificName">Search User Name</option>
-                <option value="specificID">Search User ID</option>
-            </select>
-            <input type="text" id="specificNameInput" placeholder="Enter user name" style="display: none;">
-            <input type="text" id="specificIDInput" placeholder="Enter user ID" style="display: none;">
-        </div>
-        
-        <div class="log-type-filter">
-            <select id="logTypeSelect">
-                <option value="all">All Activities</option>
-                <option value="login">Login</option>
-                <option value="logout">Logout</option>
-            </select>
-        </div>
-        
-        <div class="date-filter">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" value="{{ request('startDate') }}">
-            
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" value="{{ request('endDate') }}">
-        </div>
-        
-        <button id="filterButton">Filter</button>
+    <div class="user-filter">
+        <select id="userFilterSelect">
+            <option value="all">All User Types</option>
+            <option value="user">Patient</option>
+            <option value="therapist">Therapist</option>
+            <option value="admin">Admin</option>
+            <option value="specificName">Search User Name</option>
+            <option value="specificID">Search User ID</option>
+        </select>
+        <input type="text" id="specificNameInput" placeholder="Enter user name" style="display: none;">
+        <input type="text" id="specificIDInput" placeholder="Enter user ID" style="display: none;">
     </div>
+    
+    <div class="log-type-filter">
+        <select id="logTypeSelect">
+            <option value="all">All Activities</option>
+            <option value="login">Login</option>
+            <option value="logout">Logout</option>
+        </select>
+    </div>
+    
+    <div class="date-filter">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+        
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+    </div>
+    
+    <button id="clearButton">Clear</button>
+</div>
+
     <div class="table-wrapper">
-    <table id="activityLogsTable">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Timestamp</th>
-                <th>User</th>
-                <th>Activity</th>
-                <th>User Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($activityLogs as $log)
-                <tr class="log-entry" data-activity="{{ $log['action'] }}" data-user-type="{{ $log['userType'] }}">
-                    <td>{{ $log['userId'] }}</td>
-                    <td>{{ $log['timestamp'] }}</td>
-                    <td>{{ $log['name'] }}</td>
-                    <td>{{ ucfirst($log['action']) }}</td>
-                    <td>{{ ucfirst($log['userType']) }}</td>
-                </tr>
-            @endforeach
-            @if ($activityLogs->isEmpty())
+        <table id="activityLogsTable">
+            <thead>
                 <tr>
-                    <td colspan="5" style="text-align: center;">No activity logs available.</td>
+                    <th>User ID</th>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                    <th>Activity</th>
+                    <th>User Type</th>
                 </tr>
-            @endif
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($activityLogs as $log)
+                    <tr class="log-entry" data-activity="{{ $log['action'] }}" data-user-type="{{ $log['userType'] }}">
+                        <td>
+                            @if($log['userType'] === 'user')
+                                P-{{ str_pad($log['userId'], 3, '0', STR_PAD_LEFT) }} <!-- Patient ID -->
+                            @elseif($log['userType'] === 'therapist')
+                                T-{{ str_pad($log['userId'], 3, '0', STR_PAD_LEFT) }} <!-- Therapist ID -->
+                            @elseif($log['userType'] === 'admin')
+                                A-{{ str_pad($log['userId'], 3, '0', STR_PAD_LEFT) }} <!-- Admin ID -->
+                            @endif
+                        </td>
+                        <td>{{ $log['timestamp'] }}</td>
+                        <td>{{ $log['name'] }}</td>
+                        <td>{{ ucfirst($log['action']) }}</td>
+                        <td>{{ $log['userType'] === 'user' ? 'Patient' : ucfirst($log['userType']) }}</td> <!-- Change 'user' to 'Patient' -->
+                    </tr>
+                @endforeach
+                @if ($activityLogs->isEmpty())
+                    <tr>
+                        <td colspan="5" style="text-align: center;">No activity logs available.</td>
+                    </tr>
+                @endif
+            </tbody>
+
+        </table>
     </div>
 </section>
-
 <script>
-    document.getElementById('userFilterSelect').addEventListener('change', function() {
-        const specificNameInput = document.getElementById('specificNameInput');
-        const specificIDInput = document.getElementById('specificIDInput');
-        specificNameInput.style.display = this.value === 'specificName' ? 'block' : 'none';
-        specificIDInput.style.display = this.value === 'specificID' ? 'block' : 'none';
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const userFilterSelect = document.getElementById('userFilterSelect');
+    const specificNameInput = document.getElementById('specificNameInput');
+    const specificIDInput = document.getElementById('specificIDInput');
+    const logTypeSelect = document.getElementById('logTypeSelect');
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const activityLogsTableBody = document.querySelector('#activityLogsTable tbody');
+    const clearButton = document.getElementById('clearButton');
 
-    document.getElementById('filterButton').addEventListener('click', function() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const userType = document.getElementById('userFilterSelect').value;
-        const specificName = document.getElementById('specificNameInput').value;
-        const specificID = document.getElementById('specificIDInput').value;
+    function filterLogs() {
+    const userType = userFilterSelect.value;
+    const logType = logTypeSelect.value;
+    const startDate = startDateInput.value ? new Date(startDateInput.value + 'T00:00:00') : null;
+    const endDate = endDateInput.value ? new Date(endDateInput.value + 'T23:59:59') : null;
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('startDate', startDate);
-        url.searchParams.set('endDate', endDate);
-        url.searchParams.set('userType', userType);
-        if (userType === 'specificName') {
-            url.searchParams.set('specificUser', specificName);
-        } else if (userType === 'specificID') {
-            url.searchParams.set('specificUserID', specificID);
+    console.log('User Type:', userType);
+    console.log('Log Type:', logType);
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
+    console.log('Specific Name Input:', specificNameInput.value);
+    console.log('Specific ID Input:', specificIDInput.value);
+
+    Array.from(activityLogsTableBody.children).forEach(row => {
+        const userTypeData = row.getAttribute('data-user-type');
+        const activityData = row.getAttribute('data-activity');
+        const timestamp = new Date(row.cells[1].textContent);
+
+        // Check user type filter
+        const userTypeMatch = (userType === 'all' || (userTypeData === 'user' && userType === 'patient') || userTypeData === userType);
+
+        // Check log type filter
+        const logTypeMatch = (logType === 'all' || activityData === logType);
+
+        // Check date range
+        const dateMatch = (!startDate && !endDate) || 
+                          (startDate && timestamp >= startDate) && 
+                          (endDate && timestamp <= endDate);
+
+        // Check specific name filtering
+        const specificNameMatch = specificNameInput.value ? 
+            row.cells[2].textContent.toLowerCase().includes(specificNameInput.value.toLowerCase()) : true;
+
+        // Check specific ID filtering (flexible matching)
+        const idCellText = row.cells[0].textContent.trim();
+        const numericId = idCellText.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        const specificIDValue = specificIDInput.value.trim();
+
+        const specificIDMatch = specificIDValue ? 
+            idCellText.includes(specificIDValue) || numericId.includes(specificIDValue) : true;
+
+        // Show or hide row based on filters
+        if (userTypeMatch && logTypeMatch && dateMatch && specificNameMatch && specificIDMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
         }
+    });
+}
 
-        localStorage.setItem('filterClicked', 'true');
-        window.location.href = url.toString();
+
+
+    // Event listener for user filter
+    userFilterSelect.addEventListener('change', function () {
+        specificNameInput.style.display = (this.value === 'specificName') ? 'block' : 'none';
+        specificIDInput.style.display = (this.value === 'specificID') ? 'block' : 'none';
+        
+        // Filter immediately based on user selection
+        filterLogs();
     });
 
-    window.onload = function() {
-        const logEntries = document.querySelectorAll('.log-entry');
+    // Event listeners for log type filter
+    logTypeSelect.addEventListener('change', filterLogs);
 
-        // Add event listener for log type filter
-        document.getElementById('logTypeSelect').addEventListener('change', function() {
-            const selectedType = this.value;
-            logEntries.forEach(entry => {
-                if (selectedType === 'all' || entry.dataset.activity === selectedType) {
-                    entry.style.display = '';
-                } else {
-                    entry.style.display = 'none';
-                }
-            });
-        });
+    // Event listeners for date inputs
+    startDateInput.addEventListener('change', filterLogs);
+    endDateInput.addEventListener('change', filterLogs);
 
-        // Add event listener for user type filter
-        document.getElementById('userFilterSelect').addEventListener('change', function() {
-            const selectedUserType = this.value;
-            logEntries.forEach(entry => {
-                if (selectedUserType === 'all' || entry.dataset.userType === selectedUserType) {
-                    entry.style.display = '';
-                } else {
-                    entry.style.display = 'none';
-                }
-            });
-        });
+    // Event listeners for specific name and ID inputs
+    specificNameInput.addEventListener('input', filterLogs);
+    specificIDInput.addEventListener('input', filterLogs);
 
-        // Search for specific user name
-        document.getElementById('specificNameInput').addEventListener('input', function() {
-            const specificUser = this.value.toLowerCase();
-            logEntries.forEach(entry => {
-                const userName = entry.children[2].textContent.toLowerCase();
-                entry.style.display = userName.includes(specificUser) ? '' : 'none';
-            });
-        });
+    // Clear button functionality
+    clearButton.addEventListener('click', function () {
+        // Reset all filters
+        userFilterSelect.value = 'all';
+        specificNameInput.value = '';
+        specificIDInput.value = '';
+        logTypeSelect.value = 'all';
+        startDateInput.value = '';
+        endDateInput.value = '';
 
-        // Search for specific user ID
-        document.getElementById('specificIDInput').addEventListener('input', function() {
-            const specificUserID = this.value.toLowerCase();
-            logEntries.forEach(entry => {
-                const userID = entry.children[0].textContent.toLowerCase(); // Assuming User ID is in the first column
-                entry.style.display = userID.includes(specificUserID) ? '' : 'none';
-            });
+        // Hide specific name and ID inputs
+        specificNameInput.style.display = 'none';
+        specificIDInput.style.display = 'none';
+
+        // Reset table visibility
+        Array.from(activityLogsTableBody.children).forEach(row => {
+            row.style.display = '';
         });
-    };
+    });
+});
+
 </script>
+
+
+
 
     <!-- Therapy Center Reports Section -->
     <section class="therapy-center-reports">

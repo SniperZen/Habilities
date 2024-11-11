@@ -446,15 +446,22 @@ public function getDashboardCounts()
             });
         }
     
-        // Apply specific user filtering
-        if ($request->has('specificUser') && !empty($request->input('specificUser'))) {
-            $specificUser = strtolower($request->input('specificUser'));
-    
-            $activityLogs = $activityLogs->filter(function ($log) use ($specificUser) {
-                return strtolower($log['name']) === $specificUser;
+        // Apply specific user filtering by name
+        if ($request->has('specificName') && !empty($request->input('specificName'))) {
+            $specificName = strtolower($request->input('specificName'));
+            $activityLogs = $activityLogs->filter(function ($log) use ($specificName) {
+                return strpos(strtolower($log['name']), $specificName) !== false; // Use strpos for partial matches
             });
         }
-    
+
+        // Apply specific user filtering by ID
+        if ($request->has('specificID') && !empty($request->input('specificID'))) {
+            $specificID = $request->input('specificID');
+            $activityLogs = $activityLogs->filter(function ($log) use ($specificID) {
+                return strpos($log['userId'], $specificID) !== false; // Check if specificID is part of the ID
+            });
+        }
+
         // Sort by timestamp in descending order
         $activityLogs = $activityLogs->sortByDesc('timestamp');
     

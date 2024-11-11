@@ -366,7 +366,7 @@ table {
     border-collapse: collapse;
 }
 
-#filterButton{
+#clearButton{
     background-color: #74A36B;
     display: inline-block;
     color: white;
@@ -382,7 +382,7 @@ table {
     transition: transform 0.3s ease;
 }
 
-#filterButton:hover{
+#clearButton:hover{
     transform: scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }

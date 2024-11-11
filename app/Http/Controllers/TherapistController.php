@@ -444,12 +444,21 @@ public function   changespass(){
 
 
 
-public function searchUsers(Request $request)
-{
-    $query = $request->get('query');
-    $users = User::where('name', 'LIKE', "%{$query}%")->get();
-    return response()->json($users);
-}
+ public function searchUsers(Request $request)
+ {
+     $query = $request->get('query');
+ 
+     // Fetch users with usertype 'user' that match the search query
+     $users = User::where('usertype', 'user') // Filter by usertype
+         ->where(function($q) use ($query) {
+             $q->where('name', 'LIKE', "%{$query}%")
+               ->orWhere('email', 'LIKE', "%{$query}%"); // Include other fields if needed
+         })
+         ->get(['id', 'name']); // Select only the fields needed
+ 
+     return response()->json($users);
+ }
+ 
 
 public function store(Request $request)
 {
