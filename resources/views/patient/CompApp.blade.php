@@ -7,6 +7,71 @@
     <title>Complete Your Appointment</title>
     <link rel="stylesheet" href="{{ asset('css/patient/CompApp.css') }}">
 </head>
+<style>
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    margin: 15% auto;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.button-secondary {
+    padding: 0.5rem 1.5rem;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-primary {
+    padding: 0.5rem 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+.button-primary:hover {
+    background-color: #45a049;
+}
+
+/* Show modal when active */
+.modal.show {
+    display: block;
+}
+
+</style>
 <body>  
     <main class="main-content">
       
@@ -64,14 +129,28 @@
             </div>
         </div>
 
-        <!-- Modal HTML -->
-        <div id="confirmationModal" class="modal">
-            <div class="modal-content">
-                <h2>Appointment Request <br> has been sent!</h2>
-                <p>Please wait for your therapist to approve your appointment request. A confirmation, along with appointment details, will be sent to you once the request is accepted. You may check your email or appointment tab for updates.</p>
-                <a href="{{ route('patient.appntmnt') }}"><button id="closeModalButton">Okay</button></a>
-            </div>
-        
+<!-- Are You Sure Modal -->
+<div id="areYouSureModal" class="modal">
+    <div class="modal-content">
+        <h2>Confirm Appointment</h2>
+        <p>Are you sure you want to submit this appointment request?</p>
+        <div class="modal-buttons">
+            <button type="button" id="cancelButton" class="button-secondary">Cancel</button>
+            <button type="button" id="proceedButton" class="button-primary">Proceed</button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <h2>Appointment Request <br> has been sent!</h2>
+        <p>Please wait for your therapist to approve your appointment request. A confirmation, along with appointment details, will be sent to you once the request is accepted. You may check your email or appointment tab for updates.</p>
+        <a href="{{ route('patient.appntmnt') }}"><button id="closeModalButton">Okay</button></a>
+    </div>
+</div>
+
+
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -79,14 +158,23 @@
 $(document).ready(function() {
     $('#appointmentForm').on('submit', function(e) {
         e.preventDefault();
+        $('#areYouSureModal').addClass('show');
+    });
+
+    $('#cancelButton').on('click', function() {
+        $('#areYouSureModal').removeClass('show');
+    });
+
+    $('#proceedButton').on('click', function() {
+        $('#areYouSureModal').removeClass('show');
         
         $.ajax({
-            url: $(this).attr('action'),
+            url: $('#appointmentForm').attr('action'),
             method: 'POST',
-            data: $(this).serialize(),
+            data: $('#appointmentForm').serialize(),
             success: function(response) {
                 if (response.success) {
-                    $('#confirmationModal').show();
+                    $('#confirmationModal').addClass('show');
                 } else {
                     alert('An error occurred. Please try again.');
                 }
@@ -98,10 +186,19 @@ $(document).ready(function() {
     });
 
     $('#closeModalButton').on('click', function() {
-        $('#confirmationModal').hide();
+        $('#confirmationModal').removeClass('show');
         window.location.href = "{{ route('patient.appntmnt') }}";
     });
+
+    // Close modal when clicking outside
+    $(window).on('click', function(event) {
+        if ($(event.target).hasClass('modal')) {
+            $('.modal').removeClass('show');
+        }
+    });
 });
+
+
 </script>
 
 </body>
