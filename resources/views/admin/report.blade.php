@@ -695,6 +695,13 @@ document.getElementById('printReport').addEventListener('click', function () {
     const printWindow = window.open('', '_blank');
     const reportContent = document.querySelector('.dashboard-container').innerHTML;
 
+    // Remove unwanted sections from the report content
+    const modifiedContent = reportContent
+        .replace(/<h1>System Usage Report<\/h1>.*?<canvas.*?<\/canvas>/s, '') // Remove System Usage Report
+        .replace(/<h3>Gender Count<\/h3>.*?<canvas.*?<\/canvas>/s, '') // Remove Gender Count
+        .replace(/<h1>Onsite Appointments Report<\/h1>.*?<canvas.*?<\/canvas>/s, '') // Remove Onsite Appointments Report
+        .replace(/<h1>Tele-therapy Appointments Report<\/h1>.*?<canvas.*?<\/canvas>/s, ''); // Remove Tele-therapy Appointments Report
+
     // Function to convert chart canvases to images
     function getChartImages() {
         const charts = document.querySelectorAll('canvas');
@@ -738,6 +745,17 @@ document.getElementById('printReport').addEventListener('click', function () {
             th {
                 background-color: #f2f2f2;
             }
+            .charts {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .charts img {
+                max-width: 100%;
+                height: auto;
+                margin: 10px;
+            }
         </style>
     `;
 
@@ -751,7 +769,7 @@ document.getElementById('printReport').addEventListener('click', function () {
                 </head>
                 <body>
                     <h1>Dashboard Reports</h1>
-                    ${reportContent}
+                    ${modifiedContent} <!-- Use modified content -->
                     <div class="charts">${chartsHtml}</div>
                 </body>
             </html>
