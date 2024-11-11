@@ -7,6 +7,9 @@
     <title>Habilities Center for Intervention - Edit Profile</title>
     <link rel="stylesheet" href="{{ asset('css/patient/patientprofedit.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
 <body>
 
@@ -124,18 +127,11 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Profile updated successfully!</h2>
-            <button onclick="closeSuccessModal()" class="modal-btn close">Ok</button>
-        </div>
-    </div>
+
 
     <script>
     const profileForm = document.getElementById('profileForm');
     const confirmModal = document.getElementById('confirmModal');
-    const successModal = document.getElementById('successModal');
     const profilePreview = document.getElementById('profilePreview');
     const originalImageSrc = profilePreview.src;
     const cameraIcon = document.getElementById('cameraIcon');
@@ -152,15 +148,9 @@
 
     function submitForm() {
         closeConfirmModal();
-        openSuccessModal();
-    }
-
-    function openSuccessModal() {
-        successModal.style.display = 'flex';
-    }
-
-    function closeSuccessModal() {
-        successModal.style.display = 'none';
+        // Store the toast message in localStorage
+        localStorage.setItem('toastMessage', 'Profile updated successfully!');
+        localStorage.setItem('toastBackgroundColor', '#28a745');
         profileForm.submit();
     }
 
@@ -181,7 +171,33 @@
         cameraIcon.style.visibility = 'visible';
         submitImageButton.style.display = 'none';
     }
+
+    // Function to show toast notification
+    function showToast(message, backgroundColor) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: backgroundColor,
+        }).showToast();
+    }
+
+    // Check for toast message on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const message = localStorage.getItem('toastMessage');
+        const backgroundColor = localStorage.getItem('toastBackgroundColor');
+        if (message) {
+            showToast(message, backgroundColor);
+            // Clear the message from local storage
+            localStorage.removeItem('toastMessage');
+            localStorage.removeItem('toastBackgroundColor');
+        }
+    });
 </script>
+
+
 
 
 

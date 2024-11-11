@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habilities Center for Intervention</title>
     <link rel="stylesheet" href="{{ asset('css/therapist/AppReq2.css')}}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
 <body>
 
@@ -104,11 +107,22 @@
     
 
     <script>
-        
-        // Get today's date in YYYY-MM-DD format
-    const today = new Date().toISOString().split('T')[0];
-    // Set the min attribute of the input to today's date
-    document.getElementById('newDate').setAttribute('min', today);
+        // Add the toast function
+        function showToast(message, type = 'success') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+                stopOnFocus: true,
+                close: true,
+            }).showToast();
+        }
+
+        // Your existing JavaScript
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('newDate').setAttribute('min', today);
 
         function openAddModal() {
             var modal = document.getElementById("addAppointmentModal");
@@ -141,30 +155,41 @@
                 closeAddModal();
             }
         }
-        function validateAppointment() {
-        var date = document.getElementById("newDate").value;
-        var startTime = document.getElementById("newStartTime").value;
-        var endTime = document.getElementById("newEndTime").value;
 
-        // Example: Fetch booked slots from the server (this should be an AJAX call)
-        var bookedSlots = [
-            { date: '2024-10-15', start: '10:00', end: '11:00' },
-            // Add more booked slots as needed
-        ];
-
-        for (var i = 0; i < bookedSlots.length; i++) {
-            var slot = bookedSlots[i];
-            if (slot.date === date && ((startTime < slot.end && startTime >= slot.start) || (endTime > slot.start && endTime <= slot.end))) {
-                alert('The selected time slot is already booked.');
-                return false;
+        // Check for the flags on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('showDeclineToast')) {
+                showToast('Request declined successfully!');
+                sessionStorage.removeItem('showDeclineToast');
             }
-        }
+            if (sessionStorage.getItem('showAddToast')) {
+                showToast('Appointment added successfully!');
+                sessionStorage.removeItem('showAddToast');
+            }
+        });
 
-        return true;
-    }
+        // Modify the forms to set the flags before submission
+        document.querySelector('form[action*="declineRequest"]').addEventListener('submit', function() {
+            sessionStorage.setItem('showDeclineToast', 'true');
+        });
 
-    document.querySelector("form").onsubmit = validateAppointment;
+        document.querySelector('form[action*="addAppointment"]').addEventListener('submit', function() {
+            sessionStorage.setItem('showAddToast', 'true');
+        });
     </script>
+
+    <!-- Add this at the end of your body to handle Laravel's session flash messages -->
+    @if(session('success'))
+        <script>
+            showToast("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast("{{ session('error') }}", 'error');
+        </script>
+    @endif
 
 </body>
 </html>

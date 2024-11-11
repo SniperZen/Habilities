@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/therapist/edit.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <style>
     .form-check-inline-container {
@@ -185,7 +187,6 @@
 
     <script>
     const confirmModal = document.getElementById('confirmModal');
-    const successModal = document.getElementById('successModal');
 
     function openConfirmModal() {
         confirmModal.style.display = 'flex';
@@ -195,25 +196,32 @@
         confirmModal.style.display = 'none';
     }
 
-    function openSuccessModal() {
-        successModal.style.display = 'flex';
-    }
-
-
-    function closeSuccessModal() {
-        successModal.style.display = 'none';
-        document.getElementById('profileForm').submit();
+    function showToast(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+            stopOnFocus: true,
+            close: true,
+        }).showToast();
     }
 
     function submitForm() {
-        openSuccessModal();
         closeConfirmModal();
+        document.getElementById('profileForm').submit();
+        // Store a flag in sessionStorage
+        sessionStorage.setItem('showToast', 'true');
     }
+
+
+
     document.getElementById('profileForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        openSuccessModal();
+        submitForm();
     });
-</script>
+    </script>
 
 
     <script>
@@ -246,6 +254,17 @@
             submitImageButton.style.display = 'none'; // Hide the submit button
         }
     </script>
+    @if(session('success'))
+        <script>
+            showToast("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast("{{ session('error') }}", 'error');
+        </script>
+    @endif
 </body>
 </html>
 </x-therapist-layout>

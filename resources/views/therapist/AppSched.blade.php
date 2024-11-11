@@ -327,11 +327,11 @@ function showToast(message, backgroundColor) {
     }).showToast();
 }
 
-// Function to set toast message in local storage
-function setToastMessage(message, backgroundColor) {
+function setToastMessage(message, type) {
     localStorage.setItem('toastMessage', message);
-    localStorage.setItem('toastBackgroundColor', backgroundColor);
+    localStorage.setItem('toastType', type);
 }
+
 
 // Handle cancellation form submission
 document.getElementById('cancellationForm').addEventListener('submit', function(e) {
@@ -349,7 +349,7 @@ document.getElementById('cancellationForm').addEventListener('submit', function(
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            setToastMessage("Appointment canceled successfully!", "#28a745"); // Green for success
+            setToastMessage("Appointment canceled successfully!", 'success'); // Green for success
             document.getElementById('cancelAppointmentModal').style.display = 'none';
             window.location.reload();
         } else {
@@ -380,7 +380,7 @@ document.getElementById('finishForm').addEventListener('submit', function(event)
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            setToastMessage("Appointment marked as finished!", "#28a745"); // Green for success
+            setToastMessage("Appointment marked as finished!", 'success'); // Green for success
             location.reload();
         } else {
             setToastMessage("Error updating appointment status.", "#dc3545"); // Red for error
@@ -408,7 +408,7 @@ document.getElementById('appointmentForm').addEventListener('submit', function(e
     .then(response => response.json())
     .then(data => {
         if(data.success) {
-            setToastMessage("Appointment updated successfully!", "#28a745"); // Green for success
+            setToastMessage("Appointment updated successfully!", 'success'); // Green for success
             closeModal();
             location.reload();
         } else {
@@ -474,20 +474,47 @@ function closeFinishModal() {
     document.getElementById('date').setAttribute('min', today);
         </script>
         <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const message = localStorage.getItem('toastMessage');
-        const backgroundColor = localStorage.getItem('toastBackgroundColor');
+document.addEventListener('DOMContentLoaded', function() {
+    const message = localStorage.getItem('toastMessage');
+    const type = localStorage.getItem('toastType');
 
-        if (message) {
-            showToast(message, backgroundColor);
-            // Clear the message from local storage
-            localStorage.removeItem('toastMessage');
-            localStorage.removeItem('toastBackgroundColor');
-        }
-    });
+    if (message) {
+        showToast(message, type);
+        // Clear the message from local storage
+        localStorage.removeItem('toastMessage');
+        localStorage.removeItem('toastType');
+    }
+});
+
 </script>
 
     </div>
+    <script>
+    function showToast(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+            stopOnFocus: true,
+            close: true,
+        }).showToast();
+    }
+</script>
+
+@if(session('success'))
+    <script>
+        showToast("{{ session('success') }}");
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        showToast("{{ session('error') }}", 'error');
+    </script>
+@endif
+
 </body>
 </html>
 

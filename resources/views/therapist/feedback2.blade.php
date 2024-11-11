@@ -9,7 +9,8 @@
         <!-- External CSS -->
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/therapist/feedback2.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <style>
             /* The Modal (hidden by default) */
             .modal {
@@ -233,8 +234,11 @@
 
             function submitForm() {
                 document.getElementById('feedback-content').value = quill.root.innerHTML;
+                // Store a flag in localStorage before submitting
+                localStorage.setItem('feedbackJustSent', 'true');
                 document.getElementById('feedbackForm').submit();
             }
+
 
             // Recipient search functionality
             document.getElementById('recipient').addEventListener('input', function() {

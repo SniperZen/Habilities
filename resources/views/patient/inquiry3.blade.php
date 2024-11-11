@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habilities Center for Intervention</title>
     <link rel="stylesheet" href="{{ asset('css/patient/inquiry3.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
 <body>
 
@@ -151,6 +154,20 @@
         });
     });
 </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            (session('toast_message'))
+                Toastify({
+                    text: "{{ session('toast_message') }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: 'right',
+                    backgroundColor: "{{ session('toast_type') === 'success' ? '#28a745' : '#dc3545' }}",
+                }).showToast();
+        
+        });
+    </script>
 
 </body>
 </html>

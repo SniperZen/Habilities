@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Therapy Feedback</title>
     <link rel="stylesheet" href="{{ asset('css/therapist/feedback.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body>
 
@@ -120,6 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         </div>
     </div>
+    <div id="toast-container"></div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Clickable rows functionality
@@ -215,7 +219,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to show toast
+        function showToast(message, type = 'success') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+                stopOnFocus: true,
+                close: true,
+            }).showToast();
+        }
 
+        // Check if we just came from feedback submission
+        const feedbackJustSent = localStorage.getItem('feedbackJustSent');
+        if (feedbackJustSent) {
+            showToast('Feedback sent successfully.', 'success');
+            localStorage.removeItem('feedbackJustSent');
+        }
+    });
+</script>
+@if(session('success'))
+        <script>
+            showToast("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast("{{ session('error') }}", 'error');
+        </script>
+    @endif
 
 </body>
 

@@ -8,6 +8,8 @@
     <title>Habilities Center for Intervention</title>
     <link rel="stylesheet" href="{{ asset('css/patient/inquiry.css')}}">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body>
     <div class="tcontainer">
@@ -89,6 +91,22 @@
         });
     </script>
     </div>
+
+    @if(session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Toastify({
+                    text: "{{ session('success') }}",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#28a745",
+                    stopOnFocus: true,
+                    close: true,
+                }).showToast();
+            });
+        </script>
+    @endif
 </body>
 </html>
     </x-patient-layout>

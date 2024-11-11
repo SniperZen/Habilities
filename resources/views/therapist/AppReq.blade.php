@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habilities Center for Intervention</title>
     <link rel="stylesheet" href="{{ asset('css/therapist/AppReq.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     const filterButton = document.querySelector('.dropdown-btn');
@@ -122,6 +125,30 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
     </div>
+    <script>
+        function showToast(message, type = 'success') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+                stopOnFocus: true,
+                close: true,
+            }).showToast();
+        }
+    </script>
+     @if(session('success'))
+        <script>
+            showToast("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast("{{ session('error') }}", 'error');
+        </script>
+    @endif
 </body>
 </html>
 </x-therapist-layout>

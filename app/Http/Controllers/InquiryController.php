@@ -95,8 +95,11 @@ class InquiryController extends Controller
             $therapist->notify(new NewInquiryNotification($inquiry));
         }
     
-        return redirect()->route('patient.inquiry')->with('success', 'Inquiry confirmed!');
+        // Using flash session data
+        return redirect()->route('patient.inquiry')->with('success', 'Inquiry confirmed successfully!');
     }
+    
+    
     public function showInquiries(Request $request)
     {
         $historyFilter = $request->input('history_filter', 'all');

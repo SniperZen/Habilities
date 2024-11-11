@@ -208,7 +208,7 @@ class TherapistController extends Controller
             
     
         // Redirect with success message
-        return redirect()->route('therapist.AppSched')->with('success', 'Appointment updated successfully.');
+        return redirect()->route('therapist.AppSched')->with('success', 'Appointment accepted successfully!');
     }
     
     
@@ -460,31 +460,48 @@ public function   changespass(){
  }
  
 
-public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'recipient_id' => 'required|exists:users,id',
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-    ]);
-
-    $feedback = new Feedback();
-    $feedback->sender_id = Auth::id();
-    $feedback->recipient_id = $validatedData['recipient_id'];
-    $feedback->title = $validatedData['title'];
-    $feedback->content = $validatedData['content'];
-    $feedback->save();
-
-    // Get the therapist (sender) information
-    $therapist = Auth::user();
-
-    // Send notification to the recipient
-    $recipient = User::find($validatedData['recipient_id']);
-    $recipient->notify(new TherapistFeedbackNotification($therapist, $feedback));
-
-    return redirect()->route('therapist.feedback')->with('success', 'Feedback sent successfully and notification delivered.');
-
-}
+ public function store(Request $request)
+ {
+     $validatedData = $request->validate([
+         'recipient_id' => 'required|exists:users,id',
+         'title' => 'required|string|max:255',
+         'content' => 'required|string',
+     ]);
+ 
+     try {
+         $feedback = new Feedback();
+         $feedback->sender_id = Auth::id();
+         $feedback->recipient_id = $validatedData['recipient_id'];
+         $feedback->title = $validatedData['title'];
+         $feedback->content = $validatedData['content'];
+         $feedback->save();
+ 
+         // Get the therapist (sender) information
+         $therapist = Auth::user();
+ 
+         // Send notification to the recipient
+         $recipient = User::find($validatedData['recipient_id']);
+         $recipient->notify(new TherapistFeedbackNotification($therapist, $feedback));
+ 
+         $message = 'Feedback sent successfully and notification delivered.';
+         
+         if ($request->ajax()) {
+             return response()->json(['success' => true, 'message' => $message]);
+         }
+ 
+         return redirect()->route('therapist.feedback')->with('success', $message);
+ 
+     } catch (\Exception $e) {
+         $errorMessage = 'An error occurred while sending feedback.';
+         
+         if ($request->ajax()) {
+             return response()->json(['success' => false, 'message' => $errorMessage]);
+         }
+ 
+         return redirect()->back()->with('error', $errorMessage)->withInput();
+     }
+ }
+ 
 
 
 public function fbview(Request $request)

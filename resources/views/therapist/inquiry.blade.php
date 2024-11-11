@@ -14,6 +14,9 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
 </head>
 <style>/* Modal Styles */
@@ -401,27 +404,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Confirm completion handler
-    confirmBtn.addEventListener('click', function() {
-        if (currentForm) {
-            fetch(currentForm.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(() => {
+// Update your confirm completion handler
+confirmBtn.addEventListener('click', function() {
+    if (currentForm) {
+        const formData = new FormData(currentForm);
+        
+        fetch(currentForm.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            confirmationModal.style.display = 'none';
+            
+            if (data.success) {
+                // Store the success message in sessionStorage before reload
+                sessionStorage.setItem('toastMessage', data.message || "Inquiry marked as completed");
+                sessionStorage.setItem('toastType', 'success');
                 window.location.reload();
-            })
-            .catch(() => {
-                window.location.reload();
-            });
-        }
-    });
+            } else {
+                showToast(data.message || "Failed to complete inquiry", 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            sessionStorage.setItem('toastMessage', "An error occurred. Please try again.");
+            sessionStorage.setItem('toastType', 'error');
+            window.location.reload();
+        });
+    }
+});
 
     // Cancel button handler
     cancelBtn.addEventListener('click', function() {
@@ -449,6 +465,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function showToast(message, type = 'success') {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+        stopOnFocus: true,
+        close: true,
+    }).showToast();
+}
+// Add this to check for and display toast messages after page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Check for toast message in session storage
+    const toastMessage = sessionStorage.getItem('toastMessage');
+    const toastType = sessionStorage.getItem('toastType');
+    
+    if (toastMessage) {
+        showToast(toastMessage, toastType);
+        // Clear the message after showing
+        sessionStorage.removeItem('toastMessage');
+        sessionStorage.removeItem('toastType');
+    }
+});
 </script>
+@if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('success') }}", 'success');
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('error') }}", 'error');
+        });
+    </script>
+@endif
+
 </html>
 </x-therapist-layout>
