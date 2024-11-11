@@ -31,6 +31,7 @@ body {
 .headers h3 {
     font-size: 3rem; 
     font-weight: bold;
+    color: white;
 }
 .vision-mission {
     padding: 5vh 2vw;

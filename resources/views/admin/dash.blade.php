@@ -42,6 +42,28 @@
             display: none;
         }
 
+        .fc-button-primary{
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .fc .fc-daygrid-day-frame{
+            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .fc .fc-daygrid-day-frame:hover{
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .fc .fc-button-group>.fc-button:hover{
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background-color: #74A36B;
+        }
+
         .fc-direction-ltr {
             height: 469px;
         }
@@ -272,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-            <div class="calendar card">
+            <div class="calendar">
                 <div id="calendar"></div>
             </div>
             </aside>

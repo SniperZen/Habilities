@@ -404,7 +404,7 @@
                     </div>
                     <div class="input-container">
                         <input placeholder=" " id="middle_name" type="text" name="middle_name" autocomplete="additional-name">
-                        <label for="middle_name">Middle Name<span style="color: red;">*</span></label>
+                        <label for="middle_name">Middle Name</span></label>
                         <div class="error-message">{{ $errors->first('middle_name') }}</div>
                     </div>
                 </div>

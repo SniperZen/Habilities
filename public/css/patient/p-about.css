@@ -31,6 +31,11 @@ body {
 .headers h3 {
     font-size: 3rem; 
     font-weight: bold;
+    color: white;
+}
+
+p{
+    color: black;
 }
 .vision-mission {
     padding: 5vh 2vw;
@@ -39,7 +44,6 @@ body {
 }
 h2 {
     font-size: 2rem;
-    color: #4b5320; 
     font-weight: bold;
     margin-bottom: 3rem;
     text-align: center;
@@ -237,7 +241,7 @@ section.contact {
 .section-title {
     font-size: 36px;
     font-weight: bold;
-    color: #3b3b1e;
+    color: #395886;
     margin: 0;
 }
 
@@ -245,7 +249,7 @@ section.contact {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(79, 80, 53, 0.8); 
+    background-color: rgb(53 78 80 / 80%);
     color: white;
     padding: 10px;
     font-size: 14px;
@@ -317,7 +321,7 @@ section.contact {
 }
 
 .cases button {
-    background-color: #4F4A6E;
+    background-color: #395886;
     border: none;
     color: white;
     font-size: 24px;
@@ -326,10 +330,15 @@ section.contact {
     height: 50px;
     width: 50px;
     cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .cases button:hover {
-    background-color: #6786b4;
+    transform: scale(1.04);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    
 }
 
 /* Responsive Design */

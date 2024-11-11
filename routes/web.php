@@ -40,6 +40,10 @@ Route::middleware([ShareUserData::class])->group(function () {
         return view('auth.account_type_selection');
     })->middleware('guest')->name('account.type.selection');
 
+    Route::get('/link', function(){
+        Artisan::call('storage:link');
+    });
+
     // Authentication required routes
     Route::middleware(['auth'])->group(function () {
         // Dashboard route (moved outside of 'verified' middleware)

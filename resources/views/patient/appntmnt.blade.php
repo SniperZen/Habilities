@@ -119,7 +119,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="6" class="no-appointments">
+                        <td colspan="6" class="no-appointments" style="text-align: center; padding: 20px;">
                             No appointments scheduled
                         </td>
                     </tr>

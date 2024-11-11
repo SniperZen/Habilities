@@ -58,7 +58,7 @@
                     <tbody>
                     @if($pastAppointments->isEmpty())
                         <tr>
-                            <td colspan="5" class="empty-table-message">
+                            <td colspan="5" class="empty-table-message" style="text-align: center; padding: 20px;">
                                 No appointments found.
                             </td>
                         </tr>

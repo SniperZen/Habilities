@@ -18,6 +18,28 @@
             font-weight: bold;
             color: black;
         }
+
+        .fc-button-primary{
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .fc .fc-daygrid-day-frame{
+            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .fc .fc-daygrid-day-frame:hover{
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .fc .fc-button-group>.fc-button:hover{
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background-color: #395886;
+        }
         .fc .fc-button-primary:disabled {
             background-color: #c0d3f1;
             color: black;
@@ -67,6 +89,18 @@
         overflow-x: hidden;
         transition: max-height 0.3s ease;
     }
+
+    .fc-button-primary{
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            transition: box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .fc .fc-button-group>.fc-button:hover{
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background-color: #395886;
+        }
 
     .notifications-container.expanded {
         max-height: 600px; 
@@ -187,7 +221,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="3" class="text-center">
+                                <td colspan="4" class="text-center" style="text-align: center; padding: 20px;">
                                     <div class="alert alert-info" role="alert">
                                         No appointments found.
                                     </div>
