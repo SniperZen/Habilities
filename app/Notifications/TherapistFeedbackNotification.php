@@ -31,7 +31,7 @@ class TherapistFeedbackNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Your therapist has provided new feedback.')
+                    ->line('New Feedback check your Profile.')
                     ->line('Title: ' . $this->feedback->title)
                     ->action('View Feedback', url('/patient/feedback/' . $this->feedback->id))
                     ->line('Thank you for using our application!');

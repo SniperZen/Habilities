@@ -243,32 +243,33 @@
     <div class="notifications-container">
     <ul class="notifications-list" id="notificationsList">
         @forelse(auth()->user()->notifications()->latest()->take(8)->get() as $index => $notification)
-            @php
-                $profile_image = asset('images/others/default-prof.png'); // Default image
-                $sender_name = 'Unknown';
-                
-                if ($notification->type === 'App\Notifications\TherapistFeedbackNotification') {
-                    $feedback = \App\Models\Feedback::find($notification->data['feedback_id']);
-                    $sender = $feedback ? $feedback->sender : null;
-                } elseif (in_array($notification->type, [
-                    'App\Notifications\AcceptedNotification',
-                    'App\Notifications\AppointmentCanceledNotification',
-                    'App\Notifications\AppointmentUpdatedNotification'
-                ])) {
-                    $appointment = \App\Models\Appointment::find($notification->data['appointment_id']);
-                    $sender = $appointment ? $appointment->therapist : null;
-                } else {
-                    $sender_id = $notification->data['sender_id'] ?? null;
-                    $sender = $sender_id ? \App\Models\User::find($sender_id) : null;
-                }
-                
-                if ($sender) {
-                    $sender_name = $sender->name;
-                    $profile_image = $sender->profile_image 
-                        ? Storage::url($sender->profile_image) 
-                        : $profile_image;
-                }
-            @endphp
+                @php
+                    $profile_image = asset('images/others/default-prof.png'); // Default image
+                    $sender_name = 'Unknown';
+                    
+                    if ($notification->type === 'App\Notifications\TherapistFeedbackNotification') {
+                        $feedback = \App\Models\Feedback::find($notification->data['feedback_id']);
+                        $sender = $feedback ? $feedback->sender : null;
+                    } elseif (in_array($notification->type, [
+                        'App\Notifications\AcceptedNotification',
+                        'App\Notifications\AppointmentCanceledNotification',
+                        'App\Notifications\AppointmentUpdatedNotification',
+                        'App\Notifications\AppointmentFinishedNotification' // Add this line
+                    ])) {
+                        $appointment = \App\Models\Appointment::find($notification->data['appointment_id']);
+                        $sender = $appointment ? $appointment->therapist : null;
+                    } else {
+                        $sender_id = $notification->data['sender_id'] ?? null;
+                        $sender = $sender_id ? \App\Models\User::find($sender_id) : null;
+                    }
+                    
+                    if ($sender) {
+                        $sender_name = $sender->name;
+                        $profile_image = $sender->profile_image 
+                            ? Storage::url($sender->profile_image) 
+                            : $profile_image;
+                    }
+                @endphp
                 <li class="notification-item {{ $notification->read_at ? '' : 'unread' }} {{ $index >= 4 ? 'hiddens' : '' }}" 
                     data-id="{{ $notification->id }}"
                     data-type="{{ $notification->type }}">
@@ -282,6 +283,8 @@
                             @elseif($notification->type === 'App\Notifications\AppointmentCanceledNotification')
                                 {{ $sender_name }}
                             @elseif($notification->type === 'App\Notifications\AppointmentUpdatedNotification')
+                                {{ $sender_name }}
+                            @elseif($notification->type === 'App\Notifications\AppointmentFinishedNotification')
                                 {{ $sender_name }}
                             @else
                                 sent a Notification
@@ -350,15 +353,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         unreadIndicator.remove();
                     }
 
-                    // Handle navigation based on notification type
-                    if (notificationType === 'App\\Notifications\\AcceptedNotification' ||
-                        notificationType === 'App\\Notifications\\AppointmentUpdatedNotification') {
-                        window.location.href = '{{ route("patient.appntmnt") }}';
-                    } else if (notificationType === 'App\\Notifications\\AppointmentCanceledNotification') {
-                        window.location.href = '{{ route("patient.myHistory") }}';
-                    }else if (notificationType === 'App\\Notifications\\TherapistFeedbackNotification') {
-                        window.location.href = '{{ route("patient.profile") }}';
-                    }
+                        // Handle navigation based on notification type
+                        if (notificationType === 'App\\Notifications\\AcceptedNotification' ||
+                            notificationType === 'App\\Notifications\\AppointmentUpdatedNotification') {
+                            window.location.href = '{{ route("patient.appntmnt") }}';
+                        } else if (notificationType === 'App\\Notifications\\AppointmentCanceledNotification' ||
+                                notificationType === 'App\\Notifications\\AppointmentFinishedNotification') { // Add this condition
+                            window.location.href = '{{ route("patient.myHistory") }}';
+                        } else if (notificationType === 'App\\Notifications\\TherapistFeedbackNotification') {
+                            window.location.href = '{{ route("patient.profile") }}';
+                        }
                 }
             })
             .catch(error => console.error('Error:', error));
