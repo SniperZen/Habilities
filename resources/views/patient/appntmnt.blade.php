@@ -57,6 +57,7 @@
                                     <a href="#" data-filter="next_week">Next Week</a>
                                     <a href="#" data-filter="this_month">This Month</a>
                                     <a href="#" data-filter="next_month">Next Month</a>
+                                    <a href="#" data-filter="pending_only">All Pending</a>
                                     <a href="#" data-filter="all_upcoming">All Upcoming</a>
                                 </div>
                             </div>

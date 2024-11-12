@@ -35,7 +35,6 @@
                                     <a href="#" data-filter="last_14_days">Last 14 Days</a>
                                     <a href="#" data-filter="last_21_days">Last 21 Days</a>
                                     <a href="#" data-filter="last_28_days">Last 28 Days</a>
-                                    <a href="#" data-filter="all_pending">All Pending</a>
                                     <a href="#" data-filter="all">All</a>
                                 </div>
                             </div>
