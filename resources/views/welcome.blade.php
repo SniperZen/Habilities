@@ -69,7 +69,7 @@
                 <path d="M5.04163 24.0466L27.0416 24.0085" stroke="#4f6b4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <img src="images/logo.png" alt="Logo">
-            <h1>Habilities Center for Intervention</h1>
+            <h1>abilities Center for Intervention</h1>
         </div>
 
         <nav>
