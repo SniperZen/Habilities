@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/patient/appntmnt.css')}}">
     <script src="{{ asset('jss/modal.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
     <style>
     .disabled {
@@ -371,25 +374,63 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text();
+            return response.json();
         })
         .then(data => {
-            // Close modals
+            // Store the success message in localStorage
+            localStorage.setItem('toastMessage', 'Appointment cancelled successfully!');
+            
+            // Hide modals
             confirmationModal.style.display = 'none';
             cancelModal.style.display = 'none';
             
-            // Reload the page to show updated appointment status
+            // Reload the page immediately
             window.location.reload();
         })
         .catch(error => {
+            // Store the error message in localStorage
+            localStorage.setItem('toastMessage', 'Error cancelling appointment. Please try again.');
+            localStorage.setItem('toastType', 'error');
             console.error('Error:', error);
-            alert('An error occurred while canceling the appointment');
+            
+            // Reload the page
+            window.location.reload();
         });
     });
 
-});
+    // Check for stored toast message on page load
+    const storedToastMessage = localStorage.getItem('toastMessage');
+    const storedToastType = localStorage.getItem('toastType') || 'success';
+    if (storedToastMessage) {
+        showToast(storedToastMessage, storedToastType);
+        localStorage.removeItem('toastMessage');
+        localStorage.removeItem('toastType');
+    }
 
+    // Toast function using Toastify
+    function showToast(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: type === 'success' ? "#4CAF50" : "#f44336",
+        }).showToast();
+    }
+});
     </script>
 
+     @if(session('success'))
+        <script>
+            showToast("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast("{{ session('error') }}", 'error');
+        </script>
+    @endif
 </html>
 </x-patient-layout>
