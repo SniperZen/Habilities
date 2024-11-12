@@ -13,9 +13,12 @@ use App\Models\PatientFeedback;
 use Illuminate\Support\Facades\DB;
 use App\Models\BusinessSetting;
 use App\Notifications\NewPatientFeedbackNotification;
-use App\Mail\AppointmentCanceledPatient;
 use App\Notifications\AppointmentCanceledNotificationPatient;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\AppointmentCancelPatient;
+use App\Mail\AppointmentCanceled;
+
 
 class PatientController extends Controller
 {
@@ -328,42 +331,40 @@ class PatientController extends Controller
             return redirect()->back()->with('success', 'Thank you for your feedback!');
         }
 
-        public function cancelAppointment(Request $request, $id)
-        {
-            try {
-                $appointment = Appointment::findOrFail($id);
-                
-                // Validate the request
-                $request->validate([
-                    'cancellationReason' => 'required|string',
-                    'cancellationNote' => 'nullable|string',
-                ]);
-        
-                // Update appointment with cancellation details
-                $appointment->status = 'declined';
-                $appointment->patient_reason = $request->cancellationReason;
-                $appointment->patient_note = $request->cancellationNote;
-                $appointment->save();
-        
-                // Get the therapist
-                $therapist = $appointment->therapist;
-        
-                // You can uncomment these lines when you have set up your mail and notification system
-                 Mail::to($therapist->email)->later(now()->addSeconds(5), new AppointmentCanceledPatient($appointment));
-                $therapist->notify(new AppointmentCanceledNotificationPatient($appointment));
-        
-                return response()->json(['success' => true, 'message' => 'Appointment cancelled successfully']);
-        
-            } catch (\Exception $e) {
-                return response()->json([
-                    'success' => false, 
-                    'error' => 'An error occurred while canceling the appointment'
-                ], 500);
-            }
-        }
-        
-        
+    public function cancelAppointment(Request $request, $id)
+    {
+        try {
+            $appointment = Appointment::findOrFail($id);
+            
+            // Validate the request
+            $request->validate([
+                'cancellationReason' => 'required|string',
+                'cancellationNote' => 'nullable|string',
+            ]);
 
+            // Update appointment with cancellation details
+            $appointment->status = 'declined';
+            $appointment->patient_reason = $request->cancellationReason;
+            $appointment->patient_note = $request->cancellationNote;
+            $appointment->save();
+
+            // Get the therapist
+            $therapist = $appointment->therapist;
+            $therapistEmail = $therapist->email; 
+
+            // You can uncomment these lines when you have set up your mail and notification system
+            Mail::to($therapistEmail)->later(now()->addSeconds(5), new AppointmentCancelPatient($appointment));
+            $therapist->notify(new AppointmentCanceledNotificationPatient($appointment));
+
+            return response()->json(['success' => true, 'message' => 'Appointment cancelled successfully']);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false, 
+                'error' => 'An error occurred while canceling the appointment'
+            ], 500);
+        }
+    }
 
 
 }

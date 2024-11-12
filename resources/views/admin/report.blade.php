@@ -92,8 +92,8 @@
             <option value="user">Patient</option>
             <option value="therapist">Therapist</option>
             <option value="admin">Admin</option>
-            <option value="specificName">Search User Name</option>
-            <option value="specificID">Search User ID</option>
+            <!--<option value="specificName">Search User Name</option>
+            <option value="specificID">Search User ID</option>-->
         </select>
         <input type="text" id="specificNameInput" placeholder="Enter user name" style="display: none;">
         <input type="text" id="specificIDInput" placeholder="Enter user ID" style="display: none;">

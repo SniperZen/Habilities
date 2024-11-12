@@ -28,11 +28,7 @@ class AppointmentCanceledNotificationPatient extends Notification
         return [
             'appointment_id' => $this->appointment->id,
             'patient_id' => $this->appointment->patient_id,
-            'message' => "Patient " . $this->appointment->patient->first_name . ' ' . 
-                        $this->appointment->patient->last_name . " has cancelled their " .
-                        "appointment scheduled for " . 
-                        \Carbon\Carbon::parse($this->appointment->appointment_date)->format('F j, Y') . 
-                        " at " . \Carbon\Carbon::parse($this->appointment->start_time)->format('g:i A'),
+            'message' => "Cancelled Our appointment",
             'appointment_date' => $this->appointment->appointment_date,
             'start_time' => $this->appointment->start_time
         ];

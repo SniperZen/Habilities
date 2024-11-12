@@ -19,7 +19,7 @@ class AppointmentAccepted extends Mailable
 
     public function build()
     {
-        return $this->subject('Appointment Canceled')
+        return $this->subject('Appointment Confirmed')
                     ->view('emails.appointment_accepted');
     }
 }
