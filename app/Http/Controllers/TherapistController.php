@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use App\Models\BusinessSetting;
 use App\Models\PatientFeedback;
 use App\Notifications\NewPatientFeedbackNotification;
+use App\Notifications\AppointmentFinishedNotification;
 
 
 class TherapistController extends Controller
@@ -263,18 +264,27 @@ public function cancelAppointment(Request $request, $id)
 
 
 
-
 public function finishAppointment(Request $request, $id)
 {
-    $appointment = Appointment::findOrFail($id);
-    
-    // Update the status of the appointment
-    $appointment->status = 'finished';
-    $appointment->save();
+    try {
+        $appointment = Appointment::findOrFail($id);
+        
+        // Update the status of the appointment
+        $appointment->status = 'finished';
+        $appointment->save();
 
-    // Return a JSON response
-    return response()->json(['success' => true, 'message' => 'Appointment status updated to finished.']);
+        $patient = $appointment->user; // Get the patient
+
+        // Send in-app notification
+        $patient->notify(new AppointmentFinishedNotification($appointment));
+
+        // Return a JSON response
+        return response()->json(['success' => true, 'message' => 'Appointment finished successfully.']);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'error' => 'An error occurred while finishing the appointment.']);
+    }
 }
+
 
 
 

@@ -52,7 +52,7 @@ Route::middleware([ShareUserData::class])->group(function () {
         // Routes that require email verification
         Route::middleware(['verified'])->group(function () {
 
-        Route::controller(AdminController::class)->middleware('admin')->group(function () {
+        Route::controller(AdminController::class)->middleware(['admin'])->group(function () {
             //Route::get('admin/dashboard', [HomeController::class, 'index'])->middleware('admin')->name('admin.dashboard');
             Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
             Route::get('/admin/dash', [AdminController::class, 'dash'])->name('admin.dash');
@@ -99,7 +99,7 @@ Route::middleware([ShareUserData::class])->group(function () {
 
 
              // Patient routes
-        Route::controller(PatientController::class)->middleware('user')->group(function () {
+        Route::controller(PatientController::class)->middleware(['user'])->group(function () {
             Route::get('/patient/profile', 'profile')->name('patient.profile');
             Route::get('/patient/edit-profile', 'editprof')->name('patient.edit-profile');
             Route::get('/patient/AppReq', 'AppReq')->name('patient.AppReq');
@@ -160,7 +160,7 @@ Route::middleware([ShareUserData::class])->group(function () {
         
 
         //Therapist route
-        Route::controller(TherapistController::class)->middleware('therapist')->group(function () {
+        Route::controller(TherapistController::class)->middleware(['therapist'])->group(function () {
             Route::get('/therapist/AppReq', 'AppReq')->name('therapist.AppReq');
             Route::get('/therapist/AppReq2', 'AppReq2')->name('therapist.AppReq2');
             Route::get('/therapist/AppSched', 'AppSched')->name('therapist.AppSched');
