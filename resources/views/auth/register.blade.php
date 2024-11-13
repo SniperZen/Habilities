@@ -1,8 +1,5 @@
 <x-guest-layout>
     <style>
-        body{
-            height: 100vh;
-        }
         .container {
             display: flex;
             align-items: center;
@@ -15,7 +12,7 @@
 
         .form-box {
             background-color: white;
-            padding: 35px 40px;
+            padding: 25px 40px;
             border-radius: 10px;
             width: auto;
             max-width: 450px;
@@ -347,8 +344,6 @@
             font-size: 1.1em;
         }
         
-        
-
 
         @media (max-width: 768px) {
             .form-box {
@@ -369,8 +364,6 @@
             }
             .container{
                 background: none;
-                overflow-y: auto;
-                overflow-x: hidden;
             }
             .input-group {
                 grid-template-columns: 1fr;
@@ -392,13 +385,15 @@
         @media (max-width: 480px) {
             .form-box {
                 box-shadow: none;
-                height: 100%;
+                padding: 20px;
+                box-shadow: none;
+                height: 100vh;
+                overflow-y: auto;
+                overflow-x: hidden;
                 padding: 20px;
             }
             .container{
                 background: none;
-                overflow-y: auto;
-                overflow-x: hidden;
                 height: 100vh;
             }
             .input-group {
