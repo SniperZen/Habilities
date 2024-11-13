@@ -57,7 +57,8 @@
         }
 
         .form-side input[type="email"],
-        .form-side input[type="password"] {
+        .form-side input[type="password"],
+        #password {
             width: 100%;
             max-width: 400px;
             padding: 12px 12px 12px 40px; 
@@ -207,6 +208,19 @@
             padding-right: 7px;
         }
 
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+
+        
+
 
         @media (max-width: 768px) {
             .image-side{
@@ -250,25 +264,39 @@
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const emailInput = document.querySelector('.form-side input[type="email"]');
-            const passwordInput = document.querySelector('.form-side input[type="password"]');
-            const emailIcon = document.querySelector('.input-container .icon');
-            const passwordIcon = document.querySelector('.input-container .icon2');
+    const emailInput = document.querySelector('.form-side input[type="email"]');
+    const passwordInput = document.querySelector('.form-side input[type="password"]');
+    const emailIcon = document.querySelector('.input-container .icon');
+    const passwordIcon = document.querySelector('.input-container .icon2');
+    const togglePassword = document.getElementById('togglePassword');
 
-            emailInput.addEventListener('focus', () => {
-                emailIcon.style.color = '#74A36B';
-            });
-            emailInput.addEventListener('blur', () => {
-                emailIcon.style.color = ''; 
-            });
+    // Change icon color on focus/blur
+    emailInput.addEventListener('focus', () => {
+        emailIcon.style.color = '#74A36B';
+    });
+    emailInput.addEventListener('blur', () => {
+        emailIcon.style.color = ''; 
+    });
 
-            passwordInput.addEventListener('focus', () => {
-                passwordIcon.style.color = '#74A36B';
-            });
-            passwordInput.addEventListener('blur', () => {
-                passwordIcon.style.color = ''; 
-            });
-        });
+    passwordInput.addEventListener('focus', () => {
+        passwordIcon.style.color = '#74A36B';
+    });
+    passwordInput.addEventListener('blur', () => {
+        passwordIcon.style.color = ''; 
+    });
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the icon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+});
+
     </script>
 
 
@@ -297,10 +325,11 @@
 
                 <div class="input-container">
                     <i class="fas fa-lock icon2"></i>
-                    <input id="password" type="password" name="password"  required placeholder="Password">
+                    <input id="password" type="password" name="password" required placeholder="Password">
+                    <i class="far fa-eye toggle-password" id="togglePassword"></i> <!-- Eye Icon -->
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                    <!-- <label class="label" for="password">Password</label> -->
                 </div>
+
 
                 <div class="undLogBut">
                     <div>

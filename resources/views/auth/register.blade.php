@@ -15,7 +15,7 @@
 
         .form-box {
             background-color: white;
-            padding: 25px 40px;
+            padding: 35px 40px;
             border-radius: 10px;
             width: auto;
             max-width: 450px;
@@ -337,6 +337,19 @@
             text-decoration: underline;
         }
 
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        
+
+
         @media (max-width: 768px) {
             .form-box {
                 box-shadow: none;
@@ -347,23 +360,49 @@
             .container{
                 background: none;
             }
+
+            .form-box {
+                box-shadow: none;
+                height: 100%;
+                height: 100vh;
+                padding: 20px;
+            }
+            .container{
+                background: none;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-box h1 {
+                font-size: 20px;
+            }
+
+            .form-box p {
+                font-size: 12px;
+            }
+
+            .form-box button {
+                font-size: 14px;
+            }
         }
 
         @media (max-width: 480px) {
             .form-box {
                 box-shadow: none;
                 height: 100%;
+                height: 100vh;
+                padding: 20px;
             }
             .container{
                 background: none;
-                overflow: auto;
+                overflow-y: auto;
+                overflow-x: hidden;
             }
             .input-group {
                 grid-template-columns: 1fr;
-            }
-            
-            .form-box {
-                padding: 20px;
             }
 
             .form-box h1 {
@@ -450,15 +489,16 @@
                     <div class="error-message">{{ $errors->first('email') }}</div>
                 </div>
 
-                <!-- Password and Password Confirmation Inputs -->
                 <div class="input-container">
                     <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password">
-                    <label for="password">Password<span style="color: red;">*</span></label>
+                    <label for="password">Password<span style="color: red;">*</span></i></label>
+                    <i class="far fa-eye toggle-password" onclick="togglePasswordVisibility('password', this)"></i> <!-- Eye Icon -->
                     <div class="error-message">{{ $errors->first('password') }}</div>
                 </div>
                 <div class="input-container">
                     <input placeholder=" " id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
                     <label for="password_confirmation">Confirm Password<span style="color: red;">*</span></label>
+                    <i class="far fa-eye toggle-password" onclick="togglePasswordVisibility('password_confirmation', this)"></i> <!-- Eye Icon -->
                     <div class="error-message">{{ $errors->first('password_confirmation') }}</div>
                 </div>
 
@@ -624,6 +664,20 @@
                     <div class="close2"><button class="close">Close</button></div>
             </div>
         </div>
+        <script>
+    function togglePasswordVisibility(inputId, icon) {
+        // Get the input field and its current type
+        const inputField = document.getElementById(inputId);
+        const currentType = inputField.getAttribute('type');
+
+        // Toggle between 'password' and 'text' type
+        inputField.setAttribute('type', currentType === 'password' ? 'text' : 'password');
+
+        // Toggle the icon between 'fa-eye' and 'fa-eye-slash'
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    }
+</script>
     <script>
         // Get modals and buttons
         const termsModal = document.getElementById("termsModal");
@@ -632,6 +686,7 @@
         const privacyLink = document.querySelector(".open-privacy");
         const closeButtons = document.querySelectorAll(".close");
         const privacyPolicyLinks = document.querySelectorAll(".privacy-policy");
+        const togglePassword = document.getElementById('togglePassword');
 
         // Open Terms Modal
         termsLink.onclick = function() {
@@ -658,6 +713,7 @@
                 privacyModal.style.display = "none";
             };
         });
+
 
         // Close modals when clicking outside
         //window.onclick = function(event) {

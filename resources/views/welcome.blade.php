@@ -76,7 +76,7 @@
             <div class="navrad1">
                 <div class="navrad2" :class="{'hidden': openSidebar}" x-show="!openSidebar">
                     <a href="#about">About</a>
-                    <a href="#services fade-in-ups">Services</a>
+                    <a href="#servicess">Services</a>
                     <a href="#cases">Cases</a>
                     <a href="#contact">Contact</a>
                 </div>
@@ -99,7 +99,7 @@
             </svg>
         <nav>
             <a href="#about"><i class="fas fa-info-circle"></i> About</a>
-            <a href="#services fade-in-ups"><i class="fas fa-hand-holding-heart"></i> Services</a>
+            <a href="#services"><i class="fas fa-hand-holding-heart"></i> Services</a>
             <a href="#cases"><i class="fas fa-heartbeat"></i> Cases</a>
             <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
         </nav>
