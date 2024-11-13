@@ -1,4 +1,4 @@
-<!-- <x-patient-layout> -->
+<x-patient-layout>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -531,5 +531,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </body>
 </html>
-<!-- 
-</x-patient-layout> -->
+
+</x-patient-layout>
