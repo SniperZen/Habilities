@@ -393,13 +393,13 @@
             .form-box {
                 box-shadow: none;
                 height: 100%;
-                height: 100vh;
                 padding: 20px;
             }
             .container{
                 background: none;
                 overflow-y: auto;
                 overflow-x: hidden;
+                height: 100vh;
             }
             .input-group {
                 grid-template-columns: 1fr;
