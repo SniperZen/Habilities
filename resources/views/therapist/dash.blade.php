@@ -1,3 +1,6 @@
+@extends('layouts.patient-layout')
+
+
 <x-therapist-layout>
 <!DOCTYPE html>
 <html lang="en">
