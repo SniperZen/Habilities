@@ -282,7 +282,7 @@
             }
         }
 
-        input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input[type="tel"]:-webkit-autofill {
+        input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input[type="tel"]:-webkit-autofill, input[type="date"]:-webkit-autofill {
             background-color: white !important;
             -webkit-box-shadow: 0 0 0 1000px white inset !important;
             color: black !important;
