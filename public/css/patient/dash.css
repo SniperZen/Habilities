@@ -206,8 +206,8 @@ nav ul li a:hover {
 }
 
 .dropdown-item:hover {
-    background: #B1C9EF;
-    color: #473401;
+    background-color: #c6e4ff;
+    color: #000000;
 }
 
 .dropdown-item img{
@@ -286,6 +286,10 @@ th{
     display: flex;
     flex-direction: row;
     overflow: hidden;
+}
+
+.appointments tr:hover{
+    background-color: #ddeeff;
 }
 
 ::-webkit-scrollbar {

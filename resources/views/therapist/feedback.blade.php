@@ -93,14 +93,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     <th>Recipient</th>
                     <th>Feedback Title</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($feedbacks as $feedback)
-                    <tr class="clickable-row" data-url="{{ route('therapist.feedback3', ['id' => $feedback->id]) }}">
+                    <tr class="clickable-row">
                         <td>{{ $feedback->recipient->name }}</td>
                         <td>{{ $feedback->title }}</td>
                         <td>{{ $feedback->created_at->format('m/d/Y') }}</td>
+                        <td><a class="create-button views" href="{{ route('therapist.feedback3', ['id' => $feedback->id]) }}"><button class="view">View</button></a></td>
                     </tr>
                 @empty
                     <tr>

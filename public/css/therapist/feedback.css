@@ -85,12 +85,28 @@ th:nth-child(2), td:nth-child(2){
 }
 
 .feedback-table tr:hover {
-    background-color: #dfdffc;
+    background-color: #fbf5ff;
 }
 
 .feedback-table a {
     color: #5B63BC;
     text-decoration: none;
+}
+
+.view{
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+}
+
+.views{
+    background-color: #4F4A6E;
+    font-weight: bold;
+    border-radius: 56px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: 48px;
 }
 
 .feedback-table a:hover {

@@ -387,6 +387,10 @@ input[type="text"] {
     color: #fff;
 }
 
+tr:hover{
+    background-color: #ddeeff;
+}
+
 /* Responsive Styles */
 
 /* For devices less than 1200px */
@@ -426,6 +430,9 @@ input[type="text"] {
         font-size: 18px;
         margin-bottom: 10px;
     }
+    table th, table td {
+        min-width: 150px;
+    }
 
     .reserve-btn {
         padding: 10px 15px;
@@ -433,8 +440,8 @@ input[type="text"] {
 
     .appointments .view-btn, .appointments .cancel-btn {
         width: 60px;
-        height: 20px;
-        padding: 4px 8px;
+        height: 29px;
+        padding: 4px 11px;
     }
 }
 

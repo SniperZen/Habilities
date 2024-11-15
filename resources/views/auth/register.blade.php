@@ -308,6 +308,7 @@
 
     </style>
     <div class="container">
+
         <div class="form-box">
             <img src="images/logo.png" alt="Logo">
             <h1>Create your account</h1>

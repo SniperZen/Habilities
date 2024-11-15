@@ -238,6 +238,17 @@ a {
         padding: 20px;
     }
 
+    .main-content p{
+        font-size: 18px;
+        width: auto;
+    }
+
+    .main-content h2{
+        font-size: 30px;
+        width: 407px;
+        text-align: center;
+    }
+
     .progress-bar {
         flex-direction: row;
     }

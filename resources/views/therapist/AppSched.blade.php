@@ -70,7 +70,6 @@
                     <th>Mode</th>
                     <th>Tele-Therapy</th>
                     <th>OTF</th>
-                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -105,8 +104,6 @@
                                         <button type="submit" class="status-button cancelled" onclick="openCancelModal('{{ $appointment->id }}')">Cancel</button>
                                     </form>
                                     <button type="button" class="status-button finished" onclick="openFinishModal('{{ $appointment->id }}')">Finish</button>
-                                </td>
-                                <td>
                                     <button class="view" onclick="openModal('{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}', '{{ $appointment->patient_id }}', '{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('Y-m-d') }}', '{{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }}', '{{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}', '{{ $appointment->id }}')">Edit</button>
                                 </td>
                             </tr>

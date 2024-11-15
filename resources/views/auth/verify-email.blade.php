@@ -37,14 +37,17 @@
         .message-box .btn-group button,
         .message-box .btn-group x-primary-button {
             padding: 12px;
+            padding: 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
             border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease;
             transition: transform 0.3s ease;
+            background-color: #74A36B;
+            border-radius: 50px;
         }
 
         .message-box .btn-group x-primary-button {

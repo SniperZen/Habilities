@@ -227,6 +227,7 @@ Route::middleware([ShareUserData::class])->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
+
     // Email verification routes
     Route::middleware('auth')->group(function () {
         Route::get('/email/verify', function () {

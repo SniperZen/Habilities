@@ -16,6 +16,10 @@ body {
     height: calc(100vh - 120px); 
 }
 
+tr:hover{
+    background-color: #fbf5ff;
+}
+
 .tabs {
     display: flex;
     margin-bottom: 35px;

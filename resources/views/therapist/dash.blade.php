@@ -76,11 +76,12 @@
         margin-left: 5px;
     }
     .notification-item.unread {
-        background-color: #f6e8ff;
+        background-color: #f9f1ff;
+        font-weight: bold;
     }
 
     .notification-item.unread:hover{
-        background-color: #CCCFE5;
+        background-color: #f3e1ff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
     .notification-timestamp {

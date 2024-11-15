@@ -22,7 +22,7 @@ body {
 }
 
 .right-sidebar {
-    flex-grow: 1;
+    flex-grow: 0.5;
     min-width: 25%;
     height: 100%;
     padding: 20px 10px;

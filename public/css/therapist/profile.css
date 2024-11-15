@@ -327,13 +327,13 @@ body {
 .patient-item {
     display: flex;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    padding: 10px 0;    
     padding: 10px;
     justify-content: space-between;
     transition: box-shadow 0.3s ease;
     transition: transform 0.3s ease;
     border-radius: 8px;
+    margin: 10px 13px;
 }
 
 .patient-item:hover{

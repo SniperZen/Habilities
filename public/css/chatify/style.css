@@ -727,6 +727,10 @@ td, th {
   border-radius: 20px;
   transition: transform 0.3s, background 0.3s;
 }
+
+.main{
+  overflow: hidden;
+}
 .file-download:hover,
 .file-download:focus {
   color: #fff;
