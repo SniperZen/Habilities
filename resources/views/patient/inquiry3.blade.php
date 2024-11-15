@@ -46,7 +46,7 @@
                 <strong><p>Attached Documents:</p></strong>
                 @if(session('inquiry.identification_card'))
                     <div class="attachment">
-                        <a href="{{ Storage::url(session('inquiry.identification_card')) }}" class="attachment-link">
+                        <a href="{{ Storage::url(session('inquiry.identification_card')) }}" class="attachment-link" target = "_blank">
                             <svg width="50" height="47" viewBox="0 0 50 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M38 45.5H23.7977C17.9987 45.5 13.2977 40.799 13.2977 35V12C13.2977 6.20101 17.9987 1.5 23.7977 1.5H33.3795L48.5 16.2091V35C48.5 40.799 43.799 45.5 38 45.5Z" fill="#EEF1F7" stroke="#CBD0DC" stroke-width="3"/>
                                 <rect y="20.7676" width="33.7079" height="19.1279" rx="7" fill="#D82042"/>
@@ -60,7 +60,7 @@
                 @endif
                 @if(session('inquiry.birth_certificate'))
                     <div class="attachment">
-                        <a href="{{ Storage::url(session('inquiry.birth_certificate')) }}" class="attachment-link">
+                        <a href="{{ Storage::url(session('inquiry.birth_certificate')) }}" class="attachment-link" target = "_blank">
                             <svg width="50" height="47" viewBox="0 0 50 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M38 45.5H23.7977C17.9987 45.5 13.2977 40.799 13.2977 35V12C13.2977 6.20101 17.9987 1.5 23.7977 1.5H33.3795L48.5 16.2091V35C48.5 40.799 43.799 45.5 38 45.5Z" fill="#EEF1F7" stroke="#CBD0DC" stroke-width="3"/>
                                 <rect y="20.7676" width="33.7079" height="19.1279" rx="7" fill="#D82042"/>
@@ -73,7 +73,7 @@
                 @endif
                 @if(session('inquiry.diagnosis_reports'))
                     <div class="attachment">
-                        <a href="{{ Storage::url(session('inquiry.diagnosis_reports')) }}" class="attachment-link">
+                        <a href="{{ Storage::url(session('inquiry.diagnosis_reports')) }}" class="attachment-link" target = "_blank">
                             <svg width="50" height="47" viewBox="0 0 50 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M38 45.5H23.7977C17.9987 45.5 13.2977 40.799 13.2977 35V12C13.2977 6.20101 17.9987 1.5 23.7977 1.5H33.3795L48.5 16.2091V35C48.5 40.799 43.799 45.5 38 45.5Z" fill="#EEF1F7" stroke="#CBD0DC" stroke-width="3"/>
                                 <rect y="20.7676" width="33.7079" height="19.1279" rx="7" fill="#D82042"/>
