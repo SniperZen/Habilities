@@ -247,5 +247,6 @@ Route::middleware([ShareUserData::class])->group(function () {
 });
 
 
+
 // Include authentication routes
 require __DIR__.'/auth.php';
