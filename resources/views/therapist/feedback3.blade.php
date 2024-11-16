@@ -10,7 +10,7 @@
 <body>
 <style>
 /* Reset default margins and paddings */
-ul, ol {
+.main-content ul, .main-content ol {
     padding-left: 40px !important;
     margin-left: 20px !important;
     margin-top: 10px !important;
@@ -18,7 +18,7 @@ ul, ol {
 }
 
 /* Style for list items */
-li {
+.main-content li {
     margin-bottom: 8px !important;
     display: list-item !important;
 }
@@ -36,6 +36,7 @@ li {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+
 
 
 </style>

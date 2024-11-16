@@ -86,11 +86,11 @@ body, html {
 
 .but a{
     font-weight: bolder;
+    transition: transform 0.3s ease;
     color: #395886;
-    font-size: 20px;
 }
 .but a:hover{
-    color: #8AAEE0;
+    transform: scale(1.07);
 }
 
 .welcome-header h2 {
@@ -276,14 +276,17 @@ tr{
 .notification-item {
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px;
     border-bottom: 1px solid #e6e6e6;
     border-radius: 8px;
-    margin-bottom: 5px;
+    margin: 10px 13px;
+    transition: background-color 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .notification-item:hover{
     background-color: #c5dcfc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card {

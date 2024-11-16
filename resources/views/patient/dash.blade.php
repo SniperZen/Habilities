@@ -84,7 +84,7 @@
             display: block;
         }
         .notifications-container {
-        max-height: 324px;
+        max-height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
         transition: max-height 0.3s ease;
@@ -110,24 +110,9 @@
         padding: 0;
         margin: 0;
         list-style-type: none;
+        max-height: 357px;
     }
 
-    .notifications-container::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .notifications-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    .notifications-container::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 4px;
-    }
-
-    .notifications-container::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
 
     </style>
 </head>

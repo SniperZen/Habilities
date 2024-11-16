@@ -35,6 +35,7 @@ async function fetchRecipients() {
 // Call the function on page load
 document.addEventListener('DOMContentLoaded', fetchRecipients);
 
+
 // Handle form submission
 document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     e.preventDefault();

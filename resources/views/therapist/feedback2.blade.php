@@ -185,6 +185,10 @@
                 }
             }
 
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('#editor').style.height = '53vh';
+            });
+
             // Back button functionality
             document.getElementById('back').addEventListener('click', function() {
                 window.history.back();

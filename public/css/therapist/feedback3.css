@@ -17,8 +17,6 @@ body {
     flex: 1; 
     padding: 30px;
     background-color: #fafafa;
-    overflow-y: auto;
-    height: 100vh;
 }
 
 /* Profile Info */
@@ -64,7 +62,13 @@ body {
     height: 30px;
     cursor: pointer;
     margin-bottom: 15px;
+    transition: transform 0.3s ease;
 }
+
+.icon-container img:hover{
+    transform: scale(1.10);
+}
+
 
 .content-header h1{
     margin-bottom: 20px;
@@ -85,6 +89,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    height: 60vh;
+    overflow-y: auto;
 }
 
 .inquiry-details h4{
@@ -143,6 +149,7 @@ body {
 .send-message button:hover {
     background-color: #333;
 }
+
 
 /* The Modal (hidden by default) */
 .modal {

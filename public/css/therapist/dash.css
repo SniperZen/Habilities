@@ -74,10 +74,10 @@ body {
 
 .but a{
     font-weight: bolder;
-    color: #4F4A6E;
+    transition: transform 0.3s ease;
 }
 .but a:hover{
-    color: #AEADD6;
+    transform: scale(1.07);
 }
 
 .actions {
@@ -269,6 +269,8 @@ tr{
     border-radius: 8px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     margin: 10px 13px;
+    transition: background-color 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .notification-item:hover{
@@ -483,7 +485,7 @@ tr{
     flex: 1;
 }
 .notifications-container {
-    max-height: 330px;
+    max-height: 357px;
     overflow-y: auto;
     transition: max-height 0.3s ease;
 }

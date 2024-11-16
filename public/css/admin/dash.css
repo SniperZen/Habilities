@@ -190,6 +190,8 @@ table{
     border-radius: 8px;
     margin-bottom: 5px;
     padding: 10px;
+    transition: background-color 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .notification-item:hover{
