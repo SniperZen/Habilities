@@ -66,6 +66,10 @@ body {
     margin-bottom: 15px;
 }
 
+.content-header h1{
+    margin-bottom: 20px;
+}
+
 /* Timestamp */
 .timestamp {
     font-size: 14px;
@@ -81,6 +85,10 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+}
+
+.inquiry-details h4{
+    margin-bottom: 10px;
 }
 
 .details-grid {

@@ -405,6 +405,20 @@
                                 max-height: 60vh;
                                 overflow-y: auto;
                             }
+                            .messages-section::after {
+                                content: '';
+                                position: absolute;
+                                left: 0;
+                                right: 0;
+                                height: 50px; 
+                                pointer-events: none; 
+                                z-index: 10; 
+                                
+                            }
+                            .messages-section::after {
+                                bottom: 0;
+                                background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+                            }
 
                             .inners{
                                 padding: 28px;

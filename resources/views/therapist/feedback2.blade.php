@@ -29,27 +29,23 @@
                             <input type="text" id="recipient" placeholder="Search Recipient" autocomplete="off">
                             <div id="recipient-dropdown" class="dropdown-list"></div>
                         </div>
-                        <div class="form-group">
-<<<<<<< Updated upstream
-                            <label class="ftitle" for="feedback-diagnosis">Diagnosis:</label>
-                            <select id="feedback-diagnosis" name="diagnosis">
-                                <option value="">Select...</option>
-                                <option value="Autism">Autism</option>
-                                <option value="Attention Deficit Hyperactivity Disorder (ADHD)">Attention Deficit Hyperactivity Disorder (ADHD)</option>
-                                <option value="Down Syndrome">Down Syndrome</option>
-                                <option value="Global Developmental Delay (GDD)">Global Developmental Delay (GDD)</option>
-                                <option value="Behavioral Problems">Behavioral Problems</option>
-                                <option value="Learning Disabilities">Learning Disabilities</option>
-                                <option value="Others">Others</option>
-                            </select>
-                            <div id="other-diagnosis-div" style="display: none; margin-top: 10px;">
-                                <input type="text" id="other-diagnosis" placeholder="Please specify diagnosis">
+                        <div class="custom-select-wrapper">
+                            <div class="form-group">
+                                <label class="dignosis" for="feedback-diagnosis">Diagnosis:</label>
+                                <select id="feedback-diagnosis" name="diagnosis">
+                                    <option value="">Select...</option>
+                                    <option value="Autism">Autism</option>
+                                    <option value="Attention Deficit Hyperactivity Disorder (ADHD)">Attention Deficit Hyperactivity Disorder (ADHD)</option>
+                                    <option value="Down Syndrome">Down Syndrome</option>
+                                    <option value="Global Developmental Delay (GDD)">Global Developmental Delay (GDD)</option>
+                                    <option value="Behavioral Problems">Behavioral Problems</option>
+                                    <option value="Learning Disabilities">Learning Disabilities</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <div id="other-diagnosis-div" style="display: none; margin-top: 10px;">
+                                    <input type="text" id="other-diagnosis" placeholder="Please specify diagnosis">
+                                </div>
                             </div>
-
-=======
-                            <label class="diagnosis" for="feedback-diagnosis">Diagnosis:</label>
-                            <input type="text" id="feedback-diagnosis" name="diagnosis" placeholder="Type here..." required autocomplete="off">
->>>>>>> Stashed changes
                         </div>
                     </div>
                     <div class="form-group1">

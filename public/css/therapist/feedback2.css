@@ -64,10 +64,47 @@ input[type="text"] {
     border-radius: 4px;
 }
 
+/* input[type="text"]#recipient{
+    background-color: #4F4A6E;
+    color: white;
+}
+
+input[type="text"]#recipient::after{
+    content: 'x';
+} */
+
 #editor {
     height: 200px;
     background-color: white;
     border: 1px solid #ccc;
+}
+
+#feedback-diagnosis {
+    width: 98%;         
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;    
+    appearance: none;      
+    appearance: none;          /* Hide default arrow */
+    -webkit-appearance: none;  /* Webkit browsers */
+    -moz-appearance: none; 
+}
+
+.custom-select-wrapper::after {
+    content: '\25BC';
+    position: absolute;
+    top: 30%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none; 
+    font-size: 14px;
+    color: #333;
+}
+
+.custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 98%; /* Same width as the select */
 }
 
 .form-actions {
