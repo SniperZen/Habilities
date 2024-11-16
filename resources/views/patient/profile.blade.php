@@ -87,16 +87,6 @@
     .feedback-content ol {
         list-style-type: decimal !important;
     }
-
-    .modal-content {
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    .modal-content .content-wrapper {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
     </style>
 </head>
 
@@ -161,70 +151,71 @@
                         <!-- Messages Section -->
                         <section class="messages-section">
                         @if($feedback->count() > 0)
-    @foreach($feedback as $item)
-        <div class="message" onclick="openModal('modal-{{ $item->id }}')">
-            <div class="message-header">
-                @if($item->sender->profile_image)
-                    <img src="{{ Storage::url($item->sender->profile_image) }}" alt="{{ $item->sender->name }}'s Profile Picture" class="therapist-pic">
-                @else
-                    <img src="{{ asset('images/therapist-default.png') }}" alt="Default Therapist Picture" class="therapist-pic">
-                @endif
-                <div>
-                    <h4>{{ $item->sender->name }}</h4>
-                    <span>{{ $item->created_at->format('M d, Y') }}</span>
-                </div>
-            </div>
-            <h3>Diagnosis:{{ $item->diagnosis }}</h3>
-            <h3>Feedback Title:{{ $item->title }}</h3>
-            <div class="feedback-content">
-                {!! Str::words($item->content, 100, '...') !!}
-            </div>        
-        </div>
+                            @foreach($feedback as $item)
+                                <div class="message" onclick="openModal('modal-{{ $item->id }}')">
+                                    <div class="message-header">
+                                        @if($item->sender->profile_image)
+                                            <img src="{{ Storage::url($item->sender->profile_image) }}" alt="{{ $item->sender->name }}'s Profile Picture" class="therapist-pic">
+                                        @else
+                                            <img src="{{ asset('images/therapist-default.png') }}" alt="Default Therapist Picture" class="therapist-pic">
+                                        @endif
+                                        <div>
+                                            <h4>{{ $item->sender->name }}</h4>
+                                            <span>{{ $item->created_at->format('M d, Y') }}</span>
+                                        </div>
+                                    </div>
+                                    <h3>Diagnosis:{{ $item->diagnosis }}</h3>
+                                    <h3>Feedback Title:{{ $item->title }}</h3>
+                                    <div class="feedback-content">
+                                        {!! Str::words($item->content, 20, '...') !!}
+                                    </div>        
+                                </div>
 
-        <!-- Modal for full content -->
-        <div id="modal-{{ $item->id }}" class="modal2" style="display: none;">
-            <div class="modal-content">
-                <!-- <span class="close" onclick="closeModal('modal-{{ $item->id }}')">&times;</span> -->
-                 <div class="scroller">
-                    <div class="inners">
-                <div class="head_template">
-                    <div class="headers">
-                        <div class="logos">
-                            <img src="{{ asset('images/logo.png') }}" alt="Habilities Center for Intervention Logo">
-                        </div>
-                        <div class="info">
-                            <h2 style="margin-bottom: 0;">Habilities Center for Intervention</h2>
-                            <p>112 Sampaguita Street, Phase 1<br>
-                            Brgy. Bulihan, City of Malolos<br>
-                            0927 307 0434</p>
-                        </div>
-                    </div>
+                                <!-- Modal for full content -->
+                                <div id="modal-{{ $item->id }}" class="modal2" style="display: none;">
+                                    <div class="modal-content">
+                                        <div class="scroller">
+                                            <div class="inners">
+                                        <div class="head_template">
+                                            <div class="headers">
+                                                <div class="logos">
+                                                    <img src="{{ asset('images/logo.png') }}" alt="Habilities Center for Intervention Logo">
+                                                </div>
+                                                <div class="info">
+                                                    <h2 style="margin-bottom: 0;">Habilities Center for Intervention</h2>
+                                                    <p>112 Sampaguita Street, Phase 1<br>
+                                                    Brgy. Bulihan, City of Malolos<br>
+                                                    0927 307 0434</p>
+                                                </div>
+                                            </div>
 
-                    <div class="title">
-                        <h1>Occupational Therapy Feedback</h1>
-                    </div>
+                                            <div class="title">
+                                                <h1>Occupational Therapy Feedback</h1>
+                                            </div>
 
-                    <div class="note">
-                        <p>NOTE: HIGHLY CONFIDENTIAL. UPLOADING, SHARING, OR DUPLICATION OF THIS DOCUMENT WITHOUT CONSENT OF THE THERAPIST IS HIGHLY PROHIBITED.</p>
-                    </div>
-                </div>
-                <h2>{{ $item->diagnosis }}</h2>
-                <h2>{{ $item->title }}</h2>
-                <div class="content-wrapper">
-                    <div class="feedback-content">
-                        {!! $item->content !!}
-                    </div>
-                </div>
-                <div class="close3"><button class="close5" onclick="closeModal('modal-{{ $item->id }}')">Close</button></div>
-            </div>
-        </div>
-    @endforeach
-@else
-    <div class="message" style="text-align:center;">
-        <p>No feedback available from therapist at this time.</p>
-    </div>
-@endif
-</section>
+                                            <div class="note">
+                                                <p>NOTE: HIGHLY CONFIDENTIAL. UPLOADING, SHARING, OR DUPLICATION OF THIS DOCUMENT WITHOUT CONSENT OF THE THERAPIST IS HIGHLY PROHIBITED.</p>
+                                            </div>
+                                        </div>
+                                        <h2>{{ $item->diagnosis }}</h2>
+                                        <h2>{{ $item->title }}</h2>
+                                        <div class="content-wrapper">
+                                            <div class="feedback-content">
+                                                {!! $item->content !!}
+                                            </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        <div class="close3"><button class="close5" onclick="closeModal('modal-{{ $item->id }}')">Close</button></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="message" style="text-align:center;">
+                                <p>No feedback available from therapist at this time.</p>
+                            </div>
+                        @endif
+                        </section>
 
                         </section>
 
@@ -390,19 +381,9 @@
                                 background-color: #fefefe;
                                 margin: 6% auto;
                                 border: 1px solid #888;
-                                width: 80%;
-                                max-width: 600px;
+                                width: 100%;
+                                max-width: 700px;
                                 border-radius: 10px;
-                            }
-
-
-                            .scroller{
-                                max-height: 600px;
-                                overflow-y: auto;
-                            }
-
-                            .inners{
-                                padding: 28px;
                             }
                             .modal {
                                 display: none;
@@ -416,9 +397,22 @@
                                 background-color: rgba(0,0,0,0.4);
                             }
 
-
                             .modal-content h2{
                                 margin-bottom: 19px;
+                            }
+
+                            .scroller{
+                                max-height: 60vh;
+                                overflow-y: auto;
+                            }
+
+                            .inners{
+                                padding: 28px;
+                            }
+
+                            .modal-content .content-wrapper {
+                                white-space: pre-wrap;
+                                word-wrap: break-word;
                             }
                             .close {
                                 color: #aaa;
