@@ -185,6 +185,8 @@
         <div id="modal-{{ $item->id }}" class="modal2" style="display: none;">
             <div class="modal-content">
                 <!-- <span class="close" onclick="closeModal('modal-{{ $item->id }}')">&times;</span> -->
+                 <div class="scroller">
+                    <div class="inners">
                 <div class="head_template">
                     <div class="headers">
                         <div class="logos">
@@ -267,7 +269,6 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 var calendarEl = document.getElementById('calendar');
                                 var modal = document.getElementById('eventModal');
-                                var span = document.getElementsByClassName("close4")[0];
                                 var span2 = document.getElementsByClassName("close2")[0];
 
                                 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -313,10 +314,6 @@
                                 });
 
                                 calendar.render();
-
-                                span.onclick = function() {
-                                    modal.style.display = "none";
-                                }
 
                                 span2.onclick = function() {
                                     modal.style.display = "none";
@@ -392,11 +389,20 @@
                             .modal-content {
                                 background-color: #fefefe;
                                 margin: 6% auto;
-                                padding: 28px;
                                 border: 1px solid #888;
                                 width: 80%;
                                 max-width: 600px;
                                 border-radius: 10px;
+                            }
+
+
+                            .scroller{
+                                max-height: 600px;
+                                overflow-y: auto;
+                            }
+
+                            .inners{
+                                padding: 28px;
                             }
                             .modal {
                                 display: none;
@@ -409,6 +415,7 @@
                                 overflow: auto;
                                 background-color: rgba(0,0,0,0.4);
                             }
+
 
                             .modal-content h2{
                                 margin-bottom: 19px;
@@ -434,15 +441,23 @@
 
                         <!-- Modal for Event Details -->
                         <div id="eventModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close4">&times;</span>
-                                <h2 id="modalTitle"></h2>
-                                <p id="modalPatient"></p>
-                                <p id="modalNote"></p>
-                                <p id="modalDate"></p>
-                                <p id="modalStartTime"></p>
-                                <p id="modalEndTime"></p>
-                                <div class="close3"><button class="close2">Close</button></div>
+                            <div class="modal-contents">
+                                <div class="heads"></div>
+                                <div class="mod-cont">
+                                    <div class="inner">
+                                        <div class="top">
+                                            <h2 id="modalTitle"></h2>
+                                        </div>
+                                        <div class="bot">
+                                            <p id="modalPatient"></p>
+                                            <p id="modalNote"></p>
+                                            <p id="modalDate"></p>
+                                            <p id="modalStartTime"></p>
+                                            <p id="modalEndTime"></p>
+                                        </div>
+                                    </div>
+                                    <div class="close7"><button class="close2">Close</button></div>
+                                </div>
                             </div>
                         </div>
                     </div>

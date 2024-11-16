@@ -11,129 +11,6 @@
         <link rel="stylesheet" href="{{ asset('css/therapist/feedback2.css') }}">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <style>
-            /* The Modal (hidden by default) */
-            .modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 1000;
-            }
-            .modal-content {
-                display: block;
-                background-color: white;
-                margin: 15% auto;
-                border-radius: 10px;
-                width: 450px;
-                text-align: center;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                position: relative;
-            }
-
-            .heads{
-                width: 100%;
-                background-color: #635c91;
-                height: 15px;
-                border-radius: 10px 10px 0 0;
-            }
-
-            .mod-cont{
-                padding: 20px;
-            }
-
-
-            .top{
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding-bottom: 20px;
-                border-bottom: 1px solid #afafaf;
-                width: 100%;
-                h2{
-                    margin: 0;
-                }
-            }
-            .bot {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: justify;
-                padding: 0 10px;
-            }
-            .inner{
-                display: flex;
-                gap: 20px;
-                flex-direction: column;
-                position: relative;
-            }
-
-            .modal-buttons {
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 30px;
-                border-top: 1px solid #afafaf;
-                padding-top: 20px;
-                gap: 20px;
-            }
-
-            .modal-btn {
-                border: none;
-                padding: 10px 20px;
-                border-radius: 20px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            .confirm-btn {
-                background-color: #4F4A6E;
-                color: white;
-            }
-
-            .confirm-btn:hover {
-                background-color: #665f8d;
-            }
-
-            .cancel-btn {
-                background-color: transparent;
-                color: #395886;
-                border: #395886 0.5px solid;
-            }
-
-            .cancel-btn:hover {
-                background-color: #665f8d;
-            }
-
-            .relative-position {
-                position: relative;
-            }
-
-            .dropdown-list {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                max-height: 200px;
-                overflow-y: auto;
-                background-color: white;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                display: none;
-                z-index: 1000;
-            }
-
-            .dropdown-item {
-                padding: 10px;
-                cursor: pointer;
-            }
-
-            .dropdown-item:hover {
-                background-color: #f5f5f5;
-            }
-        </style>
     </head>
     <body>
         <div class="feedback-form">
@@ -153,6 +30,7 @@
                             <div id="recipient-dropdown" class="dropdown-list"></div>
                         </div>
                         <div class="form-group">
+<<<<<<< Updated upstream
                             <label class="ftitle" for="feedback-diagnosis">Diagnosis:</label>
                             <select id="feedback-diagnosis" name="diagnosis">
                                 <option value="">Select...</option>
@@ -168,6 +46,10 @@
                                 <input type="text" id="other-diagnosis" placeholder="Please specify diagnosis">
                             </div>
 
+=======
+                            <label class="diagnosis" for="feedback-diagnosis">Diagnosis:</label>
+                            <input type="text" id="feedback-diagnosis" name="diagnosis" placeholder="Type here..." required autocomplete="off">
+>>>>>>> Stashed changes
                         </div>
                     </div>
                     <div class="form-group1">
