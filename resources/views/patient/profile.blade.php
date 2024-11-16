@@ -62,6 +62,41 @@
         .fc-direction-ltr {
             height: 469px;
         }
+        .feedback-content {
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .feedback-content ul,
+    .feedback-content ol {
+        padding-left: 40px !important;
+        margin-left: 20px !important;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .feedback-content li {
+        margin-bottom: 8px !important;
+        display: list-item !important;
+    }
+
+    .feedback-content ul {
+        list-style-type: disc !important;
+    }
+
+    .feedback-content ol {
+        list-style-type: decimal !important;
+    }
+
+    .modal-content {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .modal-content .content-wrapper {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
     </style>
 </head>
 
@@ -139,9 +174,11 @@
                     <span>{{ $item->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
-            <h3>{{ $item->diagnosis }}</h3>
-            <h3>{{ $item->title }}</h3>
-            <p>{!! Str::words(strip_tags($item->content), 100, '...') !!}</p>
+            <h3>Diagnosis:{{ $item->diagnosis }}</h3>
+            <h3>Feedback Title:{{ $item->title }}</h3>
+            <div class="feedback-content">
+                {!! Str::words($item->content, 100, '...') !!}
+            </div>        
         </div>
 
         <!-- Modal for full content -->
@@ -171,7 +208,11 @@
                 </div>
                 <h2>{{ $item->diagnosis }}</h2>
                 <h2>{{ $item->title }}</h2>
-                <p>{!! strip_tags($item->content) !!}</p>
+                <div class="content-wrapper">
+                    <div class="feedback-content">
+                        {!! $item->content !!}
+                    </div>
+                </div>
                 <div class="close3"><button class="close5" onclick="closeModal('modal-{{ $item->id }}')">Close</button></div>
             </div>
         </div>

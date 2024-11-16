@@ -22,6 +22,8 @@ use App\Models\BusinessSetting;
 use App\Models\PatientFeedback;
 use App\Notifications\NewPatientFeedbackNotification;
 use App\Notifications\AppointmentFinishedNotification;
+use Illuminate\Support\HtmlString;
+use Mews\Purifier\Facades\Purifier;
 
 
 class TherapistController extends Controller
@@ -480,12 +482,21 @@ public function   changespass(){
      ]);
  
      try {
+         // Clean the HTML content but preserve formatting tags
+         $cleanContent = Purifier::clean($validatedData['content'], [
+            'HTML.Allowed' => 'p,b,strong,i,em,u,ul[style],ol[style],li[style],br,span,div',
+            'CSS.AllowedProperties' => '*',
+            'AutoFormat.AutoParagraph' => true,
+            'AutoFormat.RemoveEmpty' => false,
+        ]);
+        
+ 
          $feedback = new Feedback();
          $feedback->sender_id = Auth::id();
          $feedback->recipient_id = $validatedData['recipient_id'];
          $feedback->title = $validatedData['title'];
          $feedback->diagnosis = $validatedData['diagnosis'];
-         $feedback->content = $validatedData['content'];
+         $feedback->content = $cleanContent;
          $feedback->save();
  
          // Get the therapist (sender) information
@@ -495,24 +506,22 @@ public function   changespass(){
          $recipient = User::find($validatedData['recipient_id']);
          $recipient->notify(new TherapistFeedbackNotification($therapist, $feedback));
  
-         $message = 'Feedback sent successfully and notification delivered.';
-         
          if ($request->ajax()) {
-             return response()->json(['success' => true, 'message' => $message]);
+             return response()->json(['success' => true, 'message' => 'Feedback sent successfully']);
          }
  
-         return redirect()->route('therapist.feedback')->with('success', $message);
+         return redirect()->route('therapist.feedback')->with('success', 'Feedback sent successfully');
  
      } catch (\Exception $e) {
-         $errorMessage = 'An error occurred while sending feedback.';
-         
          if ($request->ajax()) {
-             return response()->json(['success' => false, 'message' => $errorMessage]);
+             return response()->json(['success' => false, 'message' => 'An error occurred while sending feedback']);
          }
  
-         return redirect()->back()->with('error', $errorMessage)->withInput();
+         return redirect()->back()->with('error', 'An error occurred while sending feedback')->withInput();
      }
  }
+ 
+ 
  
 
 

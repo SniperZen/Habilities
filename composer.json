@@ -5,12 +5,13 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "ext-dom": "*",
         "php": "^8.2",
+        "ext-dom": "*",
         "doctrine/dbal": "^4.2",
         "intervention/image": "^3.8",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "mews/purifier": "^3.4",
         "munafio/chatify": "^1.6",
         "pusher/pusher-php-server": "^7.2"
     },

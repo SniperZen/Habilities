@@ -8,7 +8,37 @@
     <link rel="stylesheet" href="{{ asset('css/therapist/feedback3.css') }}">
 </head>
 <body>
+<style>
+/* Reset default margins and paddings */
+ul, ol {
+    padding-left: 40px !important;
+    margin-left: 20px !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
 
+/* Style for list items */
+li {
+    margin-bottom: 8px !important;
+    display: list-item !important;
+}
+
+/* Content wrapper styles */
+.feedback-content {
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Preserve whitespace and formatting */
+.feedback-content p, 
+.feedback-content ul, 
+.feedback-content ol {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+
+</style>
 <main class="main-content">
     <header class="content-header">
         <h1>Therapy Feedback</h1>
@@ -61,7 +91,9 @@
         <h4>Diagnosis: {{ $feedback->diagnosis }}</h4>
         <h4>Feedback Title: {{ $feedback->title }}</h4>
         <p><strong>Feedback Content:</strong></p>
-        <p>{!! $feedback->content !!}</p>    
+        <div class="feedback-content">
+            {!! $feedback->content !!}
+        </div>
     </section>
 </main>
 

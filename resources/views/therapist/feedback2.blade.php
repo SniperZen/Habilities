@@ -212,15 +212,20 @@
             // Initialize Quill editor
             var quill = new Quill('#editor', {
                 theme: 'snow',
+                formats: [
+                    'bold', 'italic', 'underline',
+                    'list', 'bullet',  // Enable lists
+                    'indent', 'align'  // Enable indentation
+                ],
                 modules: {
                     toolbar: [
                         ['bold', 'italic', 'underline'],
                         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link', 'image'],
-                        ['clean']
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
                     ]
                 }
             });
+
 
             // Modal functions
             function showConfirmModal() {
@@ -249,12 +254,14 @@
                 document.getElementById('confirmModal').style.display = 'none';
             }
 
+            // Modify mo ang submitForm function
             function submitForm() {
-                document.getElementById('feedback-content').value = quill.root.innerHTML;
-                // Store a flag in localStorage before submitting
+                let quillContent = quill.root.innerHTML;
+                document.getElementById('feedback-content').value = quillContent;
                 localStorage.setItem('feedbackJustSent', 'true');
                 document.getElementById('feedbackForm').submit();
             }
+
 
 
             // Recipient search functionality
