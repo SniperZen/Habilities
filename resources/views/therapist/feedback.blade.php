@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </script>
             </div>
         <!-- Modify the search bar input to include an ID -->
-        <input type="text" id="searchInput" placeholder="Search Recipient or Title..." class="search-bar" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Search by Recipient, Title or Diagnosis..." class="search-bar" autocomplete="off">
             <a href="{{ route('therapist.feedback2')}}"><button class="create-button">Create New</button></a>
         </div>
         <div class="table-wrapper">
@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <tr>
                     <th>Recipient</th>
                     <th>Feedback Title</th>
+                    <th>Diagnosis</th>
                     <th>Date</th>
                     <th>Action</th>
                 </tr>
@@ -101,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <tr class="clickable-row">
                         <td>{{ $feedback->recipient->name }}</td>
                         <td>{{ $feedback->title }}</td>
+                        <td>{{ $feedback->diagnosis }}</td>
                         <td>{{ $feedback->created_at->format('m/d/Y') }}</td>
                         <td><a class="create-button views" href="{{ route('therapist.feedback3', ['id' => $feedback->id]) }}"><button class="view">View</button></a></td>
                     </tr>
@@ -127,99 +129,101 @@ document.addEventListener('DOMContentLoaded', function () {
     <div id="toast-container"></div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Clickable rows functionality
-        const rows = document.querySelectorAll('.clickable-row');
-        rows.forEach(row => {
-            row.addEventListener('click', function () {
-                window.location.href = this.dataset.url;
-            });
-        });
-
-        // Search functionality with debounce
-        const searchInput = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.feedback-table tbody tr');
-        let searchTimeout = null;
-
-        function performSearch() {
-            const searchTerm = searchInput.value.toLowerCase();
-
-            tableRows.forEach(row => {
-                if (row.classList.contains('clickable-row')) {
-                    const recipientName = row.cells[0].textContent.toLowerCase();
-                    const feedbackTitle = row.cells[1].textContent.toLowerCase();
-
-                    // Check if either recipient name or feedback title contains the search term
-                    if (recipientName.includes(searchTerm) || feedbackTitle.includes(searchTerm)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            });
-
-            // Show "No results found" message if no matches
-            const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
-            const noResultsRow = document.querySelector('.no-results-row');
-
-            if (visibleRows.length === 0) {
-                if (!noResultsRow) {
-                    const tbody = document.querySelector('.feedback-table tbody');
-                    const newRow = document.createElement('tr');
-                    newRow.className = 'no-results-row';
-                    newRow.innerHTML = '<td colspan="3">No matching results found.</td>';
-                    tbody.appendChild(newRow);
-                }
-            } else {
-                if (noResultsRow) {
-                    noResultsRow.remove();
-                }
-            }
-        }
-
-        // Add loading indicator
-        function createLoadingIndicator() {
-            const tbody = document.querySelector('.feedback-table tbody');
-            const loadingRow = document.createElement('tr');
-            loadingRow.className = 'loading-row';
-            loadingRow.innerHTML = '<td colspan="3"><div class="loading-spinner">Searching...</div></td>';
-            tbody.appendChild(loadingRow);
-        }
-
-        function removeLoadingIndicator() {
-            const loadingRow = document.querySelector('.loading-row');
-            if (loadingRow) {
-                loadingRow.remove();
-            }
-        }
-
-        searchInput.addEventListener('input', function() {
-            // Remove previous loading indicator and timeout
-            removeLoadingIndicator();
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
-
-            // Show loading indicator if search field is not empty
-            if (this.value.trim() !== '') {
-                createLoadingIndicator();
-            }
-
-            // Hide all no-results messages while searching
-            const noResultsRow = document.querySelector('.no-results-row');
-            if (noResultsRow) {
-                noResultsRow.remove();
-            }
-
-            // Set new timeout
-            searchTimeout = setTimeout(() => {
-                removeLoadingIndicator();
-                performSearch();
-            }, 500); // 500ms delay
+document.addEventListener('DOMContentLoaded', function () {
+    // Clickable rows functionality
+    const rows = document.querySelectorAll('.clickable-row');
+    rows.forEach(row => {
+        row.addEventListener('click', function () {
+            window.location.href = this.dataset.url;
         });
     });
 
-    
+    // Search functionality with debounce
+    const searchInput = document.getElementById('searchInput');
+    const tableRows = document.querySelectorAll('.feedback-table tbody tr');
+    let searchTimeout = null;
+
+    function performSearch() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            if (row.classList.contains('clickable-row')) {
+                const recipientName = row.cells[0].textContent.toLowerCase();
+                const feedbackTitle = row.cells[1].textContent.toLowerCase();
+                const diagnosis = row.cells[2].textContent.toLowerCase(); // Add diagnosis
+
+                // Check if recipient name, feedback title, or diagnosis contains the search term
+                if (recipientName.includes(searchTerm) || 
+                    feedbackTitle.includes(searchTerm) || 
+                    diagnosis.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+        // Show "No results found" message if no matches
+        const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+        const noResultsRow = document.querySelector('.no-results-row');
+
+        if (visibleRows.length === 0) {
+            if (!noResultsRow) {
+                const tbody = document.querySelector('.feedback-table tbody');
+                const newRow = document.createElement('tr');
+                newRow.className = 'no-results-row';
+                newRow.innerHTML = '<td colspan="5">No matching results found.</td>'; // Updated colspan to 5
+                tbody.appendChild(newRow);
+            }
+        } else {
+            if (noResultsRow) {
+                noResultsRow.remove();
+            }
+        }
+    }
+
+    // Add loading indicator
+    function createLoadingIndicator() {
+        const tbody = document.querySelector('.feedback-table tbody');
+        const loadingRow = document.createElement('tr');
+        loadingRow.className = 'loading-row';
+        loadingRow.innerHTML = '<td colspan="5"><div class="loading-spinner">Searching...</div></td>'; // Updated colspan to 5
+        tbody.appendChild(loadingRow);
+    }
+
+    function removeLoadingIndicator() {
+        const loadingRow = document.querySelector('.loading-row');
+        if (loadingRow) {
+            loadingRow.remove();
+        }
+    }
+
+    searchInput.addEventListener('input', function() {
+        // Remove previous loading indicator and timeout
+        removeLoadingIndicator();
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        // Show loading indicator if search field is not empty
+        if (this.value.trim() !== '') {
+            createLoadingIndicator();
+        }
+
+        // Hide all no-results messages while searching
+        const noResultsRow = document.querySelector('.no-results-row');
+        if (noResultsRow) {
+            noResultsRow.remove();
+        }
+
+        // Set new timeout
+        searchTimeout = setTimeout(() => {
+            removeLoadingIndicator();
+            performSearch();
+        }, 500); // 500ms delay
+    });
+});
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

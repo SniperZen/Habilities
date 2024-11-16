@@ -17,6 +17,7 @@ class Feedback extends Model
         'sender_id',
         'recipient_id',
         'title',
+        'diagnosis',
         'content',
     ];
     protected $dates = ['created_at', 'updated_at'];

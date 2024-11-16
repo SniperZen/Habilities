@@ -139,6 +139,7 @@
                     <span>{{ $item->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
+            <h3>{{ $item->diagnosis }}</h3>
             <h3>{{ $item->title }}</h3>
             <p>{!! Str::words(strip_tags($item->content), 100, '...') !!}</p>
         </div>
@@ -168,6 +169,7 @@
                         <p>NOTE: HIGHLY CONFIDENTIAL. UPLOADING, SHARING, OR DUPLICATION OF THIS DOCUMENT WITHOUT CONSENT OF THE THERAPIST IS HIGHLY PROHIBITED.</p>
                     </div>
                 </div>
+                <h2>{{ $item->diagnosis }}</h2>
                 <h2>{{ $item->title }}</h2>
                 <p>{!! strip_tags($item->content) !!}</p>
                 <div class="close3"><button class="close5" onclick="closeModal('modal-{{ $item->id }}')">Close</button></div>

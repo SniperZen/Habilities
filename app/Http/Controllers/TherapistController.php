@@ -475,6 +475,7 @@ public function   changespass(){
      $validatedData = $request->validate([
          'recipient_id' => 'required|exists:users,id',
          'title' => 'required|string|max:255',
+         'diagnosis' => 'required|string|max:255',
          'content' => 'required|string',
      ]);
  
@@ -483,6 +484,7 @@ public function   changespass(){
          $feedback->sender_id = Auth::id();
          $feedback->recipient_id = $validatedData['recipient_id'];
          $feedback->title = $validatedData['title'];
+         $feedback->diagnosis = $validatedData['diagnosis'];
          $feedback->content = $validatedData['content'];
          $feedback->save();
  

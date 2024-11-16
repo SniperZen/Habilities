@@ -152,6 +152,10 @@
                             <input type="text" id="recipient" placeholder="Search Recipient" autocomplete="off">
                             <div id="recipient-dropdown" class="dropdown-list"></div>
                         </div>
+                        <div class="form-group">
+                            <label class="ftitle" for="feedback-diagnosis">Diagnosis:</label>
+                            <input type="text" id="feedback-diagnosis" name="diagnosis" placeholder="Type here..." required autocomplete="off">
+                        </div>
                     </div>
                     <div class="form-group1">
                         <label for="feedback-content">Feedback Content:</label>
