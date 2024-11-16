@@ -283,6 +283,7 @@
         .container {
             background: none;
             overflow-y: auto;
+            header 100%
         }
     }
 

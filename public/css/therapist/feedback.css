@@ -15,13 +15,6 @@ body {
     height: calc(100vh - 120px);
 }
 
-h1 {
-    font-size: 36px;
-    color: #555;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #4C4C2B; /* Slight green tint */
-}
 
 .controls {
     display: flex;

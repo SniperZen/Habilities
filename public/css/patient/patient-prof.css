@@ -337,11 +337,40 @@ body {
     display: flex;
     justify-content: flex-end;
     margin-top: 22px;
+    margin-top: 22px;
+    padding: 16px 28px;
 }
 
-.modal-content p{
+.close7{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+    margin-top: 22px;
+}
+
+
+.modal-contents p{
     line-height: 1.6;
     margin-bottom: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+.close-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-body {
+    margin-top: 20px;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    text-align: right;
 }
 
 .headers {
@@ -389,6 +418,63 @@ body {
     color: #333;
     font-weight: bold;
     margin: 0 20px 22px;
+}
+
+.modal-contents {
+    display: block;
+    background-color: white;
+    margin: 15% auto;
+    border-radius: 10px;
+    width: 450px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.heads{
+    width: 100%;
+    background-color: #395886;
+    height: 15px;
+    border-radius: 10px 10px 0 0;
+}
+
+.mod-cont{
+    padding: 20px;
+}
+
+
+.top{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #afafaf;
+    width: 100%;
+    h2{
+        margin: 0;
+    }
+}
+.bot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: justify;
+    padding: 0 10px;
+}
+.inner{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    border-top: 1px solid #afafaf;
+    padding-top: 20px;
+    gap: 20px;
 }
 
 @media (max-width: 1200px) {
