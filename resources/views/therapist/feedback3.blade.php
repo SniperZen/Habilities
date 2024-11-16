@@ -58,6 +58,7 @@
     </div>
 
     <section class="inquiry-details">
+        <h4>Diagnosis: {{ $feedback->diagnosis }}</h4>
         <h4>Feedback Title: {{ $feedback->title }}</h4>
         <p><strong>Feedback Content:</strong></p>
         <p>{!! $feedback->content !!}</p>    

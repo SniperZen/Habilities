@@ -154,7 +154,20 @@
                         </div>
                         <div class="form-group">
                             <label class="ftitle" for="feedback-diagnosis">Diagnosis:</label>
-                            <input type="text" id="feedback-diagnosis" name="diagnosis" placeholder="Type here..." required autocomplete="off">
+                            <select id="feedback-diagnosis" name="diagnosis">
+                                <option value="">Select...</option>
+                                <option value="Autism">Autism</option>
+                                <option value="Attention Deficit Hyperactivity Disorder (ADHD)">Attention Deficit Hyperactivity Disorder (ADHD)</option>
+                                <option value="Down Syndrome">Down Syndrome</option>
+                                <option value="Global Developmental Delay (GDD)">Global Developmental Delay (GDD)</option>
+                                <option value="Behavioral Problems">Behavioral Problems</option>
+                                <option value="Learning Disabilities">Learning Disabilities</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <div id="other-diagnosis-div" style="display: none; margin-top: 10px;">
+                                <input type="text" id="other-diagnosis" placeholder="Please specify diagnosis">
+                            </div>
+
                         </div>
                     </div>
                     <div class="form-group1">
@@ -292,6 +305,44 @@
                 window.history.back();
             });
         </script>
+<script>
+document.getElementById('feedback-diagnosis').addEventListener('change', function() {
+    const otherDiagnosisDiv = document.getElementById('other-diagnosis-div');
+    const otherDiagnosisInput = document.getElementById('other-diagnosis');
+    const diagnosisSelect = document.getElementById('feedback-diagnosis');
+    
+    if (this.value === 'Others') {
+        otherDiagnosisDiv.style.display = 'block';
+        otherDiagnosisInput.required = true;
+    } else {
+        otherDiagnosisDiv.style.display = 'none';
+        otherDiagnosisInput.required = false;
+        otherDiagnosisInput.value = '';
+    }
+});
+
+// Add a separate event listener for the other diagnosis input
+document.getElementById('other-diagnosis').addEventListener('input', function() {
+    const diagnosisSelect = document.getElementById('feedback-diagnosis');
+    if (diagnosisSelect.value === 'Others' && this.value.trim() !== '') {
+        // Update the select element's value directly
+        const option = new Option(this.value, this.value, true, true);
+        diagnosisSelect.add(option);
+        diagnosisSelect.value = this.value;
+    }
+});
+
+// Update the form submission to ensure the correct value is sent
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    const diagnosisSelect = document.getElementById('feedback-diagnosis');
+    const otherDiagnosisInput = document.getElementById('other-diagnosis');
+    
+    if (diagnosisSelect.value === 'Others' && otherDiagnosisInput.value.trim() !== '') {
+        diagnosisSelect.value = otherDiagnosisInput.value;
+    }
+});
+
+</script>
     </body>
     </html>
 </x-therapist-layout>

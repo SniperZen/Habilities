@@ -199,6 +199,8 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::post('/therapist/feedback', [TherapistController::class, 'stores'])->name('therapist.feedback.stores');
             Route::get('/therapist/my-history', [TherapistController::class, 'myHistory'])->name('therapist.myHistory');
 
+                
+
 
 
 
