@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </thead>
             <tbody>
                 @forelse($feedbacks as $feedback)
-                    <tr class="clickable-row">
+                    <tr>
                         <td>{{ $feedback->recipient->name }}</td>
                         <td>{{ $feedback->title }}</td>
                         <td>{{ $feedback->diagnosis }}</td>
@@ -131,12 +131,12 @@ document.addEventListener('DOMContentLoaded', function () {
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Clickable rows functionality
-    const rows = document.querySelectorAll('.clickable-row');
-    rows.forEach(row => {
-        row.addEventListener('click', function () {
-            window.location.href = this.dataset.url;
-        });
-    });
+    //const rows = document.querySelectorAll('.clickable-row');
+   // rows.forEach(row => {
+   //     row.addEventListener('click', function () {
+   //         window.location.href = this.dataset.url;
+   //     });
+   // });
 
     // Search functionality with debounce
     const searchInput = document.getElementById('searchInput');

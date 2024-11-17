@@ -180,7 +180,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/therapist/inquirymess', 'inquirymess')->name('therapist.inquirymess');
             Route::get('/therapist/dash', 'dash')->name('therapist.dash');
             Route::get('/therapist/feedback', 'feedback')->name('therapist.feedback');
-            Route::get('/therapist/feedback2', 'feedback2')->name('therapist.feedback2');
+            Route::get('/therapist/feedback2', [TherapistController::class, 'feedback2'])->name('therapist.feedback2');
             Route::get('/therapist/feedback3', 'feedback3')->name('therapist.feedback3');
             Route::get('/therapist/notification', 'notification')->name('therapist.notification');
             Route::get('/search-users', [TherapistController::class, 'searchUsers']);

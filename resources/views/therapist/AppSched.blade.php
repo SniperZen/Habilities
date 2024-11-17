@@ -93,11 +93,16 @@
                                     </svg>
                                     </a>
                                 </td>
-                                <td>
-                                    <a href="{{ route('therapist.feedback2') }}">
-                                        <img class="otf" src="{{ asset('images/icons/otf.png') }}" alt="Feedback Icon">
-                                    </a>
-                                </td>
+<!-- Replace your existing OTF button with this -->
+<td>
+    <a href="{{ route('therapist.feedback2', [
+        'patient_id' => $appointment->patient_id,
+        'patient_name' => $appointment->first_name . ' ' . $appointment->middle_name . ' ' . $appointment->last_name
+    ]) }}" class="otf-link">
+        <img class="otf" src="{{ asset('images/icons/otf.png') }}" alt="Feedback Icon">
+    </a>
+</td>
+
                                 <td>
                                     <form action="{{ route('therapist.cancelAppointment', $appointment->id) }}" method="POST" style="display:inline;">
                                         @csrf

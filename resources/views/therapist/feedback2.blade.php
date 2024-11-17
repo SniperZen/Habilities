@@ -24,11 +24,12 @@
                             <input type="text" id="feedback-title" name="title" placeholder="Type here..." required autocomplete="off">
                         </div>
                         <div class="form-group relative-position">
-                            <label for="recipient">Recipient:</label>
-                            <input type="hidden" id="recipient-id" name="recipient_id">
-                            <input type="text" id="recipient" placeholder="Search Recipient" autocomplete="off">
-                            <div id="recipient-dropdown" class="dropdown-list"></div>
-                        </div>
+    <label for="recipient">Recipient:</label>
+    <input type="hidden" id="recipient-id" name="recipient_id" value="{{ request('patient_id') }}">
+    <input type="text" id="recipient" placeholder="Search Recipient" autocomplete="off" value="{{ request('patient_name') }}" readonly>
+    <div id="recipient-dropdown" class="dropdown-list"></div>
+</div>
+
                         <div class="custom-select-wrapper">
                             <div class="form-group">
                                 <label class="dignosis" for="feedback-diagnosis">Diagnosis:</label>
@@ -228,6 +229,58 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     
     if (diagnosisSelect.value === 'Others' && otherDiagnosisInput.value.trim() !== '') {
         diagnosisSelect.value = otherDiagnosisInput.value;
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('patient_id');
+    const patientName = urlParams.get('patient_name');
+
+    // If we have the parameters, set the values
+    if (patientId && patientName) {
+        document.getElementById('recipient-id').value = patientId;
+        document.getElementById('recipient').value = patientName;
+        // Make the recipient field readonly since we're auto-populating it
+        document.getElementById('recipient').setAttribute('readonly', true);
+        // Hide the dropdown since we don't need it
+        document.getElementById('recipient-dropdown').style.display = 'none';
+    }
+});
+
+// Modify the existing recipient search functionality to only work if no patient_id is preset
+document.getElementById('recipient').addEventListener('input', function() {
+    // Only allow search if the field isn't readonly
+    if (this.hasAttribute('readonly')) {
+        return;
+    }
+    
+    let query = this.value;
+    if (query.length > 0) {
+        fetch(`/search-users?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                let dropdown = document.getElementById('recipient-dropdown');
+                dropdown.innerHTML = '';
+                data.forEach(user => {
+                    let item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.textContent = user.name;
+                    item.dataset.userId = user.id;
+                    item.addEventListener('click', function() {
+                        document.getElementById('recipient').value = user.name;
+                        document.getElementById('recipient-id').value = user.id;
+                        dropdown.style.display = 'none';
+                    });
+                    dropdown.appendChild(item);
+                });
+                dropdown.style.display = 'block';
+            });
+    } else {
+        document.getElementById('recipient-dropdown').style.display = 'none';
     }
 });
 
