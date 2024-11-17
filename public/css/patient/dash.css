@@ -351,8 +351,6 @@ table{
     }
   }
   
-
-
 @media (min-width: 1px){
     .header-left .logo {
         width: 60px;
@@ -449,12 +447,9 @@ table{
         transition: transform 0.3s ease-in-out;
         z-index: 10000;
     }
-    .sidebar.hidden {
-        transform: translateX(-100%);
-    }
     .container {
         flex-wrap: nowrap;
-        height: calc(100vh - 120px);
+        height: 100vh   ;
     }
     .notifications {
         width: 250px;
@@ -485,6 +480,10 @@ table{
     .welcome-header {
         flex-direction: row;
         height: 200px;
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%);
     }
     .header-left .logo {
         width: 100px;

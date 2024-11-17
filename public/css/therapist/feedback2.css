@@ -6,7 +6,7 @@ body {
 
 .feedback-form {
     padding: 20px;
-    width: 80vw;
+    width: calc(100vw - 300px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,11 +73,6 @@ input[type="text"]#recipient::after{
     content: 'x';
 } */
 
-#editor {
-    height: 200px;
-    background-color: white;
-    border: 1px solid #ccc;
-}
 
 #feedback-diagnosis {
     width: 98%;         
@@ -93,6 +88,7 @@ input[type="text"]#recipient::after{
 .custom-select-wrapper::after {
     content: '\25BC';
     position: absolute;
+    background-color: white;
     top: 30%;
     right: 10px;
     transform: translateY(-50%);

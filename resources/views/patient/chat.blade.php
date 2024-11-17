@@ -15,7 +15,7 @@
     padding: 13px 16px;
     border-radius: 20px;
     transition: transform 0.3s, background 0.3s;
-    background: var(--primary-color) !important;
+    background: #b5b5b5 !important;
 }
 </style>
 

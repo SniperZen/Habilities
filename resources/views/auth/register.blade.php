@@ -14,6 +14,8 @@
         background: url('images/bg.png') no-repeat center center fixed;
         background-size: cover;
         overflow-y: auto;
+        height: 100vh;
+        flex-wrap: wrap;
     }
 
     .form-box {
@@ -24,6 +26,7 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         width: 100%;
         box-sizing: border-box;
+        height: auto;
     }
 
     .form-box img {
@@ -277,13 +280,12 @@
             padding: 20px;
             box-shadow: none;
             overflow-y: auto;
-            height: 100vh;
+            height: auto;
         }
 
         .container {
             background: none;
             overflow-y: auto;
-            header 100%
         }
     }
 

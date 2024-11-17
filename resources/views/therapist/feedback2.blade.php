@@ -42,7 +42,7 @@
                                     <option value="Learning Disabilities">Learning Disabilities</option>
                                     <option value="Others">Others</option>
                                 </select>
-                                <div id="other-diagnosis-div" style="display: none; margin-top: 10px;">
+                                <div id="other-diagnosis-div" style="display: none;">
                                     <input type="text" id="other-diagnosis" placeholder="Please specify diagnosis">
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
             }
 
             document.addEventListener('DOMContentLoaded', function() {
-                document.querySelector('#editor').style.height = '53vh';
+                document.querySelector('#editor').style.height = '40vh';
             });
 
             // Back button functionality
