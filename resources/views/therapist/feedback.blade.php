@@ -130,123 +130,140 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Clickable rows functionality
-    //const rows = document.querySelectorAll('.clickable-row');
-   // rows.forEach(row => {
-   //     row.addEventListener('click', function () {
-   //         window.location.href = this.dataset.url;
-   //     });
-   // });
-
-    // Search functionality with debounce
     const searchInput = document.getElementById('searchInput');
-    const tableRows = document.querySelectorAll('.feedback-table tbody tr');
+    const tableBody = document.querySelector('.feedback-table tbody');
     let searchTimeout = null;
 
     function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase();
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const tableRows = tableBody.querySelectorAll('tr:not(.no-results-row):not(.loading-row)');
+        let hasVisibleRows = false;
+
+        // Remove existing no-results row if present
+        removeNoResultsRow();
 
         tableRows.forEach(row => {
-            if (row.classList.contains('clickable-row')) {
-                const recipientName = row.cells[0].textContent.toLowerCase();
-                const feedbackTitle = row.cells[1].textContent.toLowerCase();
-                const diagnosis = row.cells[2].textContent.toLowerCase(); // Add diagnosis
+            const cells = row.cells;
+            if (cells.length >= 3) {
+                const recipientName = cells[0].textContent.toLowerCase();
+                const feedbackTitle = cells[1].textContent.toLowerCase();
+                const diagnosis = cells[2].textContent.toLowerCase();
 
-                // Check if recipient name, feedback title, or diagnosis contains the search term
-                if (recipientName.includes(searchTerm) || 
+                if (searchTerm === '' || 
+                    recipientName.includes(searchTerm) || 
                     feedbackTitle.includes(searchTerm) || 
                     diagnosis.includes(searchTerm)) {
                     row.style.display = '';
+                    hasVisibleRows = true;
                 } else {
                     row.style.display = 'none';
                 }
             }
         });
 
-        // Show "No results found" message if no matches
-        const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
-        const noResultsRow = document.querySelector('.no-results-row');
-
-        if (visibleRows.length === 0) {
-            if (!noResultsRow) {
-                const tbody = document.querySelector('.feedback-table tbody');
-                const newRow = document.createElement('tr');
-                newRow.className = 'no-results-row';
-                newRow.innerHTML = '<td colspan="5">No matching results found.</td>'; // Updated colspan to 5
-                tbody.appendChild(newRow);
-            }
-        } else {
-            if (noResultsRow) {
-                noResultsRow.remove();
-            }
+        // Show "No results found" message if needed
+        if (!hasVisibleRows && searchTerm !== '') {
+            showNoResultsMessage();
         }
     }
 
-    // Add loading indicator
+    function showNoResultsMessage() {
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.className = 'no-results-row';
+        noResultsRow.innerHTML = `
+            <td colspan="5" style="
+                text-align: center;
+                padding: 20px;
+                color: #666;
+                background-color: #f9f9f9;
+                font-style: italic;
+            ">
+                No matching results found
+            </td>
+        `;
+        tableBody.appendChild(noResultsRow);
+    }
+
+    function removeNoResultsRow() {
+        const noResultsRow = tableBody.querySelector('.no-results-row');
+        if (noResultsRow) {
+            noResultsRow.remove();
+        }
+    }
+
     function createLoadingIndicator() {
-        const tbody = document.querySelector('.feedback-table tbody');
+        removeLoadingIndicator(); // Remove existing if any
         const loadingRow = document.createElement('tr');
         loadingRow.className = 'loading-row';
-        loadingRow.innerHTML = '<td colspan="5"><div class="loading-spinner">Searching...</div></td>'; // Updated colspan to 5
-        tbody.appendChild(loadingRow);
+        loadingRow.innerHTML = `
+            <td colspan="5" style="
+                text-align: center;
+                padding: 15px;
+                background-color: #f5f5f5;
+            ">
+                <div class="loading-spinner">
+                    Searching...
+                </div>
+            </td>
+        `;
+        tableBody.appendChild(loadingRow);
     }
 
     function removeLoadingIndicator() {
-        const loadingRow = document.querySelector('.loading-row');
+        const loadingRow = tableBody.querySelector('.loading-row');
         if (loadingRow) {
             loadingRow.remove();
         }
     }
 
-    searchInput.addEventListener('input', function() {
-        // Remove previous loading indicator and timeout
+    // Debounced search handler
+    function handleSearch() {
         removeLoadingIndicator();
+        
         if (searchTimeout) {
             clearTimeout(searchTimeout);
         }
 
-        // Show loading indicator if search field is not empty
-        if (this.value.trim() !== '') {
+        const searchValue = searchInput.value.trim();
+        
+        if (searchValue !== '') {
             createLoadingIndicator();
         }
 
-        // Hide all no-results messages while searching
-        const noResultsRow = document.querySelector('.no-results-row');
-        if (noResultsRow) {
-            noResultsRow.remove();
-        }
-
-        // Set new timeout
         searchTimeout = setTimeout(() => {
             removeLoadingIndicator();
             performSearch();
-        }, 500); // 500ms delay
-    });
+        }, 300); // Reduced delay for better responsiveness
+    }
+
+    // Add event listener for search input
+    searchInput.addEventListener('input', handleSearch);
+
+    // Initial search if there's a value in the search input
+    if (searchInput.value.trim() !== '') {
+        performSearch();
+    }
+
+    // Add this style to your CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        .loading-spinner {
+            display: inline-block;
+            position: relative;
+            color: #666;
+        }
+        
+        .no-results-row td {
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-table tr {
+            transition: opacity 0.2s ease;
+        }
+    `;
+    document.head.appendChild(style);
 });
 
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to show toast
-        function showToast(message, type = 'success') {
-            Toastify({
-                text: message,
-                duration: 3000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
-                stopOnFocus: true,
-                close: true,
-            }).showToast();
-        }
-
-        // Check if we just came from feedback submission
-        const feedbackJustSent = localStorage.getItem('feedbackJustSent');
-        if (feedbackJustSent) {
-            showToast('Feedback sent successfully.', 'success');
-            localStorage.removeItem('feedbackJustSent');
-        }
-    });
 </script>
 @if(session('success'))
         <script>

@@ -489,12 +489,11 @@ public function   changespass(){
      try {
          // Clean the HTML content but preserve formatting tags
          $cleanContent = Purifier::clean($validatedData['content'], [
-            'HTML.Allowed' => 'p,b,strong,i,em,u,ul[style],ol[style],li[style],br,span,div',
-            'CSS.AllowedProperties' => '*',
-            'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty' => false,
-        ]);
-        
+             'HTML.Allowed' => 'p,b,strong,i,em,u,ul[style],ol[style],li[style],br,span,div',
+             'CSS.AllowedProperties' => '*',
+             'AutoFormat.AutoParagraph' => true,
+             'AutoFormat.RemoveEmpty' => false,
+         ]);
  
          $feedback = new Feedback();
          $feedback->sender_id = Auth::id();
@@ -525,6 +524,8 @@ public function   changespass(){
          return redirect()->back()->with('error', 'An error occurred while sending feedback')->withInput();
      }
  }
+ 
+ 
  
  
  
