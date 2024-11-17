@@ -395,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 upcomingSessionDiv.innerHTML = `
                     <p>${capitalizedMode} with ${nextEvent.extendedProps.patientName}</p>
                     <p>${appointmentDate} | ${startTime}</p>
-                    ${nextEvent.extendedProps.description ? `<p>Note: ${nextEvent.extendedProps.description}</p>` : ''}
                 `;
             } else {
                 upcomingSessionDiv.innerHTML = '<p>No upcoming sessions scheduled</p>';

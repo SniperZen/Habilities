@@ -1,3 +1,5 @@
+
+
 body {
     margin: 0;
     padding: 0;
@@ -9,6 +11,8 @@ body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 120px);
+    overflow-y: auto;
+    flex-wrap: wrap;
 }
 
 tr {
@@ -23,7 +27,7 @@ tr {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    height: calc(100vh - 120px);
+    height: auto;
     width: 80vw;
 }
 
@@ -190,9 +194,9 @@ tr {
 
 
 /* Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .tcontainer {
-        height: auto;
+        height: calc(100vh - 70px);
         padding: 20px;
     }
 
@@ -214,7 +218,7 @@ tr {
 
     .main-content {
         width: 100vw;
-        padding: 15px;
+        padding: 0px;
     }
 
     .form-container {

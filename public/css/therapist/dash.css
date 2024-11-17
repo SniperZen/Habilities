@@ -75,15 +75,18 @@ body {
 .but a{
     font-weight: bolder;
     transition: transform 0.3s ease;
+    color: #4F4A6E;
 }
 .but a:hover{
     transform: scale(1.07);
 }
 
+
 .actions {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .actions h6{

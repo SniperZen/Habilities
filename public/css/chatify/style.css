@@ -575,6 +575,7 @@ td, th {
   border-radius: 20px;
   word-break: break-word;
   display: table-cell;
+  background-color: #efefef;
 }
 .message-card .message-time {
   display: inline-block;

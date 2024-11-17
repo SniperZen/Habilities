@@ -353,7 +353,6 @@
                                         upcomingSessionDiv.innerHTML = `
                                             <p>${capitalizedMode} with Teacher ${nextEvent.extendedProps.patientName}</p>
                                             <p>${appointmentDate} | ${startTime}</p>
-                                            ${nextEvent.extendedProps.description ? `<p>Note: ${nextEvent.extendedProps.description}</p>` : ''}
                                         `;
                                     } else {
                                         upcomingSessionDiv.innerHTML = '<p>No upcoming sessions scheduled</p>';
