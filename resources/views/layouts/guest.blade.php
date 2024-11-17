@@ -40,12 +40,9 @@
         }
         </style>
     </head>
-    <body >
-        <div >
-
+    <body>
             <div>
                 {{ $slot }}
             </div>
-        </div>
     </body>
 </html>

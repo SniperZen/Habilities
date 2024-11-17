@@ -339,6 +339,7 @@ input[type="text"] {
 
 .dropdown-btn, .dropdown-btn2 {
     width: 180px;
+    height: 41.82px;
     text-align: left;
     display: flex;
     justify-content: space-between;

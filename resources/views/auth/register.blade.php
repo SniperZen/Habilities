@@ -18,6 +18,13 @@
         flex-wrap: wrap;
     }
 
+    #gender, #date_of_birth{
+        appearance: none;      
+        -webkit-appearance: none; 
+        -moz-appearance: none; 
+        height: 40px;
+    }
+
     .form-box {
         background-color: white;
         padding: 25px 40px;
@@ -27,6 +34,7 @@
         width: 100%;
         box-sizing: border-box;
         height: auto;
+        margin: 20px;
     }
 
     .form-box img {
@@ -210,7 +218,7 @@
 
     .modal-content {
         background-color: #fefefe;
-        margin: 5% auto;
+        margin: 4% auto;
         padding: 20px;
         max-height: 90vh;
         border: 1px solid #888;
@@ -235,9 +243,17 @@
         background-color: #618a59;
     }
 
+    .close2{
+        padding-top: 25px;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        right: 13px;
+    }
+
     .main-modal {
         overflow-y: auto;
-        max-height: 85vh;
+        max-height: 73vh;
         padding-right: 15px;
         box-sizing: content-box;
     }
@@ -268,6 +284,64 @@
             color: black !important;
         }
 
+        .consent-checkbox label{
+            font-size: 16px;
+        }
+
+        .modal-content h1 {
+            font-size: 24px;
+            color: black;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-content h2 {
+            font-size: 18px;
+            color: black;
+            margin-top: 20px;
+        }
+
+        .modal-content strong{
+            color: black;
+        }
+
+        .modal-content p {
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .modal-content li{
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .last-updated {
+            font-style: italic;
+            color: #888888;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-content a {
+            color: #0056b3;
+            text-decoration: none;
+            cursor: pointer;
+            /* text-decoration: underline; */
+        }
+
+        .modal-content a:hover {
+            text-decoration: underline;
+        }
+
+        .but {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
         
 
     @media (max-width: 768px) {

@@ -74,7 +74,7 @@
 </style>
 <body>  
     <main class="main-content">
-      
+                <div class="inner">
             <h2>Complete Your Appointment</h2>
             <p class="p">Book a therapy session at Habilities with just easy steps! Please complete your appointment details.</p>
             
@@ -126,6 +126,7 @@
                         <button type="submit" class="button">Confirm</button>
                     </div>
                 </form>
+            </div>
             </div>
         </div>
 

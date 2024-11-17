@@ -80,8 +80,7 @@ input[type="text"]#recipient::after{
     border: 1px solid #ccc;
     border-radius: 4px;    
     appearance: none;      
-    appearance: none;          /* Hide default arrow */
-    -webkit-appearance: none;  /* Webkit browsers */
+    -webkit-appearance: none; 
     -moz-appearance: none; 
 }
 

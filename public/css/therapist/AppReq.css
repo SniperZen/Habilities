@@ -154,6 +154,7 @@ th {
 }
 
 .dropdown-btn {
+    height: 49.31px;
     width: 170px; 
     text-align: left;
     display: flex;
