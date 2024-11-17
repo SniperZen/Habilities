@@ -367,9 +367,14 @@ public function feedback(){
     return view('therapist.feedback');
 }
 
-public function feedback2(){
-    return view('therapist.feedback2');
+public function feedback2(Request $request)
+{
+    return view('therapist.feedback2', [
+        'patient_id' => $request->query('patient_id'),
+        'patient_name' => $request->query('patient_name')
+    ]);
 }
+
 
 public function myHistory(Request $request)
     {

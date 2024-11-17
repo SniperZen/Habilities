@@ -186,8 +186,9 @@
 
            
             <section class="appointments">
-            <h3>Scheduled Appointments</h3>
-            <table>
+    <h3>Scheduled Appointments</h3>
+    @if(count($acceptedAppointments) > 0)
+        <table>
             <thead>
                 <tr>
                     <th>Patient Name</th>
@@ -209,7 +210,13 @@
                 @endforeach
             </tbody>
         </table>
-        </section>
+    @else
+        <div class="no-appointments">
+            <p>No scheduled appointments available at the moment.</p>
+        </div>
+    @endif
+</section>
+
         </main>
 
         <aside class="sidebar">
