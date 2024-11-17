@@ -29,6 +29,7 @@
         align-items: center;
         position: relative;
         box-sizing: border-box;
+        height: auto;
     }
 
     .form-side img {
