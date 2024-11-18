@@ -61,7 +61,10 @@ class AdminController extends Controller
     {
         return view('admin.otfr');
     }
-
+    public function systemfeedbackr()
+    {
+        return view('admin.systemfeedbackr');
+    }
     public function activitylogs()
     {
         return view('admin.activitylogs');

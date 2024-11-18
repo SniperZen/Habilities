@@ -94,7 +94,7 @@ body {
 .sidebar {
     width: 100%;
     height: calc(100vh - 120px);
-    max-width: 300px;
+    max-width: 330px;
     background-color: #fff;
     padding: 20px 0;
     color: #fff;
@@ -315,7 +315,7 @@ nav ul li a.active {
 
 @media (min-width: 768px) {
     .sidebar {
-        width: 300px;
+        width: 100%;
     }
     .container {
         flex-wrap: nowrap;
@@ -334,7 +334,7 @@ nav ul li a.active {
     }
 
     .sidebar {
-        width: 300px;
+        width: 100%;
     }
 
     .profile-info h2 {

@@ -342,6 +342,42 @@
             justify-content: flex-end;
             margin-top: 20px;
         }
+
+        .password-restrictions {
+            display: none; /* Initially hidden */
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .password-restrictions p {
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .password-restrictions ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .password-restrictions ul li {
+            margin-bottom: 5px;
+        }
+
+        .check-icon {
+            font-weight: bold;
+            margin-right: 5px;
+            color: red; /* Default color for failed checks */
+        }
+
+        .check-icon.valid {
+            color: green; /* Color when a condition is met */
+        }
+
         
 
     @media (max-width: 768px) {
@@ -384,6 +420,18 @@
     }
 
     </style>
+    <script>
+        function showRestrictions() {
+            const restrictionBox = document.getElementById('password-restrictions');
+            restrictionBox.style.display = 'block'; // Show restrictions when focused
+        }
+
+        function hideRestrictions() {
+            const restrictionBox = document.getElementById('password-restrictions');
+            restrictionBox.style.display = 'none'; // Hide restrictions when focus is lost
+        }
+
+    </script>
     <div class="container">
 
         <div class="form-box">
@@ -455,11 +503,55 @@
                 </div>
 
                 <div class="input-container">
-                    <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password">
-                    <label for="password">Password<span style="color: red;">*</span></i></label>
+                    <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password" onfocus="showRestrictions()" onblur="hideRestrictions()">
+                    <label for="password">Password<span style="color: red;">*</span></label>
                     <i class="far fa-eye toggle-password" onclick="togglePasswordVisibility('password', this)"></i> <!-- Eye Icon -->
                     <div class="error-message">{{ $errors->first('password') }}</div>
+
+                    <script>
+                        document.getElementById('password').addEventListener('input', function () {
+                        const password = this.value;
+                        const hasUpperCase = /[A-Z]/.test(password);
+                        const hasLowerCase = /[a-z]/.test(password);
+                        const hasNumber = /[0-9]/.test(password);
+                        const hasSpecialChar = /[~`!@#$%^&*()\-_+={}[\]|\\:;"'<>,./?]/.test(password);
+                        const hasMinLength = password.length >= 8;
+
+                        updateCheck('uppercase-check', hasUpperCase);
+                        updateCheck('lowercase-check', hasLowerCase);
+                        updateCheck('number-check', hasNumber);
+                        updateCheck('special-char-check', hasSpecialChar);
+                        updateCheck('min-length-check', hasMinLength);
+                    });
+
+                    function updateCheck(elementId, isValid) {
+                        const element = document.getElementById(elementId);
+                        if (isValid) {
+                            element.textContent = '✔'; 
+                            element.style.color = 'green';
+                        } else {
+                            element.textContent = '✕'; 
+                            element.style.color = 'red';
+                        }
+                    }
+                    function showRestrictions() {
+                        document.getElementById('password-restrictions').style.display = 'block';
+                    }
+
+                    function hideRestrictions() {
+                        document.getElementById('password-restrictions').style.display = 'none';
+                    }
+                    </script>
                 </div>
+
+                <div id="password-restrictions" class="password-restrictions">
+                        <p>Password must meet the following criteria:</p>
+                            <span id="uppercase-check" class="check-icon">✕</span> Contain at least one uppercase letter (A-Z)<br>
+                            <span id="lowercase-check" class="check-icon">✕</span> Contain at least one lowercase letter (a-z)<br>
+                            <span id="number-check" class="check-icon">✕</span> Contain at least one number (0-9)<br>
+                            <span id="special-char-check" class="check-icon">✕</span> Contain at least one special character (~`! @#$%^&*()-_+={}[]|\;:"<>,./?)<br>
+                            <span id="min-length-check" class="check-icon">✕</span> Be at least 8 characters long
+                    </div>
                 <div class="input-container">
                     <input placeholder=" " id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
                     <label for="password_confirmation">Confirm Password<span style="color: red;">*</span></label>
