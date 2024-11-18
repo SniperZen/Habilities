@@ -49,6 +49,24 @@ class AdminController extends Controller
         return view('admin.report');
     }
 
+    public function appointmentr()
+    {
+        return view('admin.appointmentr');
+    }
+    public function inquiryr()
+    {
+        return view('admin.inquiryr');
+    }
+    public function otfr()
+    {
+        return view('admin.otfr');
+    }
+
+    public function activitylogs()
+    {
+        return view('admin.activitylogs');
+    }
+
     public function therapycenter()
     {
         $settings = BusinessSetting::first();

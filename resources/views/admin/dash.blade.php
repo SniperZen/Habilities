@@ -96,6 +96,8 @@
                     </div></div>
                 </header>
 
+                <div class="incont">
+                    <div class="left">
                 <!-- Navigation Section -->
                 <nav class="dashboard-nav">
                     <a href="{{ route('admin.usersPatient') }}" class="nav-button" style="text-decoration: none;">
@@ -173,131 +175,131 @@
 
                 <!-- Chart Section -->
                 <section class="chart-section card">
-                    <h3>Weekly Usage Report</h3>
-                    <canvas id="weekly-usage-chart" style="height: 400px; width: 100%;"></canvas>
-                </section>
-            </div>
-
-            <!-- Sidebar Section -->
-            <aside class="sidebarr">
-            <div class="notifications card">
-    <div class="notifications-header">
-        <h3>Notifications</h3>
-        <a href="#" id="toggleNotifications" class="see-more">See More ›</a>
-    </div>
-    <ul id="notificationsList" class="notifications-list">
-        @foreach(auth()->user()->notifications()->latest()->take(8)->get() as $index => $notification)
-            @php
-                $profile_image = asset('images/others/default-prof.png'); // Default image
-                $sender_name = 'Unknown';
-                
-                if ($notification->type === 'App\Notifications\NewPatientFeedbackNotification') {
-                    $user = \App\Models\User::find($notification->data['user_id']);
-                    if ($user) {
-                        $sender_name = $user->name;
-                        $profile_image = $user->profile_image 
-                            ? asset('storage/' . $user->profile_image) 
-                            : $profile_image;
-                    }
-                }
-                $feedback_id = $notification->data['feedback_id'] ?? '';
-            @endphp
-            <li class="notification-item {{ $notification->read_at ? '' : 'unread' }} {{ $index >= 4 ? 'hidden' : '' }}" data-id="{{ $notification->id }}">
-                <a href="{{ route('admin.report', ['feedback_id' => $feedback_id]) }}" class="notification-link">
-                    <img src="{{ $profile_image }}" alt="{{ $sender_name }}'s Avatar" class="notification-avatar">
-                    <div class="notification-content">
-                        <p class="notification-title">{{ $sender_name }}</p>
-                        <p class="notification-description">{{ $notification->data['message'] ?? 'No message' }}</p>
+                                    <h3>Weekly Usage Report</h3>
+                                    <canvas id="weekly-usage-chart" style="height: 400px; width: 100%;"></canvas>
+                                </section>
+                                </div>
+                                <aside class="sidebarr">
+                            <div class="notifications card">
+                    <div class="notifications-header">
+                        <h3>Notifications</h3>
+                        <a href="#" id="toggleNotifications" class="see-more">See More ›</a>
                     </div>
-                    @if($notification->read_at === null)
-                        <span class="unread-indicator"></span>
-                    @endif
-                </a>
-            </li>
-        @endforeach
-        @if(auth()->user()->notifications()->count() == 0)
-            <li class="no-notifications">No notifications</li>
-        @endif
-    </ul>
-</div>
+                    <ul id="notificationsList" class="notifications-list">
+                        @foreach(auth()->user()->notifications()->latest()->take(8)->get() as $index => $notification)
+                            @php
+                                $profile_image = asset('images/others/default-prof.png'); // Default image
+                                $sender_name = 'Unknown';
+                                
+                                if ($notification->type === 'App\Notifications\NewPatientFeedbackNotification') {
+                                    $user = \App\Models\User::find($notification->data['user_id']);
+                                    if ($user) {
+                                        $sender_name = $user->name;
+                                        $profile_image = $user->profile_image 
+                                            ? asset('storage/' . $user->profile_image) 
+                                            : $profile_image;
+                                    }
+                                }
+                                $feedback_id = $notification->data['feedback_id'] ?? '';
+                            @endphp
+                            <li class="notification-item {{ $notification->read_at ? '' : 'unread' }} {{ $index >= 4 ? 'hidden' : '' }}" data-id="{{ $notification->id }}">
+                                <a href="{{ route('admin.report', ['feedback_id' => $feedback_id]) }}" class="notification-link">
+                                    <img src="{{ $profile_image }}" alt="{{ $sender_name }}'s Avatar" class="notification-avatar">
+                                    <div class="notification-content">
+                                        <p class="notification-title">{{ $sender_name }}</p>
+                                        <p class="notification-description">{{ $notification->data['message'] ?? 'No message' }}</p>
+                                    </div>
+                                    @if($notification->read_at === null)
+                                        <span class="unread-indicator"></span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                        @if(auth()->user()->notifications()->count() == 0)
+                            <li class="no-notifications">No notifications</li>
+                        @endif
+                    </ul>
+                </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleButton = document.getElementById('toggleNotifications');
-    const notificationsList = document.getElementById('notificationsList');
-    let isExpanded = false;
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toggleButton = document.getElementById('toggleNotifications');
+                    const notificationsList = document.getElementById('notificationsList');
+                    let isExpanded = false;
 
-    toggleButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        isExpanded = !isExpanded;
-        
-        const allItems = notificationsList.querySelectorAll('.notification-item');
-        allItems.forEach((item, index) => {
-            if (index >= 4) {
-                item.classList.toggle('hidden');
-            }
-        });
+                    toggleButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        isExpanded = !isExpanded;
+                        
+                        const allItems = notificationsList.querySelectorAll('.notification-item');
+                        allItems.forEach((item, index) => {
+                            if (index >= 4) {
+                                item.classList.toggle('hidden');
+                            }
+                        });
 
-        toggleButton.textContent = isExpanded ? 'See Less ‹' : 'See More ›';
-    });
+                        toggleButton.textContent = isExpanded ? 'See Less ‹' : 'See More ›';
+                    });
 
-    // Mark notification as read when clicked
-    notificationsList.addEventListener('click', function(e) {
-        const notificationItem = e.target.closest('.notification-item');
-        if (notificationItem) {
-            const notificationId = notificationItem.dataset.id;
-            fetch(`/mark-notification-as-read/${notificationId}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                },
-            });
-        }
-    });
-});
-</script>
+                    // Mark notification as read when clicked
+                    notificationsList.addEventListener('click', function(e) {
+                        const notificationItem = e.target.closest('.notification-item');
+                        if (notificationItem) {
+                            const notificationId = notificationItem.dataset.id;
+                            fetch(`/mark-notification-as-read/${notificationId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    'Content-Type': 'application/json'
+                                },
+                            });
+                        }
+                    });
+                });
+                </script>
 
-<style>
-.hidden {
-    display: none;
-}
-.unread-indicator {
-        width: 10px;
-        height: 10px;
-        background-color: #a3eb8a;
-        border-radius: 50%;
-        display: inline-block;
-        margin-left: 5px;
-    }
-.notification-item.unread {
-    background-color: #f0f8ff;
-}
+                <style>
+                .hidden {
+                    display: none;
+                }
+                .unread-indicator {
+                        width: 10px;
+                        height: 10px;
+                        background-color: #a3eb8a;
+                        border-radius: 50%;
+                        display: inline-block;
+                        margin-left: 5px;
+                    }
+                .notification-item.unread {
+                    background-color: #f0f8ff;
+                }
 
-.notification-item.unread:hover{
-    background-color: #caddc6;
-}
-.notification-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
-}
-.notifications-list {
-    max-height: 324px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    transition: max-height 0.3s ease;
-}
+                .notification-item.unread:hover{
+                    background-color: #caddc6;
+                }
+                .notification-link {
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: inherit;
+                }
+                .notifications-list {
+                    max-height: 324px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    transition: max-height 0.3s ease;
+                }
 
-</style>
+                </style>
 
 
 
-            <div class="calendar">
-                <div id="calendar"></div>
+                            <div class="calendar">
+                                <div id="calendar"></div>
+                            </div>
+                            </aside>
+                </div>
             </div>
-            </aside>
         </div>
         <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -102,10 +102,10 @@ body {
     flex-direction: column;
     justify-content: space-between;
     border-right: 1.5px solid #000A67; 
-    overflow: hidden; 
+    overflow: hidden auto; 
 }
 
-.arrow{
+.arrow,.arrow2{
     flex-grow: 1;
     display: flex;
     justify-content: flex-end;
@@ -113,7 +113,7 @@ body {
     transition: transform 0.3s ease;
 }
 
-.submenu {
+.submenu, .submenu2 {
     list-style: none;
     padding-left: 20px;
     transition: max-height 0.3s ease;
@@ -126,16 +126,6 @@ body {
 .profile:hover .dropdown {
     display: block;
 }
-.footer-links {
-    background-color: #fff;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 15px 20px;
-}
-
 .sidebar ul img {
     width: 15%;
 }
@@ -187,7 +177,26 @@ nav ul li a:hover {
     }
 }
 
-.subnav{
+td, th{
+    text-align: center;
+    vertical-align: middle;
+}
+
+td:nth-child(1), th:nth-child(1){
+    text-align: left;
+    vertical-align: middle;
+}
+
+table{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.subnav, .subnav2{
     border-radius: 15px;
 }
 
@@ -255,7 +264,7 @@ nav ul li a.active {
     height: calc(100vh - 120px);  
 }
 
-.subnav.active {
+.subnav.active, .subnav2.active {
     font-weight: bold;
     color: #000000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -263,10 +272,6 @@ nav ul li a.active {
     svg path{
         stroke: #000000; 
     }
-}
-
-.subnav:hover{
-    background-color: #C1DB9B;
 }
 
 ::-webkit-scrollbar {

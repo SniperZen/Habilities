@@ -77,6 +77,10 @@ Route::middleware([ShareUserData::class])->group(function () {
             
             Route::get('/admin/edit-center', [AdminController::class, 'editTCenter'])->name('admin.editTCenter');
             Route::post('/admin/update-center', [AdminController::class, 'updateCenter'])->name('admin.updateCenter');
+            Route::get('/admin/appointmentr', [AdminController::class, 'appointmentr'])->name('admin.appointmentr');
+            Route::get('/admin/inquiryr', [AdminController::class, 'inquiryr'])->name('admin.inquiryr');
+            Route::get('/admin/otfr', [AdminController::class, 'otfr'])->name('admin.otfr');
+            Route::get('/admin/activitylogs', [AdminController::class, 'activitylogs'])->name('admin.activitylogs');
 
             
         });

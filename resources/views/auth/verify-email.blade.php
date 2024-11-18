@@ -62,7 +62,6 @@
 
         .message-box .btn-group button {
             color: white;
-            background: none;
             text-decoration: underline;
         }
 
