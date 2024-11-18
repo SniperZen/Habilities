@@ -35,18 +35,23 @@
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Feedback Description</th>
-                        <th>Date Submitted</th>
+                        <th>Therapist</th>
+                        <th>Patient</th>
+                        <th>Diagnosis</th>
+                        <th>Feedback Title</th>
+                        <th>Feedback Content</th>
+                        <th>Date Created</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Celestine E. Guitierrez</td>
+                        <td>Celestine E. Guitierrez</td>
+                        <td>ADHD</td>
+                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing...</td>
                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing...</td>
                         <td>04/19/2024</td>
                     </tr>
-                    <!-- Repeat rows as needed -->
                 </tbody>
             </table>
             <button class="export-btn">
