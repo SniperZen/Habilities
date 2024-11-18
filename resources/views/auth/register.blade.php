@@ -399,18 +399,16 @@
                 <!-- Name Inputs -->
                 <div class="input-group">
                     <div class="input-container">
-                        <input placeholder=" " id="last_name" type="text" name="last_name" required autofocus autocomplete="family-name">
-                        <label for="last_name">Last Name<span style="color: red;">*</span></label>
+                    <input placeholder=" " id="last_name" type="text" name="last_name" required autofocus autocomplete="family-name" value="{{ old('last_name') }}">                        <label for="last_name">Last Name<span style="color: red;">*</span></label>
                         <div class="error-message">{{ $errors->first('last_name') }}</div>
                     </div>
                     <div class="input-container">
-                        <input placeholder=" " id="first_name" type="text" name="first_name" required autocomplete="given-name">
-                        <label for="first_name">First Name<span style="color: red;">*</span></label>
+                    <input placeholder=" " id="first_name" type="text" name="first_name" required autocomplete="given-name" value="{{ old('first_name') }}">                        <label for="first_name">First Name<span style="color: red;">*</span></label>
                         <div class="error-message">{{ $errors->first('first_name') }}</div>
                     </div>
                     <div class="input-container">
-                        <input placeholder=" " id="middle_name" type="text" name="middle_name" autocomplete="additional-name">
-                        <label for="middle_name">Middle Name</span></label>
+                    <input placeholder=" " id="middle_name" type="text" name="middle_name" autocomplete="additional-name" value="{{ old('middle_name') }}">
+                    <label for="middle_name">Middle Name</span></label>
                         <div class="error-message">{{ $errors->first('middle_name') }}</div>
                     </div>
                 </div>
@@ -418,17 +416,17 @@
                 <!-- Date of Birth and Gender Inputs -->
                 <div class="input-groups">
                     <div class="input-container">
-                        <input id="date_of_birth" type="date" name="date_of_birth" max="{{ now()->toDateString() }}" required>
-                        <label  for="date_of_birth">Date of Birth<span style="color: red;">*</span></label>
+                    <input id="date_of_birth" type="date" name="date_of_birth" max="{{ now()->toDateString() }}" required value="{{ old('date_of_birth') }}">
+                    <label  for="date_of_birth">Date of Birth<span style="color: red;">*</span></label>
                         <p class="mt-2">{{ $errors->first('date_of_birth') }}</p>
                     </div>
                     <div class="input-container">
-                        <select id="gender" name="gender" required>
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
                         <label style="color: #74A36B; position: absolute;top:0;left: 8px;font-size: 14px;transform: translateY(-50%);pointer-events: none;transition: all 0.3s; background-color:white;" class="gender" for="gender">Gender<span style="color: red;">*</span></label>
                         <p class="mt-2">{{ $errors->first('gender') }}</p>
                     </div>
@@ -439,20 +437,20 @@
 
                 <!-- Contact Number and Home Address Inputs -->
                 <div class="input-container">
-                    <input placeholder=" " id="contact_number" type="tel" name="contact_number" required autocomplete="tel">
-                    <label for="contact_number">Contact Number<span style="color: red;">*</span></label>
+                <input placeholder=" " id="contact_number" type="tel" name="contact_number" required autocomplete="tel" value="{{ old('contact_number') }}">
+                <label for="contact_number">Contact Number<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('contact_number') }}</div>
                 </div>
                 <div class="input-container">
-                    <input placeholder=" " id="home_address" type="text" name="home_address" required autocomplete="street-address">
-                    <label for="home_address">Home Address<span style="color: red;">*</span></label>
+                <input placeholder=" " id="home_address" type="text" name="home_address" required autocomplete="street-address" value="{{ old('home_address') }}">
+                <label for="home_address">Home Address<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('home_address') }}</div>
                 </div>
 
                 <!-- Email Input -->
                 <div class="input-container">
-                    <input placeholder=" " id="email" type="email" name="email" required autocomplete="email">
-                    <label for="email">Email Address<span style="color: red;">*</span></label>
+                <input placeholder=" " id="email" type="email" name="email" required autocomplete="email" value="{{ old('email') }}">
+                <label for="email">Email Address<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('email') }}</div>
                 </div>
 
@@ -471,7 +469,7 @@
 
                 <!-- Terms and Conditions Checkbox -->
                 <div class="terms">
-                    <input type="checkbox" name="terms" required>
+                    <input type="checkbox" name="terms" required {{ old('terms') ? 'checked' : '' }}>
                     <p>I agree to <span class="open-terms">Terms of Service</span> and <span class="open-privacy">Privacy Policies</span><span style="color: red;">*</span></p>
                 </div>
 
