@@ -47,7 +47,7 @@ Route::middleware([ShareUserData::class])->group(function () {
     // Authentication required routes
     Route::middleware(['auth'])->group(function () {
         // Dashboard route (moved outside of 'verified' middleware)
-        Route::get('/dashboard', [UserController::class, 'index'])->middleware('user')->name('dashboard');
+        Route::get('/patient/dash', [UserController::class, 'index'])->middleware('user')->name('patient.dash');
         
         // Routes that require email verification
         Route::middleware(['verified'])->group(function () {
