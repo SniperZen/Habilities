@@ -93,7 +93,7 @@
                         <tr>
                             <th>Patient Name</th>
                             <th>Clinical / Working Diagnosis</th>
-                            <th>Elaboration</th>
+                            <!--<th>Elaboration</th>-->
                             <th>Attached Documents</th>
                             <th>Date Received</th>
                             <th>Status</th>
@@ -104,7 +104,7 @@
                         <tr>
                             <td>{{ $inquiry->user->name }}</td>
                             <td>{{ $inquiry->concerns }}</td>
-                            <td>{{ $inquiry->elaboration }}</td>
+                            <!--<td>{{ $inquiry->elaboration }}</td>-->
                             <td>
                                 @if($inquiry->identification_card)
                                     <div>
@@ -175,20 +175,8 @@
             function printTable() {
                 window.print();
             }
-
-            // Auto-submit form when filters change
-            document.getElementById('status').addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
-
-            document.getElementById('start_date').addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
-            
-            document.getElementById('end_date').addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
         </script>
+
     </body>
     </html>
 </x-admin-layout>

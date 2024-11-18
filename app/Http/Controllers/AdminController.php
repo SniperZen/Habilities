@@ -51,9 +51,34 @@ class AdminController extends Controller
         return view('admin.report');
     }
 
-    public function appointmentr()
+    public function appointmentr(Request $request) // Add Request parameter here
     {
-        return view('admin.appointmentr');
+        $query = Appointment::query()
+            ->with(['patient', 'therapist']);
+    
+        // Apply mode filter
+        if ($request->mode && $request->mode != 'all') {
+            $query->where('mode', $request->mode);
+        }
+    
+        // Apply status filter
+        if ($request->status && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+    
+        // Apply date range filter
+        if ($request->start_date) {
+            $query->whereDate('appointment_date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $query->whereDate('appointment_date', '<=', $request->end_date);
+        }
+    
+        $appointments = $query->orderBy('appointment_date', 'desc')
+                             ->orderBy('start_time', 'asc')
+                             ->get();
+    
+        return view('admin.appointmentr', compact('appointments'));
     }
     public function inquiryr()
     {
