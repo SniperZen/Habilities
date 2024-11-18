@@ -15,6 +15,9 @@ use App\Models\UserLogout;
 use App\Models\Inquiry;
 use App\Models\Feedback;
 use App\Models\BusinessSetting;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 
 class AdminController extends Controller
 {
@@ -125,10 +128,89 @@ class AdminController extends Controller
         return view('admin.systemfeedbackr', compact('feedbacks'));
     }
     
-    public function activitylogs()
+    public function activitylogs(Request $request)
     {
-        return view('admin.activitylogs');
+        // Create base query for logins
+        $loginQuery = DB::table('user_logins as l')
+            ->join('users as u', 'l.user_id', '=', 'u.id')
+            ->select(
+                'l.id',
+                'l.user_id',
+                'u.name',
+                'u.usertype',
+                'l.login_at as timestamp',
+                DB::raw("'Login' as activity")
+            );
+    
+        // Create base query for logouts
+        $logoutQuery = DB::table('user_logouts as lo')
+            ->join('users as u', 'lo.user_id', '=', 'u.id')
+            ->select(
+                'lo.id',
+                'lo.user_id',
+                'u.name',
+                'u.usertype',
+                'lo.logged_out_at as timestamp',
+                DB::raw("'Logout' as activity")
+            );
+    
+        // Apply date filters to both queries if present
+        if ($request->filled(['start_date', 'end_date'])) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            
+            $loginQuery->whereBetween('l.login_at', [$startDate, $endDate]);
+            $logoutQuery->whereBetween('lo.logged_out_at', [$startDate, $endDate]);
+        }
+    
+        // Apply user type filter to both queries if present
+        if ($request->filled('usertype') && $request->usertype !== 'all') {
+            $loginQuery->where('u.usertype', $request->usertype);
+            $logoutQuery->where('u.usertype', $request->usertype);
+        }
+    
+        // Handle activity filter
+        if ($request->filled('activity') && $request->activity !== 'all') {
+            if ($request->activity === 'login') {
+                $query = $loginQuery;
+            } elseif ($request->activity === 'logout') {
+                $query = $logoutQuery;
+            }
+        } else {
+            $query = $loginQuery->union($logoutQuery);
+        }
+    
+        $activities = $query->orderBy('timestamp', 'desc')->get();
+    
+        // Add debug logging for results
+    
+        // Transform the results
+        $activities = $activities->map(function($record) {
+            $prefix = match($record->usertype) {
+                'admin' => 'A-',
+                'user' => 'P-',
+                'therapist' => 'T-',
+                default => ''
+            };
+            
+            return [
+                'formatted_id' => $prefix . $record->user_id,
+                'name' => $record->name,
+                'usertype' => $record->usertype,
+                'activity' => $record->activity,
+                'date' => Carbon::parse($record->timestamp)->format('Y-m-d'),
+                'time' => Carbon::parse($record->timestamp)->format('H:i:s')
+            ];
+        });
+    
+        if ($request->ajax()) {
+            return response()->json(['data' => $activities]);
+        }
+    
+        return view('admin.activitylogs', compact('activities'));
     }
+    
+    
 
     public function therapycenter()
     {
