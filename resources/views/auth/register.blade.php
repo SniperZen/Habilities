@@ -143,8 +143,8 @@
 
     .error-message {
         position: absolute;
-        top: 100%;
-        left: 0;
+        top: 86%;
+        left: 65px;
         width: 100%;
         color: red;
         font-size: 0.775rem;
