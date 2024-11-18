@@ -81,7 +81,7 @@
                         <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}">
                     </div>
                     
-                    <button type="submit">Apply Filters</button>
+                    <button class="filt" type="submit">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
                 </form>
             </div>

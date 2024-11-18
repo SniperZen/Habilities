@@ -80,6 +80,10 @@ class AdminController extends Controller
     
     
 
+    public function systemfeedbackr()
+    {
+        return view('admin.systemfeedbackr');
+    }
     public function activitylogs()
     {
         return view('admin.activitylogs');
