@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-left: 5px;
 }
 .notification-item.unread {
-    background-color: #f0f8ff;
+    background-color: #d6e9f9;
     font-weight: bold;
 }
 .notification-item.unread:hover{

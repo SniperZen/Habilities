@@ -62,7 +62,6 @@
 
         .message-box .btn-group button {
             color: white;
-            text-decoration: underline;
         }
 
         .message-box .btn-group button:hover {
@@ -97,7 +96,7 @@
                     @csrf
 
                     <button type="submit">
-                        {{ __('Log Out') }}
+                        {{ __('Go Back') }}
                     </button>
                 </form>
             </div>
