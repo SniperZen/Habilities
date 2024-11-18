@@ -22,7 +22,17 @@
     background-color: #f9f9f9;
     border: none;
 }
+.link {
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+}
 
+/* Style for disabled link */
+svg.link[fill="#cccccc"] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
 
 </style>
 <body>
@@ -85,22 +95,23 @@
                                 <td>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}</td>
-                                <td>{{ $appointment->mode }}</td>
+                                <td>{{ ucfirst(strtolower($appointment->mode)) }}</td>
                                 <td>
-                                    <a href="{{$appointment->teletherapist_link}}" target="_blank">
-                                    <svg class="link" xmlns="http://www.w3.org/2000/svg" fill="#4F4A6E" viewBox="0 0 24 24" stroke-width="1.5" stroke="#4F4A6E" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-                                    </svg>
-                                    </a>
-                                </td>
-                                <!-- Replace your existing OTF button with this -->
-                                <td>
-                                    <a href="{{ route('therapist.feedback2', [
-                                        'patient_id' => $appointment->patient_id,
-                                        'patient_name' => $appointment->first_name . ' ' . $appointment->middle_name . ' ' . $appointment->last_name
-                                    ]) }}" class="otf-link">
-                                        <img class="otf" src="{{ asset('images/icons/otf.png') }}" alt="Feedback Icon">
-                                    </a>
+                                    @if(strtolower($appointment->mode) === 'tele-therapy' && $appointment->teletherapist_link)
+                                        <a href="{{ $appointment->teletherapist_link }}" target="_blank" title="Open teletherapy link">
+                                            <svg class="link" xmlns="http://www.w3.org/2000/svg" fill="#4F4A6E" viewBox="0 0 24 24" stroke-width="1.5" stroke="#4F4A6E" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                            </svg>
+                                        </a>
+                                    @elseif(strtolower($appointment->mode) === 'tele-therapy')
+                                        <div title="No teletherapy link available">
+                                            <svg class="link" xmlns="http://www.w3.org/2000/svg" fill="#cccccc" viewBox="0 0 24 24" stroke-width="1.5" stroke="#cccccc" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                            </svg>
+                                        </div>
+                                    @else
+                                        <span>-</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <form action="{{ route('therapist.cancelAppointment', $appointment->id) }}" method="POST" style="display:inline;">
