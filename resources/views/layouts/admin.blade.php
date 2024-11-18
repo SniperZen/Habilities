@@ -129,7 +129,7 @@
                                                 class="{{ request()->routeIs('admin.appointmentr') ? 'active' : '' }} subnav2">
                                         <svg width="40" height="40" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M7.48322 11.817H28.2346M10.1654 4.26562V6.23578M25.2701 4.26562V6.23554M29.7168 9.68291V23.8007C29.7168 25.7046 27.9472 27.2481 25.7642 27.2481H9.95362C7.77063 27.2481 6.00098 25.7046 6.00098 23.8007V9.68291C6.00098 7.77898 7.77063 6.23554 9.95362 6.23554H25.7642C27.9472 6.23554 29.7168 7.77898 29.7168 9.68291Z" stroke="#303B1D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>Apoointment Reports
+                                        </svg>Apointment Reports
                                 </x-side-nav-bar>
                             </li>
                             <li>

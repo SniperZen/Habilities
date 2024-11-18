@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\PatientFeedback;
 use App\Models\UserLogin;
 use App\Models\UserLogout;
+use App\Models\Inquiry;
 
 use App\Models\BusinessSetting;
 
@@ -538,7 +539,31 @@ public function getDashboardCounts()
         return $previousCount > 0 ? (($latestCount - $previousCount) / $previousCount) * 100 : 0;
     }
     
+    public function showInquiries(Request $request)
+    {
+        $query = Inquiry::with('user') // Change from Report to Inquiry
+            ->select('inquiries.*', 'users.name as patient_name') // Change from reports to inquiries
+            ->join('users', 'inquiries.user_id', '=', 'users.id'); // Change from reports to inquiries
 
+        // Filter by status
+        if ($request->status === 'pending') {
+            $query->whereNull('completed_at');
+        } elseif ($request->status === 'completed') {
+            $query->whereNotNull('completed_at');
+        }
+
+        // Filter by date range
+        if ($request->start_date) {
+            $query->whereDate('inquiries.created_at', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $query->whereDate('inquiries.created_at', '<=', $request->end_date);
+        }
+
+        $inquiries = $query->orderBy('inquiries.created_at', 'desc')->get();
+
+        return view('admin.inquiryr', compact('inquiries')); // Change reports to inquiries
+    }
     
 }
 

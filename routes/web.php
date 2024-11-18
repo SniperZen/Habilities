@@ -81,6 +81,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/admin/inquiryr', [AdminController::class, 'inquiryr'])->name('admin.inquiryr');
             Route::get('/admin/otfr', [AdminController::class, 'otfr'])->name('admin.otfr');
             Route::get('/admin/activitylogs', [AdminController::class, 'activitylogs'])->name('admin.activitylogs');
+            Route::get('/admin/inquiryr', [AdminController::class, 'showInquiries'])->name('admin.inquiryr');
 
             
         });
