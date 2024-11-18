@@ -81,7 +81,7 @@
                                 <th>Time</th>
                                 <th>Mode</th>
                                 <th>Status</th>
-                                <th>Note</th>
+                                <!--<th>Note</th>-->
                             </tr>
                         </thead>
                         <tbody>
@@ -122,7 +122,7 @@
                                                 <span class="badge bg-secondary">{{ $appointment->status }}</span>
                                         @endswitch
                                     </td>
-                                    <td>{{ $appointment->note }}</td>
+                                    <!--<td>{{ $appointment->note }}</td>-->
                                 </tr>
                             @endforeach
                         </tbody>

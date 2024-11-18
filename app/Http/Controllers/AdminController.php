@@ -14,7 +14,6 @@ use App\Models\UserLogin;
 use App\Models\UserLogout;
 use App\Models\Inquiry;
 use App\Models\Feedback;
-
 use App\Models\BusinessSetting;
 
 class AdminController extends Controller
@@ -103,12 +102,29 @@ class AdminController extends Controller
         return view('admin.otfr', compact('feedbacks'));
     }
     
-    
-
-    public function systemfeedbackr()
+    public function systemfeedbackr(Request $request)
     {
-        return view('admin.systemfeedbackr');
+        $query = PatientFeedback::with('user');
+    
+        if ($request->filled(['start_date', 'end_date'])) {
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            
+            $query->whereBetween('created_at', [$start_date, $end_date]);
+        }
+    
+        $feedbacks = $query->orderBy('created_at', 'desc')->get();
+    
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => $feedbacks,
+                'status' => 'success'
+            ]);
+        }
+    
+        return view('admin.systemfeedbackr', compact('feedbacks'));
     }
+    
     public function activitylogs()
     {
         return view('admin.activitylogs');
