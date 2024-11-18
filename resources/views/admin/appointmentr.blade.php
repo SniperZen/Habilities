@@ -26,7 +26,7 @@
             </div> -->
 
             <div class="report-dropdown">
-                <div class= "user">
+                <!--<div class= "user">
                     <label for="userFilterSelect">User: </label>
                     <select id="userFilterSelect">
                         <option value="all">All User Types</option>
@@ -46,14 +46,25 @@
                             }
                         });
                     </script>
-                </div>
+                </div>-->
 
                 <div class="mode">
                     <label for="modeFilterSelect">Mode: </label>
                     <select id="modeFilterSelect">
-                        <option value="all">All User Types</option>
+                        <option value="all">All</option>
                         <option value="user">Face to face</option>
                         <option value="therapist">Tele-Therapy</option>
+                    </select>
+                </div>
+
+                <div class="status">
+                    <label for="statusFilterSelect">Status: </label>
+                    <select id="statusFilterSelect">
+                        <option value="all">All</option>
+                        <option value="user">Completed</option>
+                        <option value="therapist">Declined</option>
+                        <option value="therapist">Pending</option>
+
                     </select>
                 </div>
 
@@ -71,18 +82,24 @@
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Therapist</th>
+                        <th>Patient</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Mode</th>
+                        <th>Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Maria Lourdes Solita G. Cruz</td>
+                        <td>Maria Lourdes Solita G. Cruz</td>
                         <td>04/02/2024</td>
                         <td>10:00 AM - 11:00 AM</td>
                         <td>Face-to-Face</td>
+                        <td>Pending</td>
+
                     </tr>
                     <!-- Repeat rows as needed -->
                 </tbody>

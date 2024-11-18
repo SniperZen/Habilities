@@ -18,6 +18,45 @@
             .document-link:hover {
                 text-decoration: underline;
             }
+
+            @media print {
+                body * {
+                    visibility: hidden;
+                }
+                #printableTable, #printableTable * {
+                    visibility: visible;
+                }
+                #printableTable {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+                .export-btn, .print-btn, .report-dropdown {
+                    display: none;
+                }
+                .document-link {
+                    text-decoration: none !important;
+                }
+                a[href]::after {
+                    content: none !important;
+                }
+            }
+
+            .button-container {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .export-btn, .print-btn {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: none;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
         </style>
     </head>
     <body>
@@ -49,6 +88,7 @@
 
             <div id="printableTable">
                 <table class="report-table">
+                    <!-- Your existing table content -->
                     <thead>
                         <tr>
                             <th>Patient Name</th>
@@ -96,9 +136,14 @@
                 </table>
             </div>
 
-            <button class="export-btn" onclick="generatePDF()">
-                <i class="fas fa-download"></i> Export Data
-            </button>
+            <div class="button-container">
+                <button class="export-btn" onclick="generatePDF()">
+                    <i class="fas fa-download"></i> Export PDF
+                </button>
+                <button class="print-btn" onclick="printTable()">
+                    <i class="fas fa-print"></i> Print Data
+                </button>
+            </div>
         </div>
 
         <script>
@@ -110,18 +155,14 @@
             });
 
             function generatePDF() {
-                // Create new jsPDF instance
                 window.jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF('l', 'mm', 'a4');
-
-                // Get the element
                 var element = document.getElementById('printableTable');
 
-                // Use html2canvas to convert the element to canvas
                 html2canvas(element).then(function(canvas) {
                     var imgData = canvas.toDataURL('image/png');
-                    var imgWidth = 280; // A4 width in mm
-                    var pageHeight = 210;  // A4 height in mm
+                    var imgWidth = 280;
+                    var pageHeight = 210;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
                     var heightLeft = imgHeight;
                     var position = 10;
@@ -130,6 +171,23 @@
                     doc.save('inquiry-reports.pdf');
                 });
             }
+
+            function printTable() {
+                window.print();
+            }
+
+            // Auto-submit form when filters change
+            document.getElementById('status').addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+
+            document.getElementById('start_date').addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+            
+            document.getElementById('end_date').addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
         </script>
     </body>
     </html>

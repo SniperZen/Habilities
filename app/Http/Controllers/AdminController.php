@@ -13,6 +13,7 @@ use App\Models\PatientFeedback;
 use App\Models\UserLogin;
 use App\Models\UserLogout;
 use App\Models\Inquiry;
+use App\Models\Feedback;
 
 use App\Models\BusinessSetting;
 
@@ -58,10 +59,26 @@ class AdminController extends Controller
     {
         return view('admin.inquiryr');
     }
-    public function otfr()
+    public function otfr(Request $request)
     {
-        return view('admin.otfr');
+        $query = Feedback::query()
+            ->with(['sender', 'recipient']); // Changed from 'therapist', 'patient'
+    
+        // Apply date filters if they exist
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+    
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+    
+        $feedbacks = $query->orderBy('created_at', 'desc')->get();
+    
+        return view('admin.otfr', compact('feedbacks'));
     }
+    
+    
 
     public function activitylogs()
     {
