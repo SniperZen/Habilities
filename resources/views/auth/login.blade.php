@@ -240,7 +240,8 @@
         .form-side {
             padding: 20px;
             width: 100%;
-            margin: auto;
+            height: auto;
+            margin: 40px 0;
         }
 
         .form-side h1 {
