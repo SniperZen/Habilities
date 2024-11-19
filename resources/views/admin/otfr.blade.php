@@ -90,7 +90,7 @@
                     <i class="fas fa-download"></i> Export PDF
                 </button> -->
                 <button class="print-btn" onclick="printTable()">
-                    <i class="fas fa-download"></i> Print Data
+                    <i class="fas fa-download"></i> Export Data
                 </button>
             </div>
         </div>
