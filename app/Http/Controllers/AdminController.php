@@ -13,8 +13,11 @@ use App\Models\PatientFeedback;
 use App\Models\UserLogin;
 use App\Models\UserLogout;
 use App\Models\Inquiry;
-
+use App\Models\Feedback;
 use App\Models\BusinessSetting;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 
 class AdminController extends Controller
 {
@@ -50,26 +53,213 @@ class AdminController extends Controller
         return view('admin.report');
     }
 
-    public function appointmentr()
+    public function appointmentr(Request $request)
     {
-        return view('admin.appointmentr');
+        $query = Appointment::query()
+            ->with(['patient', 'therapist']);
+    
+        // Apply filters for both real-time search and filter submission
+        if ($request->has('mode') && $request->mode != 'all') {
+            $query->where('mode', $request->mode);
+        }
+    
+        if ($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+    
+        if ($request->start_date) {
+            $query->whereDate('appointment_date', '>=', $request->start_date);
+        }
+    
+        if ($request->end_date) {
+            $query->whereDate('appointment_date', '<=', $request->end_date);
+        }
+    
+        // Apply search if search term exists
+        if ($request->has('search_name') && $request->search_name) {
+            $query->where(function($q) use ($request) {
+                $q->whereHas('patient', function($sq) use ($request) {
+                    $sq->where('name', 'LIKE', '%' . $request->search_name . '%');
+                })->orWhereHas('therapist', function($sq) use ($request) {
+                    $sq->where('name', 'LIKE', '%' . $request->search_name . '%');
+                });
+            });
+        }
+    
+        $appointments = $query->orderBy('appointment_date', 'desc')
+                             ->orderBy('start_time', 'asc')
+                             ->get();
+    
+        if ($request->ajax()) {
+            return response()->json(['appointments' => $appointments]);
+        }
+    
+        return view('admin.appointmentr', compact('appointments'));
     }
+    
+    
     public function inquiryr()
     {
         return view('admin.inquiryr');
     }
-    public function otfr()
+    public function otfr(Request $request)
     {
-        return view('admin.otfr');
+        $query = Feedback::query()
+            ->with(['sender', 'recipient']);
+    
+        // Apply date filters if they exist
+        if ($request->filled('start_date')) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+    
+        if ($request->filled('end_date')) {
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+    
+        // Apply name or diagnosis search if provided
+        if ($request->filled('search_name')) {
+            $searchTerm = $request->search_name;
+            $query->where(function($q) use ($searchTerm) {
+                $q->whereHas('sender', function($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', '%' . $searchTerm . '%');
+                })
+                ->orWhereHas('recipient', function($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', '%' . $searchTerm . '%');
+                })
+                ->orWhere('diagnosis', 'LIKE', '%' . $searchTerm . '%'); // Add diagnosis search
+            });
+        }
+    
+        $feedbacks = $query->orderBy('created_at', 'desc')->get();
+    
+        if ($request->ajax()) {
+            return response()->json([
+                'feedbacks' => $feedbacks
+            ]);
+        }
+    
+        return view('admin.otfr', compact('feedbacks'));
     }
-    public function systemfeedbackr()
+    
+    public function systemfeedbackr(Request $request)
     {
-        return view('admin.systemfeedbackr');
+        $query = PatientFeedback::with('user');
+    
+        // Apply date filters only if the request is from the Apply Filter button
+        if ($request->filled(['start_date', 'end_date'])) {
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereBetween('created_at', [$start_date, $end_date]);
+        }
+    
+        // Apply name search (this works in real-time)
+        if ($request->filled('search_name')) {
+            $searchTerm = $request->search_name;
+            $query->whereHas('user', function($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+    
+        $feedbacks = $query->orderBy('created_at', 'desc')->get();
+    
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => $feedbacks,
+                'status' => 'success'
+            ]);
+        }
+    
+        return view('admin.systemfeedbackr', compact('feedbacks'));
     }
-    public function activitylogs()
+    
+    public function activitylogs(Request $request)
     {
-        return view('admin.activitylogs');
+        // Create base query for logins
+        $loginQuery = DB::table('user_logins as l')
+            ->join('users as u', 'l.user_id', '=', 'u.id')
+            ->select(
+                'u.id', // Changed from l.id to u.id
+                'l.user_id',
+                'u.name',
+                'u.usertype',
+                'l.login_at as timestamp',
+                DB::raw("'Login' as activity")
+            );
+    
+        // Create base query for logouts
+        $logoutQuery = DB::table('user_logouts as lo')
+            ->join('users as u', 'lo.user_id', '=', 'u.id')
+            ->select(
+                'u.id', // Changed from lo.id to u.id
+                'lo.user_id',
+                'u.name',
+                'u.usertype',
+                'lo.logged_out_at as timestamp',
+                DB::raw("'Logout' as activity")
+            );
+    
+        // Apply filters
+        if ($request->filled(['start_date', 'end_date'])) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            
+            $loginQuery->whereBetween('l.login_at', [$startDate, $endDate]);
+            $logoutQuery->whereBetween('lo.logged_out_at', [$startDate, $endDate]);
+        }
+    
+        if ($request->filled('usertype') && $request->usertype !== 'all') {
+            $loginQuery->where('u.usertype', $request->usertype);
+            $logoutQuery->where('u.usertype', $request->usertype);
+        }
+    
+        if ($request->filled('activity') && $request->activity !== 'all') {
+            if ($request->activity === 'login') {
+                $logoutQuery->whereRaw('1 = 0'); // Exclude logouts
+            } elseif ($request->activity === 'logout') {
+                $loginQuery->whereRaw('1 = 0'); // Exclude logins
+            }
+        }
+    
+        // Apply search filter if present
+        if ($request->filled('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $loginQuery->where('u.name', 'LIKE', $searchTerm);
+            $logoutQuery->where('u.name', 'LIKE', $searchTerm);
+        }
+    
+        // Combine and sort results
+        $activities = $loginQuery->union($logoutQuery)
+            ->orderBy('timestamp', 'desc')
+            ->get()
+            ->map(function ($activity) {
+                // Format ID based on usertype
+                $prefix = match ($activity->usertype) {
+                    'user' => 'P-',
+                    'admin' => 'A-',
+                    'therapist' => 'T-',
+                    default => ''
+                };
+                
+                return [
+                    'formatted_id' => $prefix . str_pad($activity->id, 4, '0', STR_PAD_LEFT),
+                    'name' => $activity->name,
+                    'usertype' => $activity->usertype,
+                    'activity' => $activity->activity,
+                    'date' => Carbon::parse($activity->timestamp)->format('Y-m-d'),
+                    'time' => Carbon::parse($activity->timestamp)->format('h:i A')
+                ];
+            });
+    
+        if ($request->ajax()) {
+            return response()->json(['data' => $activities]);
+        }
+    
+        return view('admin.activitylogs', ['activities' => $activities]);
     }
+    
+    
 
     public function therapycenter()
     {
@@ -544,29 +734,49 @@ public function getDashboardCounts()
     
     public function showInquiries(Request $request)
     {
-        $query = Inquiry::with('user') // Change from Report to Inquiry
-            ->select('inquiries.*', 'users.name as patient_name') // Change from reports to inquiries
-            ->join('users', 'inquiries.user_id', '=', 'users.id'); // Change from reports to inquiries
-
-        // Filter by status
-        if ($request->status === 'pending') {
-            $query->whereNull('completed_at');
-        } elseif ($request->status === 'completed') {
-            $query->whereNotNull('completed_at');
+        $query = Inquiry::with('user')
+            ->select('inquiries.*', 'users.name as patient_name')
+            ->join('users', 'inquiries.user_id', '=', 'users.id');
+    
+        // Clear functionality
+        if ($request->has('clear')) {
+            return redirect()->route('admin.inquiryr');
         }
-
-        // Filter by date range
+    
+        // Search functionality
+        if ($request->search_name) {
+            $query->where(function($q) use ($request) {
+                $q->where('users.name', 'LIKE', '%' . $request->search_name . '%')
+                  ->orWhere('inquiries.concerns', 'LIKE', '%' . $request->search_name . '%');
+            });
+        }
+    
+        // Status filter
+        if ($request->status && $request->status !== 'all') {
+            if ($request->status === 'pending') {
+                $query->whereNull('completed_at');
+            } elseif ($request->status === 'completed') {
+                $query->whereNotNull('completed_at');
+            }
+        }
+    
+        // Date range filter
         if ($request->start_date) {
             $query->whereDate('inquiries.created_at', '>=', $request->start_date);
         }
         if ($request->end_date) {
             $query->whereDate('inquiries.created_at', '<=', $request->end_date);
         }
-
+    
         $inquiries = $query->orderBy('inquiries.created_at', 'desc')->get();
-
-        return view('admin.inquiryr', compact('inquiries')); // Change reports to inquiries
+    
+        if ($request->ajax()) {
+            return response()->json(['inquiries' => $inquiries]);
+        }
+    
+        return view('admin.inquiryr', compact('inquiries'));
     }
+    
     
 }
 

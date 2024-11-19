@@ -45,13 +45,13 @@
                         <div class="select-wrapper">
                             <select id="concerns" name="concerns">
                                 <option value="">Select...</option>
-                                <option value="autism">Autism</option>
-                                <option value="adhd">Attention Deficit Hyperactivity Disorder (ADHD)</option>
+                                <option value="Autism">Autism</option>
+                                <option value="ADHD">Attention Deficit Hyperactivity Disorder (ADHD)</option>
                                 <option value="down_syndrome">Down Syndrome</option>
-                                <option value="gdd">Global Developmental Delay (GDD)</option>
-                                <option value="behavioral_problems">Behavioral Problems</option>
-                                <option value="learning_disabilities">Learning Disabilities</option>
-                                <option value="others">Others</option>
+                                <option value="GDD">Global Developmental Delay (GDD)</option>
+                                <option value="Behavioral Problems">Behavioral Problems</option>
+                                <option value="Learning Disabilities">Learning Disabilities</option>
+                                <option value="Others">Others</option>
                             </select>
                         </div>
                         <div class="inf">
