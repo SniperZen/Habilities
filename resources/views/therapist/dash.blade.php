@@ -76,7 +76,7 @@
         margin-left: 5px;
     }
     .notification-item.unread {
-        background-color: #f9f1ff;
+        background-color: #eed7ff;
         font-weight: bold;
     }
 

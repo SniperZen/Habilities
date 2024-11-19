@@ -19,8 +19,51 @@
         min-height: 100%;
     }
 
+    @keyframes slideInFromLeft {
+        0% {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInFromRight {
+        0% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .slide-in-left {
+        animation: slideInFromLeft 0.8s ease-out forwards;
+        opacity: 0; /* Start with invisible */
+    }
+
+    .slide-in-right {
+        animation: slideInFromRight 0.8s ease-out forwards;
+        opacity: 0; /* Start with invisible */
+    }
+
+    .cont{
+        height: 100vh;
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden auto;
+        flex-wrap: wrap;
+    }
+
     .form-side {
-        flex: 1;
         background-color: white;
         padding: 5% 10%;
         display: flex;
@@ -191,17 +234,17 @@
     /* Adjustments for smaller screens */
     @media (max-width: 768px) {
         .image-side {
-            display: none; /* Hide the image side */
+            display: none;
         }
 
         .form-side {
             padding: 20px;
-            width: 100%; /* Allow full width for mobile */
+            width: 100%;
             margin: auto;
         }
 
         .form-side h1 {
-            font-size: 1.8em; /* Smaller heading size */
+            font-size: 1.8em; 
         }
 
         .form-side p {
@@ -211,7 +254,7 @@
 
     @media (max-width: 480px) {
         .form-side h1 {
-            font-size: 1.5em; /* Even smaller heading for smaller screens */
+            font-size: 1.5em;
         }
 
         .form-side p {
@@ -221,7 +264,7 @@
         .form-side input[type="email"],
         .form-side input[type="password"],
         .form-side button {
-            max-width: 100%; /* Full width for inputs and button */
+            max-width: 100%;
         }
 
         .input-container {
@@ -229,7 +272,7 @@
         }
 
         .toggle-password {
-            font-size: 1em; /* Adjust icon size for smaller screens */
+            font-size: 1em; 
         }
 
         .links p, .links a {
@@ -270,14 +313,22 @@
         this.classList.toggle('fa-eye');
         this.classList.toggle('fa-eye-slash');
     });
-});
+
+//     const imageSide = document.querySelector('.image-side');
+//         const formSide = document.querySelector('.form-side');
+//         setTimeout(() => {
+//             imageSide.classList.add('slide-in-left');
+//             formSide.classList.add('slide-in-right');
+//         }, 100);
+ });
 
     </script>
 
 
     <div class="container">
         <div class="image-side"></div>
-        <div class="form-side">
+        <div class="cont">
+            <div class="form-side">
             <img src="images/logo.png" alt="Logo">
             <h1>Welcome to TherapEase!</h1>
             <p>by Habilities Center for Intervention</p>
@@ -323,6 +374,7 @@
                     <a href="{{ route('account.type.selection') }}">Sign up</a>
                 </div>
             </form>
+        </div>
         </div>
     </div>
 </x-guest-layout>

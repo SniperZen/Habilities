@@ -18,7 +18,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <script>
   window.onload = function () {
-    document.body.classList.add("fade-in");
+    // document.body.classList.add("fade-in");
 
     let lastScrollY = window.scrollY;
 

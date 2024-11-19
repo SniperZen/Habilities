@@ -1,7 +1,6 @@
 <x-guest-layout>
     <style>
         body {
-        height: 100vh;
         margin: 0;
         font-family: Arial, sans-serif;
     }

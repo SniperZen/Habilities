@@ -167,6 +167,24 @@
         color: black !important;
     }
 
+    .exist {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 5px;
+        font-size: 14px;
+    }
+
+    .exist p {
+        color: #74A36B;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .exist p:hover {
+        text-decoration: underline;
+    }
+
     @media (max-width: 768px) {
         .image-side {
             display: none;
@@ -243,6 +261,12 @@
                     <button type="submit">
                         {{ __('Email Password Reset Link') }}
                     </button>
+                </div>
+                <div class="exist">
+                    <p>Already have an account?</p>
+                    <a class="signin" href="{{ route('login') }}">
+                        <p>Sign in</p>
+                    </a>
                 </div>
             </form>
         </div>

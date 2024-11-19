@@ -138,8 +138,12 @@ th{
 
 .footer-links a{
     text-decoration: none;
-    color: #473401;
+    color: #1E1D3B;
     font-weight: bolder;
+}
+
+.filter-btn2{
+    cursor: none;
 }
 
 .sidebarr ul img {

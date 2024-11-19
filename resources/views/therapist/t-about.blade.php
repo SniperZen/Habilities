@@ -53,32 +53,32 @@
                 <div class="serve">
                     <h2>Services Offered</h2>
                     <div class="service1">
-                    <div><img src="{{asset('images/s1.png')}}" alt="SpEd Tutorials" class="service-img"></div>
+                    <div><img src="{{asset('images/s1_v.png')}}" alt="SpEd Tutorials" class="service-img"></div>
                     <div><h3>SpEd Tutorials</h3>
                         <p>Special Education tutorials provide personalized learning experiences for children with special needs, focusing on academic skills and overall learning development.</p>
                     </div></div>
                     <div class="service">
-                    <div><img src="{{asset('images/s2.png')}}" alt="Speech Therapy" class="service-img"></div>
+                    <div><img src="{{asset('images/s2_v.png')}}" alt="Speech Therapy" class="service-img"></div>
                         <div><h3>Speech Therapy</h3>
                         <p>Speech Therapy enhances communication skills through personalized exercises and activities, promoting effective verbal expression and comprehension.</p>
                     </div></div>
                     <div class="service1">
-                        <div><img src="{{asset('images/s3.png')}}" alt="Occupational Therapy" class="service-img"></div>
+                        <div><img src="{{asset('images/s3_v.png')}}" alt="Occupational Therapy" class="service-img"></div>
                         <div><h3>Occupational Therapy</h3>
                         <p>Occupational Therapy helps children develop necessary skills for daily activities, focusing on motor skills, sensory processing, and coordination.</p></div>
                     </div></div>
                     <div class="service">
-                    <div><img src="{{asset('images/s4.png')}}" alt="Shadow Teacher" class="service-img"></div>
+                    <div><img src="{{asset('images/s4_v.png')}}" alt="Shadow Teacher" class="service-img"></div>
                         <div><h3>Shadow Teacher</h3>
                         <p>A shadow teacher offers in-class support to children with special needs, ensuring they receive personalized attention and guidance during classroom activities.</p>
                     </div></div>
                     <div class="service1">
-                    <div><img src="{{asset('images/s5.png')}}" alt="Early Childhood Intervention" class="service-img"></div>
+                    <div><img src="{{asset('images/s5_v.png')}}" alt="Early Childhood Intervention" class="service-img"></div>
                         <div><h3>Early Childhood Intervention</h3>
                         <p>Early childhood intervention programs support the development of infants and toddlers with special needs, promoting growth in cognitive, physical, and social-emotional areas.</p>
                     </div></div>
                     <div class="service">
-                    <div><img src="{{asset('images/s6.png')}}" alt="Developmental Pediatrician" class="service-img"></div>
+                    <div><img src="{{asset('images/s6_v.png')}}" alt="Developmental Pediatrician" class="service-img"></div>
                         <div><h3>Developmental Pediatrician</h3>
                         <p>Developmental pediatricians specialize in diagnosing and managing developmental disorders, providing tailored treatment plans for children with special needs.</p>
                     </div></div>
