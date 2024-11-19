@@ -45,17 +45,19 @@
                 </div>
                 <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
                     <a href="{{ route('patient.profile') }}" class="dropdown-item">
-                        <img src="{{ asset('images/nav/profile.png') }}" alt="">Profile
-                    </a>
-                    <a href="{{ route('patient.myHistory') }}" class="dropdown-item">
-                        <img src="{{ asset('images/nav/history.png') }}" alt="">My History
+                        <svg width="23" height="23" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:3px;">
+                            <path d="M3 25.6405C3 20.9211 6.94286 17.0952 15 17.0952C23.0571 17.0952 27 20.9211 27 25.6405C27 26.3913 26.4522 27 25.7765 27H4.22353C3.54779 27 3 26.3913 3 25.6405Z" stroke="black" stroke-width="3"/>
+                            <path d="M19.5 7.5C19.5 9.98528 17.4853 12 15 12C12.5147 12 10.5 9.98528 10.5 7.5C10.5 5.01472 12.5147 3 15 3C17.4853 3 19.5 5.01472 19.5 7.5Z" stroke="black" stroke-width="3"/>
+                        </svg>Profile
                     </a>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
                         @csrf
                     </form>
 
                     <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <img src="{{ asset('images/nav/logout.png') }}" alt="">Log Out
+                        <svg width="23" height="23" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:3px;">
+                            <path d="M21.3603 11.375V8.3125C21.3603 7.50027 21.0349 6.72132 20.4558 6.14699C19.8766 5.57266 19.0911 5.25 18.2721 5.25H7.46324C6.64418 5.25 5.85868 5.57266 5.27952 6.14699C4.70037 6.72132 4.375 7.50027 4.375 8.3125V26.6875C4.375 27.4997 4.70037 28.2787 5.27952 28.853C5.85868 29.4273 6.64418 29.75 7.46324 29.75H18.2721C19.0911 29.75 19.8766 29.4273 20.4558 28.853C21.0349 28.2787 21.3603 27.4997 21.3603 26.6875V23.625M12.0956 17.5H30.625M30.625 17.5L25.9926 12.9062M30.625 17.5L25.9926 22.0938" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>Log Out
                     </a>
                 </div>
 

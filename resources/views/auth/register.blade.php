@@ -393,7 +393,7 @@
             box-shadow: none;
             overflow: hidden auto;
             height: auto;
-            margin: 40px 0;
+            margin: 25px 0;
         }
 
         .container {

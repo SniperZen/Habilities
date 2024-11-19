@@ -52,7 +52,9 @@
                     <!-- <a href="{{ route('patient.profile') }}" class="dropdown-item">Profile</a> -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="handleLogout(event)">Log Out</a>
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="handleLogout(event)"><svg width="23" height="23" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:3px;">
+                            <path d="M21.3603 11.375V8.3125C21.3603 7.50027 21.0349 6.72132 20.4558 6.14699C19.8766 5.57266 19.0911 5.25 18.2721 5.25H7.46324C6.64418 5.25 5.85868 5.57266 5.27952 6.14699C4.70037 6.72132 4.375 7.50027 4.375 8.3125V26.6875C4.375 27.4997 4.70037 28.2787 5.27952 28.853C5.85868 29.4273 6.64418 29.75 7.46324 29.75H18.2721C19.0911 29.75 19.8766 29.4273 20.4558 28.853C21.0349 28.2787 21.3603 27.4997 21.3603 26.6875V23.625M12.0956 17.5H30.625M30.625 17.5L25.9926 12.9062M30.625 17.5L25.9926 22.0938" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>Log Out</a>
                     </form>
                 </div>
             </div>
