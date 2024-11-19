@@ -214,7 +214,7 @@
                                 $feedback_id = $notification->data['feedback_id'] ?? '';
                             @endphp
                             <li class="notification-item {{ $notification->read_at ? '' : 'unread' }} {{ $index >= 4 ? 'hidden' : '' }}" data-id="{{ $notification->id }}">
-                                <a href="{{ route('admin.report', ['feedback_id' => $feedback_id]) }}" class="notification-link">
+                                <a href="{{ route('admin.systemfeedbackr', ['feedback_id' => $feedback_id]) }}" class="notification-link">
                                     <img src="{{ $profile_image }}" alt="{{ $sender_name }}'s Avatar" class="notification-avatar">
                                     <div class="notification-content">
                                         <p class="notification-title">{{ $sender_name }}</p>
