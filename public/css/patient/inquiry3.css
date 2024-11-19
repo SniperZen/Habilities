@@ -11,11 +11,11 @@ body {
     height: calc(100vh - 120px);
     overflow-y: auto;
     flex-wrap: wrap;
+    padding: 20px;
 }
 
-.main{
+.main {
     overflow: hidden;
-
 }
 
 .main-content {
@@ -29,16 +29,14 @@ body {
     width: 80vw;
 }
 
-
-h3{
-    display: block;
+h3 {
     font-size: 25px;
     color: #395886;
     font-weight: bold;
     margin-bottom: 7px;
 }
 
-strong{
+strong {
     color: #395886;
 }
 
@@ -53,20 +51,20 @@ strong{
     margin: 15px 0;
     width: 600px;
     text-align: center;
+    word-wrap: break-word; 
 }
 
-button:hover, .button-group a:hover{
+button:hover, .button-group a:hover {
     transform: scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .inquiry-details p {
     font-size: 20px;
-    color: #4f4f66;
+    color: #395886;
     margin: 15px 0;
     width: auto;
     text-align: left;
-    color: #395886;
 }
 
 .inquiry-details {
@@ -96,7 +94,7 @@ button:hover, .button-group a:hover{
 }
 
 .view-attachment {
-    color: #007BFF; /* Link color */
+    color: #007BFF;
     text-decoration: none;
 }
 
@@ -104,9 +102,10 @@ button:hover, .button-group a:hover{
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.button-group button{
+.button-group button {
     display: inline-block;
     background-color: #395886;
     color: white;
@@ -118,9 +117,11 @@ button:hover, .button-group a:hover{
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     transition: box-shadow 0.3s ease;
     transition: transform 0.3s ease;
+    width: 100%; 
+    margin-bottom: 10px;
 }
 
-.button-group a{
+.button-group a {
     display: inline-block;
     background-color: #ffffff;
     color: rgb(0, 0, 0);
@@ -134,9 +135,9 @@ button:hover, .button-group a:hover{
     transition: transform 0.3s ease;
     border: black 1px solid;
     text-decoration: none;
+    width: 100%; 
+    margin-bottom: 10px;
 }
-
-
 
 .form-container {
     background-color: #fff;
@@ -152,6 +153,7 @@ button:hover, .button-group a:hover{
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 50px;
+    flex-wrap: wrap; 
 }
 
 .progress-bar .step {
@@ -183,6 +185,7 @@ button:hover, .button-group a:hover{
     height: 4px;
     background-color: #8AAEE0;
 }
+
 .progress-bar .step.inactive .step-line {
     background-color: #E5E5E5;
 }
@@ -197,8 +200,9 @@ button:hover, .button-group a:hover{
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure modal appears on top */
+    z-index: 1000;
 }
+
 .modals {
     display: block;
     background-color: white;
@@ -208,30 +212,29 @@ button:hover, .button-group a:hover{
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     position: relative;
+    max-width: 90vw;
 }
-.heads{
+
+.heads {
     width: 100%;
     background-color: #395886;
     height: 15px;
     border-radius: 10px 10px 0 0;
 }
 
-.mod-cont{
+.mod-cont {
     padding: 20px;
 }
 
-
-.top{
+.top {
     display: flex;
     align-items: center;
     gap: 10px;
     padding-bottom: 20px;
     border-bottom: 1px solid #afafaf;
     width: 100%;
-    h2{
-        margin: 0;
-    }
 }
+
 .bot {
     display: flex;
     flex-direction: column;
@@ -239,7 +242,8 @@ button:hover, .button-group a:hover{
     text-align: justify;
     padding: 0 10px;
 }
-.inner{
+
+.inner {
     display: flex;
     gap: 20px;
     flex-direction: column;
@@ -249,13 +253,13 @@ button:hover, .button-group a:hover{
 .modals h2 {
     margin-top: 0;
     color: #333;
-    /* font-size: 1.5rem; */
 }
 
 .modals p {
     color: #666;
     margin-bottom: 1.5rem;
 }
+
 .modal-buttons {
     display: flex;
     justify-content: flex-end;
@@ -264,6 +268,7 @@ button:hover, .button-group a:hover{
     padding-top: 20px;
     gap: 20px;
 }
+
 .modal-cancel-button {
     display: inline-block;
     background-color: #ffffff;
@@ -276,8 +281,6 @@ button:hover, .button-group a:hover{
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     transition: box-shadow 0.3s ease;
     transition: transform 0.3s ease;
-    border: black 1px solid;
-    text-decoration: none;
     border: 1px solid #ddd;
 }
 
@@ -295,7 +298,7 @@ button:hover, .button-group a:hover{
     transition: transform 0.3s ease;
 }
 
-.attachments p{
+.attachments p {
     margin-bottom: 10px;
 }
 
@@ -304,9 +307,10 @@ button:hover, .button-group a:hover{
     height: calc(100vh - 70px);
 }
 
+
 @media (max-width: 1200px) {
     .tcontainer {
-        height: calc(100vh - 70px);
+        height: auto; 
         padding: 20px;
     }
 
@@ -316,27 +320,26 @@ button:hover, .button-group a:hover{
         height: auto;
     }
 
-    .main-content p{
+    .main-content p {
         font-size: 16px;
         width: auto;
     }
 
-    .main-content h2{
+    .main-content h2 {
         font-size: 30px;
-        width: 407px;
+        width: auto;
         text-align: center;
     }
 
     .form-container {
         padding: 20px;
-    }
-    
-    .main-content p {
-        width: auto;
+        width: 100%;
+        max-width: 500px;
     }
 
     .progress-bar {
         flex-direction: row;
+        gap: 15px;
     }
 
     .progress-bar .step {
@@ -356,7 +359,46 @@ button:hover, .button-group a:hover{
         width: 30px;
     }
 
-    .button {
+    .button-group button {
         font-size: 14px;
+        width: auto;
+    }
+
+    .button-group a {
+        font-size: 14px;
+        width: auto;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+    
+}
+
+@media (max-width: 768px) {
+    .main-content h2 {
+        font-size: 24px; 
+    }
+
+    .button-group a, .button-group button {
+        width: auto;
+        font-size: 0.875rem;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+    }
+
+    .main-content p {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .progress-bar .step-number {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    .modal-overlay {
+        padding: 10px; 
     }
 }

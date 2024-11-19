@@ -23,7 +23,7 @@ body {
     overflow-x: hidden;
 }
 
-.appointment-request{
+.appointment-request {
     height: auto;
     padding: 20px;
 }
@@ -33,7 +33,6 @@ body {
 }
 
 .appointment-request h2 {
-    color: #1E1D3B;
     font-size: 38px;
     margin-bottom: 10px;
     text-align: center;
@@ -189,7 +188,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.but{
+.but {
     display: inline-block;
     background-color: #ffffff;
     color: #395886;
@@ -207,17 +206,17 @@ body {
     margin-top: 10px;
 }
 
-.but:hover{
+.but:hover {
     transform: scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.buts{
+.buts {
     display: flex;
     justify-content: flex-end;
 }
 
-/* Medium Screens */
+/* Large Screens */
 @media (max-width: 1200px) {
     .appointment-request h2 {
         font-size: 32px;
@@ -228,8 +227,10 @@ body {
         width: 90%;
     }
 
-    .main-content{
+    .main-content {
         height: calc(100vh - 70px);
+        margin: 0;
+        width: 100%;
     }
 
     .appointment-request {
@@ -237,9 +238,9 @@ body {
     }
 
     .progress-bar .step-number {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
     }
 
     .progress-bar .step-line {
@@ -263,12 +264,11 @@ body {
     }
 }
 
-/* Small Screens */
-@media (max-width: 767px) {
+/* Medium Screens */
+@media (max-width: 1024px) {
     .main-content {
         padding: 20px;
     }
-
     .appointment-request h2 {
         font-size: 28px;
     }
@@ -277,6 +277,59 @@ body {
         font-size: 16px;
         width: 100%;
     }
+
+    .therapist-cards {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .therapist-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .therapist-card img {
+        width: 60px;
+        height: 60px;
+    }
+    .therapist-card h3 {
+        font-size: 16px;
+        text-align: center;
+    }
+    .therapist-card p {
+        font-size: 14px;
+    }
+
+    .appointment-button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    .but {
+        width: auto;
+        font-size: 0.875rem;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Small Screens */
+@media (max-width: 767px) {
+    .main-content {
+        padding: 20px;
+    }
+
+    .appointment-request h2 {
+        font-size: 24px;
+    }
+    .appointment-request p,
+    .appointment-request p.p {
+        font-size: 14px;
+        width: 100%;
+        margin: 10px auto 0;    
+    }
+
     .progress-bar .step {
         margin-bottom: 10px;
     }

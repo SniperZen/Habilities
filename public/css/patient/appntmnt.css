@@ -12,6 +12,7 @@ body {
 .table {    
     max-height: 700px;
     overflow-y: auto;
+    scrollbar-width: thin;
     margin-top: 10px;
 }
 
