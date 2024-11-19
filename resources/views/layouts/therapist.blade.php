@@ -45,15 +45,17 @@
                 </div>
                 <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
                     <a href="{{route('therapist.profile')}}" class="dropdown-item">
-                        <img src="{{ asset('images/nav/profile.png') }}" alt="">Profile
-                    </a>
-                    <a href="{{route('therapist.myHistory')}}" class="dropdown-item">
-                        <img src="{{ asset('images/nav/history.png') }}" alt="">My History
+                    <svg width="23" height="23" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:3px;">
+                        <path d="M3 25.6405C3 20.9211 6.94286 17.0952 15 17.0952C23.0571 17.0952 27 20.9211 27 25.6405C27 26.3913 26.4522 27 25.7765 27H4.22353C3.54779 27 3 26.3913 3 25.6405Z" stroke="black" stroke-width="3"/>
+                        <path d="M19.5 7.5C19.5 9.98528 17.4853 12 15 12C12.5147 12 10.5 9.98528 10.5 7.5C10.5 5.01472 12.5147 3 15 3C17.4853 3 19.5 5.01472 19.5 7.5Z" stroke="black" stroke-width="3"/>
+                    </svg>Profile
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <a href="{{ route('logout') }}" class="dropdown-item" onclick="handleLogout(event)">
-                            <img src="{{ asset('images/nav/logout.png') }}" alt="">Log Out
+                            <svg width="23" height="23" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:3px;">
+                                <path d="M21.3603 11.375V8.3125C21.3603 7.50027 21.0349 6.72132 20.4558 6.14699C19.8766 5.57266 19.0911 5.25 18.2721 5.25H7.46324C6.64418 5.25 5.85868 5.57266 5.27952 6.14699C4.70037 6.72132 4.375 7.50027 4.375 8.3125V26.6875C4.375 27.4997 4.70037 28.2787 5.27952 28.853C5.85868 29.4273 6.64418 29.75 7.46324 29.75H18.2721C19.0911 29.75 19.8766 29.4273 20.4558 28.853C21.0349 28.2787 21.3603 27.4997 21.3603 26.6875V23.625M12.0956 17.5H30.625M30.625 17.5L25.9926 12.9062M30.625 17.5L25.9926 22.0938" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>Log Out
                         </a>
                     </form>
                 </div>
@@ -72,7 +74,7 @@
                             <x-side-nav-bar href="{{ route('therapist.dash') }}" class="{{ request()->routeIs('therapist.dash') ? 'active' : '' }}">
                             <svg width="40" height="40" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M30.6524 16.1321L28.2344 13.7447V7.89391C28.2344 6.98771 27.4841 6.24627 26.5669 6.24627H24.8994C23.9823 6.24627 23.2319 6.98771 23.2319 7.89391V8.80505L19.8968 5.51307C19.4416 5.08798 19.0247 4.59863 18.2293 4.59863C17.4339 4.59863 17.017 5.08798 16.5618 5.51307L5.8063 16.1321C5.28603 16.6676 4.88916 17.0581 4.88916 17.7797C4.88916 18.7074 5.60953 19.4274 6.55668 19.4274H8.2242V29.3132C8.2242 30.2194 8.97459 30.9608 9.89172 30.9608H13.2268C14.1477 30.9608 14.8943 30.2232 14.8943 29.3132V22.7227C14.8943 21.8165 15.6447 21.075 16.5618 21.075H19.8968C20.814 21.075 21.5644 21.8165 21.5644 22.7227V29.3132C21.5644 30.2232 21.4772 30.9608 22.3981 30.9608H26.5669C27.4841 30.9608 28.2344 30.2194 28.2344 29.3132V19.4274H29.902C30.8491 19.4274 31.5695 18.7074 31.5695 17.7797C31.5695 17.0581 31.1726 16.6676 30.6524 16.1321Z" stroke="#303B1D" stroke-width="3" stroke-linejoin="round"/>
-                            </svg>Home
+                            </svg>Dashboard
                             </x-side-nav-bar>
                         </li>
                         <li>
@@ -100,7 +102,7 @@
                             <x-side-nav-bar href="{{ route('therapist.myHistory') }}" class="{{ request()->routeIs('therapist.myHistory')? 'active' : '' }}">
                             <svg style="margin-right: 3px;" width="33" height="33" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.0714 17.5L16.5021 16.9307C16.1806 16.6092 16 16.1731 16 15.7185V14M6 20H5C3.89543 20 3 19.1046 3 18V10M21 7V6.5C21 5.39543 20.1046 4.5 19 4.5H18M3 10H6M3 10V6.5C3 5.39543 3.89543 4.5 5 4.5H6M18 3V4.5M18 4.5H12M12 3V4.5M12 4.5H6M6 3V4.5M22 16C22 19.3137 19.3137 22 16 22C12.6863 22 10 19.3137 10 16C10 12.6863 12.6863 10 16 10C19.3137 10 22 12.6863 22 16Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>My History
+                            </svg>Appointment History
                             </x-side-nav-bar>
                         </li>
                         <li>

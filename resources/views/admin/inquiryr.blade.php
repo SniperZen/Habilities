@@ -49,7 +49,7 @@
                 margin-top: 20px;
             }
 
-            .export-btn, .print-btn {
+            .export-btn {
                 padding: 10px 20px;
                 cursor: pointer;
                 border: none;
@@ -65,6 +65,8 @@
             <h1>Inquiry Reports</h1>
             <div class="report-dropdown">
                 <form action="{{ route('admin.inquiryr') }}" method="GET" id="filterForm">
+                    <label for="specificNameInput">Search: </label>
+                    <input type="text" id="specificNameInput" placeholder="Search by patient name">
                     <div class="mode">
                         <label for="status">Status: </label>
                         <select id="status" name="status">
@@ -84,7 +86,6 @@
                     
                     <button class="filt" type="submit" name="submit" value="1">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
-                    <input type="text" id="specificNameInput" placeholder="Search by patient name">
                 </form>
             </div>
 
@@ -139,11 +140,11 @@
             </div>
 
             <div class="button-container">
-                <button class="export-btn" onclick="generatePDF()">
+                <!-- <button class="export-btn" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Export PDF
-                </button>
+                </button> -->
                 <button class="print-btn" onclick="printTable()">
-                    <i class="fas fa-print"></i> Print Data
+                    <i class="fas fa-download"></i> Export PDF
                 </button>
             </div>
         </div>

@@ -32,6 +32,8 @@
         <div class="reports-container">
             <h1>Activity Logs</h1>
             <div class="report-dropdown">
+                <label for="specificNameInput">Search: </label>
+                <input type="text" id="specificNameInput" placeholder="Search by name">
                 <div class="user">
                     <label for="userFilterSelect">User: </label>
                     <select id="userFilterSelect">
@@ -59,9 +61,8 @@
                     <input type="date" id="endDate">
                 </div>
                 
-                <button id="applyFilter">Apply Filter</button>
+                <button id="applyFilter" class="filt">Apply Filter</button>
                 <button id="clearButton">Clear</button>
-                <input type="text" id="specificNameInput" placeholder="Search by name">
                 </div>
 
             <div class="table-container">
@@ -93,11 +94,11 @@
 
             <div class="button-group" style="margin-top: 20px;">
                 <button class="export-btn" onclick="printReport()">
-                    <i class="fas fa-print"></i> Print
-                </button>
-                <button class="export-btn" id="exportPdfBtn" onclick="downloadPDF()">
                     <i class="fas fa-download"></i> Export PDF
                 </button>
+                <!-- <button class="export-btn" id="exportPdfBtn" onclick="downloadPDF()">
+                    <i class="fas fa-download"></i> Export PDF
+                </button> -->
             </div>
         </div>
 

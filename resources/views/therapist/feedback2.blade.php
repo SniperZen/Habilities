@@ -30,7 +30,7 @@
                             <div id="recipient-dropdown" class="dropdown-list"></div>
                         </div>
                         <div class="custom-select-wrapper">
-                            <div class="form-group">
+                            <div class="form-group" style="gap: 5px;">
                                 <label class="dignosis" for="feedback-diagnosis">Diagnosis:</label>
                                 <select id="feedback-diagnosis" required>
                                     <option value="">Select...</option>

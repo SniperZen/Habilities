@@ -41,6 +41,7 @@
 
 </style>
 <main class="main-content">
+    <div class="innerc">
     <header class="content-header">
         <h1>Therapy Feedback</h1>
     </header>
@@ -96,6 +97,7 @@
             {!! $feedback->content !!}
         </div>
     </section>
+    </div>
 </main>
 
 <form id="delete-form" action="{{ route('feedback.destroy', $feedback->id) }}" method="POST" style="display: none;">

@@ -16,116 +16,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-
 </head>
-<style>/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-.modal-content {
-    display: block;
-    background-color: white;
-    margin: 15% auto;
-    border-radius: 10px;
-    width: 450px;
-    text-align: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.heads{
-    width: 100%;
-    background-color: #635c91;
-    height: 15px;
-    border-radius: 10px 10px 0 0;
-}
-
-.mod-cont{
-    padding: 20px;
-}
-
-
-.top{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #afafaf;
-    width: 100%;
-    h2{
-        margin: 0;
-    }
-}
-.bot {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: justify;
-    padding: 0 10px;
-}
-.inner{
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    position: relative;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 30px;
-    border-top: 1px solid #afafaf;
-    padding-top: 20px;
-    gap: 20px;
-}
-
-.confirm-btn {
-    background-color: #6b6b92;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    transition: box-shadow 0.3s ease;
-    transition: transform 0.3s ease;
-}
-
-.confirm-btn:hover{
-    transform: scale(1.03);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.cancel-btn {
-    color: #6b6b92;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    transition: box-shadow 0.3s ease;
-    transition: transform 0.3s ease;
-    border: #6b6b92 1px solid;
-}
-.cancel-btn:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-</style>
 <body>
 
     <!-- Main Content -->
     <main class="content">
+        <div class="inner">
         <header class="content-header">
             <h1>Inquiries</h1>
         </header>
@@ -177,7 +73,7 @@
                 <tbody>
                     @forelse($pendingInquiries as $inquiry)
                         @if(is_null($inquiry->completed_at))
-                            <tr data-url="{{ route('inquiry.message', ['id' => $inquiry->id]) }}">
+                            <tr>
                                 <td>
                                     @if($inquiry->user)
                                         {{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}
@@ -191,7 +87,8 @@
                                 <td>
                                     <form method="POST" action="{{ route('inquiry.complete', ['id' => $inquiry->id]) }}">
                                         @csrf
-                                        <button type="submit" class="complete-btn">Complete</button>
+                                        <button type="submit" class="complete-btn">Complete</button>\
+                                        <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a>
                                     </form>
                                 </td>
                             </tr>
@@ -253,11 +150,12 @@
                         <th>Description</th>
                         <th>Completed</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($completedInquiries as $inquiry)
-                        <tr data-url="{{ route('inquiry.message', ['id' => $inquiry->id]) }}">
+                        <tr>
                             <td>
                                 @if($inquiry->user)
                                     {{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}
@@ -269,6 +167,7 @@
                             <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
                             <td>{{ $inquiry->completed_at ? Carbon::parse($inquiry->completed_at)->format('m/d/Y') : 'N/A' }}</td>
                             <td>Completed</td>
+                            <td><a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a></td>
                         </tr>
                     @empty
                         <tr>
@@ -290,6 +189,7 @@
 
             </div>
         </section>
+        </div>
 
     </main>
 
