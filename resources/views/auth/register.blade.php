@@ -259,7 +259,7 @@
 
     .signin p {
         color: #74A36B;
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 500;
     }
 
@@ -380,6 +380,9 @@
         
 
     @media (max-width: 768px) {
+        p{
+            font-size:11px;
+        }
         .input-group,
         .input-groups {
             grid-template-columns: 1fr;
@@ -388,7 +391,7 @@
         .form-box {
             padding: 20px;
             box-shadow: none;
-            overflow-y: auto;
+            overflow: hidden auto;
             height: auto;
         }
 

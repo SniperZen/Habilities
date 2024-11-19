@@ -351,6 +351,13 @@ table{
     }
   }
   
+  @media (max-width: 756px){
+    .arrowd {
+        width: 21px;
+        stroke: #fff;
+    }
+  }
+  
 @media (min-width: 1px){
     .header-left .logo {
         width: 60px;
@@ -368,8 +375,8 @@ table{
     }
 
     .header-left h1 {
-        font-size: 14px;
-        width: 150px;
+        font-size: 13px;
+        width: 133px;
     }
     .sidebar {
         width: 100%;
@@ -412,6 +419,7 @@ table{
     }
     .prof_box{
         height: 40px;
+        padding: 8px;
     }
     .main{
         overflow: auto;

@@ -31,7 +31,7 @@
         </div>
         <div class="header-right" x-data="{ open: false }">
             <div class="profile">
-            <div class="prof_box" @click="open = !open" style="gap:15px">
+            <div class="prof_box" @click="open = !open" style="gap:7px">
                 @if(Auth::user()->profile_image)
                     <div class="prof">
                         <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" 

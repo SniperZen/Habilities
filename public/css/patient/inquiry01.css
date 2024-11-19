@@ -207,7 +207,7 @@ tr {
 
     .main-content h2{
         font-size: 30px;
-        width: 407px;
+        width: auto;
         text-align: center;
     }
 
