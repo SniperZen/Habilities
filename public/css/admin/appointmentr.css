@@ -162,7 +162,7 @@ h1 {
     margin-right: 10px;
 }
 
-#userFilterSelect, #modeFilterSelect, #startDate, #endDate, #userNameInput {
+#userFilterSelect, #modeFilterSelect, #startDate, #endDate, #userNameInput, #statusFilterSelect, #specificNameInput {
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ddd;
@@ -171,6 +171,22 @@ h1 {
 }
 
 #clearButton {
+    background-color: transparent;
+    display: inline-block;
+    color: #74A36B;
+    padding: 10px 20px;
+    border: #74A36B solid 1px;
+    height: 39px;
+    margin-left: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.filter{
     background-color: #74A36B;
     display: inline-block;
     color: white;
@@ -190,4 +206,32 @@ h1 {
     display: flex;
     align-items: center;
     margin-right: 5px;
+}
+
+.report-dropdown form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.print-btn{
+    background-color: #AAEA9D;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 7px;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.reports-container button:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }

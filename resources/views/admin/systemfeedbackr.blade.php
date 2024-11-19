@@ -16,6 +16,8 @@
     <div class="reports-container" id="reports-section">
             <h1>System Feedback Reports</h1>
             <div class="report-dropdown">
+                <label for="specificNameInput">Search: </label>
+                <input type="text" id="specificNameInput" placeholder="Enter user name">
                 <div class="date-filter">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate" name="start_date">
@@ -23,10 +25,8 @@
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate" name="end_date">
                 </div>
-                <button id="applyFilter">Apply Filter</button>
+                <button id="applyFilter" class="filt">Apply Filter</button>
                 <button id="clearButton">Clear</button>
-                <input type="text" id="specificNameInput" placeholder="Enter user name">
-
             </div>
             <table class="report-table" id="reportTable">
                 <thead>
@@ -48,11 +48,11 @@
             </table>
             <div style="margin-top: 20px;">
                 <button class="export-btn" onclick="printReport()">
-                    <i class="fas fa-print"></i> Print
-                </button>
-                <button class="export-btn" onclick="downloadPDF()">
                     <i class="fas fa-download"></i> Export Data
                 </button>
+                <!-- <button class="export-btn" onclick="downloadPDF()">
+                    <i class="fas fa-download"></i> Export Data
+                </button> -->
             </div>
         </div>
 

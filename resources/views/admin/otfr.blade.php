@@ -42,7 +42,9 @@
         <div class="reports-container">
             <h1>OTF Reports</h1>
             <div class="report-dropdown">
-            <form action="{{ route('admin.otfr') }}" method="GET" id="filterForm" onsubmit="event.preventDefault(); updateTable();">                    
+            <form action="{{ route('admin.otfr') }}" method="GET" id="filterForm" onsubmit="event.preventDefault(); updateTable();">   
+                <label for="specificNameInput">Search: </label>
+                <input type="text" id="specificNameInput" placeholder="Search by name or diagnosis">                 
                 <div class="date-filter">
                         <label for="startDate">Start Date:</label>
                         <input type="date" id="startDate" name="start_date" value="{{ request('start_date') }}">
@@ -51,9 +53,8 @@
                         <input type="date" id="endDate" name="end_date" value="{{ request('end_date') }}">
                     </div>
                     
-                    <button type="submit">Apply Filters</button>
+                    <button type="submit" class="filt">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
-                    <input type="text" id="specificNameInput" placeholder="Search by name or diagnosis">
                     </form>
             </div>
 
@@ -85,11 +86,11 @@
             </div>
 
             <div class="button-container">
-                <button class="export-btn" onclick="generatePDF()">
+                <!-- <button class="export-btn" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Export PDF
-                </button>
+                </button> -->
                 <button class="print-btn" onclick="printTable()">
-                    <i class="fas fa-print"></i> Print Data
+                    <i class="fas fa-download"></i> Print Data
                 </button>
             </div>
         </div>

@@ -100,6 +100,7 @@ h1 {
     margin: 20px 0;
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .filt{
@@ -178,7 +179,7 @@ h1 {
     margin-right: 10px;
 }
 
-#status, #start_date, #end_date, #userNameInput {
+#status, #start_date, #end_date, #userNameInput, #specificNameInput {
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ddd;
@@ -206,4 +207,26 @@ h1 {
     display: flex;
     align-items: center;
     margin-right: 5px;
+}
+
+.print-btn{
+    background-color: #AAEA9D;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 7px;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.reports-container button:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }

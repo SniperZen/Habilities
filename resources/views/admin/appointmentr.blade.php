@@ -39,6 +39,8 @@
 
             <div class="report-dropdown">
                 <form action="{{ route('admin.appointmentr') }}" method="GET" id="filterForm">
+                    <label for="specificNameInput">Search: </label>
+                    <input type="text" id="specificNameInput" placeholder="Search by patient or therapist name">
                     <div class="mode">
                         <label for="modeFilterSelect">Mode: </label>
                         <select id="modeFilterSelect" name="mode">
@@ -66,9 +68,8 @@
                         <input type="date" id="endDate" name="end_date" value="{{ request('end_date') }}">
                     </div>
                     
-                    <button type="submit">Apply Filters</button>
+                    <button class="filter" type="submit">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
-                    <input type="text" id="specificNameInput" placeholder="Search by patient or therapist name">
                 </form>
             </div>
             
@@ -134,11 +135,11 @@
             </div>
 
             <div class="button-container">
-                <button class="export-btn" onclick="generatePDF()">
+                <!-- <button class="export-btn" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Export PDF
-                </button>
+                </button> -->
                 <button class="print-btn" onclick="printTable()">
-                    <i class="fas fa-print"></i> Print Data
+                    <i class="fas fa-download"></i> Export PDF
                 </button>
             </div>
         </div>
