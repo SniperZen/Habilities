@@ -23,9 +23,10 @@
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate" name="end_date">
                 </div>
-                
                 <button id="applyFilter">Apply Filter</button>
                 <button id="clearButton">Clear</button>
+                <input type="text" id="specificNameInput" placeholder="Enter user name">
+
             </div>
             <table class="report-table" id="reportTable">
                 <thead>
@@ -65,13 +66,15 @@
             function updateTable() {
                 const startDate = $('#startDate').val();
                 const endDate = $('#endDate').val();
+                const searchName = $('#specificNameInput').val();
 
                 $.ajax({
                     url: '{{ route("admin.systemfeedbackr") }}',
                     method: 'GET',
                     data: {
                         start_date: startDate,
-                        end_date: endDate
+                        end_date: endDate,
+                        search_name: searchName
                     },
                     success: function(response) {
                         let tableBody = '';
@@ -85,20 +88,33 @@
                             `;
                         });
                         $('#feedbackTableBody').html(tableBody);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
                     }
                 });
             }
 
-            // Apply Filter button click
+            // Real-time search for name input only
+            let searchTimeout;
+            $('#specificNameInput').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    updateTable();
+                }, 300); // Add a small delay to prevent too many requests
+            });
+
+            // Apply Filter button for date filters
             $('#applyFilter').click(function() {
                 updateTable();
             });
 
-            // Clear filters
+            // Clear all filters
             $('#clearButton').click(function() {
-                $('#startDate, #endDate').val('');
+                $('#startDate, #endDate, #specificNameInput').val('');
                 updateTable();
             });
+
 
             function printReport() {
                 // Create a new window for printing

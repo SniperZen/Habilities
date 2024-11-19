@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <title>Inquiry Reports</title>
         <style>
             .document-link {
@@ -81,8 +82,9 @@
                         <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}">
                     </div>
                     
-                    <button class="filt" type="submit">Apply Filters</button>
+                    <button class="filt" type="submit" name="submit" value="1">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
+                    <input type="text" id="specificNameInput" placeholder="Search by patient name">
                 </form>
             </div>
 
@@ -147,34 +149,125 @@
         </div>
 
         <script>
-            document.getElementById('clearButton').addEventListener('click', function() {
-                document.getElementById('status').value = 'all';
-                document.getElementById('start_date').value = '';
-                document.getElementById('end_date').value = '';
-                document.getElementById('filterForm').submit();
+$(document).ready(function() {
+    let searchTimeout;
+
+    // Real-time search functionality
+    $('#specificNameInput').on('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            // Only send search parameter for real-time search
+            $.ajax({
+                url: '{{ route("admin.inquiryr") }}',
+                method: 'GET',
+                data: {
+                    search_name: $('#specificNameInput').val()
+                },
+                success: function(response) {
+                    updateTableContent(response.inquiries);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
             });
+        }, 300);
+    });
 
-            function generatePDF() {
-                window.jsPDF = window.jspdf.jsPDF;
-                var doc = new jsPDF('l', 'mm', 'a4');
-                var element = document.getElementById('printableTable');
+    // Clear button functionality
+    $('#clearButton').click(function(e) {
+        e.preventDefault();
+        // Clear all inputs
+        $('#specificNameInput').val('');
+        $('#status').val('all');
+        $('#start_date').val('');
+        $('#end_date').val('');
+        window.location.href = "{{ route('admin.inquiryr') }}?clear=1";
+    });
 
-                html2canvas(element).then(function(canvas) {
-                    var imgData = canvas.toDataURL('image/png');
-                    var imgWidth = 280;
-                    var pageHeight = 210;
-                    var imgHeight = canvas.height * imgWidth / canvas.width;
-                    var heightLeft = imgHeight;
-                    var position = 10;
-
-                    doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    doc.save('inquiry-reports.pdf');
-                });
+    // Function to update table content
+    function updateTableContent(inquiries) {
+        let tableBody = '';
+        inquiries.forEach(function(inquiry) {
+            const createdAt = new Date(inquiry.created_at);
+            const formattedDate = (createdAt.getMonth() + 1).toString().padStart(2, '0') + 
+                                '/' + createdAt.getDate().toString().padStart(2, '0') + 
+                                '/' + createdAt.getFullYear();
+            
+            let documents = '';
+            if (inquiry.identification_card) {
+                documents += `<div><a href="/storage/${inquiry.identification_card}" target="_blank" class="document-link">
+                    <i class="fas fa-file-pdf"></i> ID Card</a></div>`;
+            }
+            if (inquiry.birth_certificate) {
+                documents += `<div><a href="/storage/${inquiry.birth_certificate}" target="_blank" class="document-link">
+                    <i class="fas fa-file-pdf"></i> Birth Certificate</a></div>`;
+            }
+            if (inquiry.diagnosis_reports) {
+                documents += `<div><a href="/storage/${inquiry.diagnosis_reports}" target="_blank" class="document-link">
+                    <i class="fas fa-file-pdf"></i> Diagnosis Report</a></div>`;
             }
 
-            function printTable() {
-                window.print();
+            tableBody += `
+                <tr>
+                    <td>${inquiry.user.name}</td>
+                    <td>${inquiry.concerns}</td>
+                    <td>${documents}</td>
+                    <td>${formattedDate}</td>
+                    <td>${inquiry.completed_at ? 'Completed' : 'Pending'}</td>
+                </tr>
+            `;
+        });
+        $('.report-table tbody').html(tableBody);
+    }
+
+    // Handle form submission for filters
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Send all filter parameters when form is submitted
+        $.ajax({
+            url: '{{ route("admin.inquiryr") }}',
+            method: 'GET',
+            data: {
+                status: $('#status').val(),
+                start_date: $('#start_date').val(),
+                end_date: $('#end_date').val(),
+                search_name: $('#specificNameInput').val(),
+                filter_applied: true
+            },
+            success: function(response) {
+                updateTableContent(response.inquiries);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
             }
+        });
+    });
+
+    // PDF Generation function
+    window.generatePDF = function() {
+        window.jsPDF = window.jspdf.jsPDF;
+        var doc = new jsPDF('l', 'mm', 'a4');
+        var element = document.getElementById('printableTable');
+
+        html2canvas(element).then(function(canvas) {
+            var imgData = canvas.toDataURL('image/png');
+            var imgWidth = 280;
+            var pageHeight = 210;
+            var imgHeight = canvas.height * imgWidth / canvas.width;
+            var position = 10;
+
+            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            doc.save('inquiry-reports.pdf');
+        });
+    };
+
+    // Print function
+    window.printTable = function() {
+        window.print();
+    };
+});
+
         </script>
 
     </body>

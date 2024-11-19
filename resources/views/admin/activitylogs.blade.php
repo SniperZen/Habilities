@@ -61,7 +61,8 @@
                 
                 <button id="applyFilter">Apply Filter</button>
                 <button id="clearButton">Clear</button>
-            </div>
+                <input type="text" id="specificNameInput" placeholder="Search by name">
+                </div>
 
             <div class="table-container">
                 <table class="report-table" id="activityTable">
@@ -101,85 +102,93 @@
         </div>
 
         <script>
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+    let searchTimeout;
+    let currentFilters = {
+        usertype: 'all',
+        activity: 'all',
+        start_date: '',
+        end_date: ''
+    };
 
-            function updateTable() {
-                const userType = $('#userFilterSelect').val();
-                const activity = $('#modeFilterSelect').val();
-                const startDate = $('#startDate').val();
-                const endDate = $('#endDate').val();
+    function updateTable(isSearch = false) {
+        clearTimeout(searchTimeout);
+        
+        searchTimeout = setTimeout(() => {
+            const searchTerm = $('#specificNameInput').val();
+            
+            // Get current filter values
+            const filters = {
+                usertype: $('#userFilterSelect').val(),
+                activity: $('#modeFilterSelect').val(),
+                start_date: $('#startDate').val(),
+                end_date: $('#endDate').val(),
+                search: searchTerm,
+                is_search: isSearch
+            };
 
-                // Validate dates
-                if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-                    alert('Start date cannot be later than end date');
-                    return;
-                }
-
-                console.log('Sending request with params:', {
-                    usertype: userType,
-                    activity: activity,
-                    start_date: startDate,
-                    end_date: endDate
-                });
-
-                $.ajax({
-                    url: '{{ route("admin.activitylogs") }}',
-                    method: 'GET',
-                    data: {
-                        usertype: userType,
-                        activity: activity,
-                        start_date: startDate,
-                        end_date: endDate
-                    },
-                    success: function(response) {
-                        console.log('Response received:', response);
-                        let tableBody = '';
-                        if (response.data && Array.isArray(response.data)) {
-                            response.data.forEach(function(activity) {
-                                const displayUsertype = activity.usertype === 'user' ? 'Patient' : 
-                                    activity.usertype.charAt(0).toUpperCase() + activity.usertype.slice(1);
-                                
-                                tableBody += `
-                                    <tr>
-                                        <td>${activity.formatted_id}</td>
-                                        <td>${activity.name}</td>
-                                        <td>${displayUsertype}</td>
-                                        <td>${activity.activity}</td>
-                                        <td>${activity.date}</td>
-                                        <td>${activity.time}</td>
-                                    </tr>
-                                `;
-                            });
-                            $('#activityTableBody').html(tableBody);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        console.error('Response:', xhr.responseText);
-                    }
-                });
+            // Validate dates
+            if (filters.start_date && filters.end_date && new Date(filters.start_date) > new Date(filters.end_date)) {
+                alert('Start date cannot be later than end date');
+                return;
             }
 
-
-            // Event Listeners
-            $(document).ready(function() {
-                updateTable();
-
-                $('#applyFilter').click(function() {
-                    updateTable();
-                });
-
-                $('#clearButton').click(function() {
-                    $('#userFilterSelect').val('all');
-                    $('#modeFilterSelect').val('all');
-                    $('#startDate, #endDate').val('');
-                    updateTable();
-                });
+            $.ajax({
+                url: '{{ route("admin.activitylogs") }}',
+                method: 'GET',
+                data: filters,
+                success: function(response) {
+                    let tableBody = '';
+                    if (response.data && Array.isArray(response.data)) {
+                        response.data.forEach(function(activity) {
+                            const displayUsertype = activity.usertype === 'user' ? 'Patient' : 
+                                activity.usertype.charAt(0).toUpperCase() + activity.usertype.slice(1);
+                            
+                            tableBody += `
+                                <tr>
+                                    <td>${activity.formatted_id}</td>
+                                    <td>${activity.name}</td>
+                                    <td>${displayUsertype}</td>
+                                    <td>${activity.activity}</td>
+                                    <td>${activity.date}</td>
+                                    <td>${activity.time}</td>
+                                </tr>
+                            `;
+                        });
+                        $('#activityTableBody').html(tableBody);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    console.error('Response:', xhr.responseText);
+                }
             });
+        }, isSearch ? 300 : 0); // Add delay for search, immediate for filters
+    }
+
+    // Event Listeners
+    $(document).ready(function() {
+        // Initial load
+        updateTable();
+
+        // Real-time search
+        $('#specificNameInput').on('input', function() {
+            updateTable(true);
+        });
+
+        // Filter button click
+        $('#applyFilter').click(function() {
+            updateTable();
+        });
+
+        // Clear button click
+        $('#clearButton').click(function() {
+            $('#userFilterSelect').val('all');
+            $('#modeFilterSelect').val('all');
+            $('#startDate, #endDate').val('');
+            $('#specificNameInput').val('');
+            updateTable();
+        });  
+    });
 
             function printReport() {
                 let printWindow = window.open('', '_blank');

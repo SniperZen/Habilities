@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
             .table-container {
                 max-height: 500px;
@@ -67,6 +68,7 @@
                     
                     <button type="submit">Apply Filters</button>
                     <button type="button" id="clearButton">Clear</button>
+                    <input type="text" id="specificNameInput" placeholder="Search by patient or therapist name">
                 </form>
             </div>
             
@@ -141,45 +143,176 @@
             </div>
         </div>
 
-        <script>
-            // Clear button functionality
-            document.getElementById('clearButton').addEventListener('click', function() {
-                document.getElementById('modeFilterSelect').value = 'all';
-                document.getElementById('statusFilterSelect').value = 'all';
-                document.getElementById('startDate').value = '';
-                document.getElementById('endDate').value = '';
-                document.getElementById('filterForm').submit();
+<script>
+$(document).ready(function() {
+    let searchTimeout;
+    let currentFilters = {
+        mode: 'all',
+        status: 'all',
+        start_date: '',
+        end_date: ''
+    };
+
+    // Real-time search functionality
+    $('#specificNameInput').on('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            // Get current filter values
+            currentFilters = {
+                mode: $('#modeFilterSelect').val(),
+                status: $('#statusFilterSelect').val(),
+                start_date: $('#startDate').val(),
+                end_date: $('#endDate').val()
+            };
+
+            // Send both search and current filters
+            $.ajax({
+                url: '{{ route("admin.appointmentr") }}',
+                method: 'GET',
+                data: {
+                    search_name: $('#specificNameInput').val(),
+                    mode: currentFilters.mode,
+                    status: currentFilters.status,
+                    start_date: currentFilters.start_date,
+                    end_date: currentFilters.end_date,
+                    real_time_search: true
+                },
+                success: function(response) {
+                    updateTableContent(response.appointments);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
             });
+        }, 300);
+    });
 
-            // PDF generation functionality
-            function generatePDF() {
-                window.jsPDF = window.jspdf.jsPDF;
-                var doc = new jsPDF('l', 'mm', 'a4');
+    // Handle form submission for filters
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Update current filters
+        currentFilters = {
+            mode: $('#modeFilterSelect').val(),
+            status: $('#statusFilterSelect').val(),
+            start_date: $('#startDate').val(),
+            end_date: $('#endDate').val()
+        };
 
-                var element = document.getElementById('printableTable');
+        $.ajax({
+            url: '{{ route("admin.appointmentr") }}',
+            method: 'GET',
+            data: {
+                mode: currentFilters.mode,
+                status: currentFilters.status,
+                start_date: currentFilters.start_date,
+                end_date: currentFilters.end_date,
+                search_name: $('#specificNameInput').val(),
+                filter_applied: true
+            },
+            success: function(response) {
+                updateTableContent(response.appointments);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    });
 
-                html2canvas(element, {
-                    useCORS: true,
-                    allowTaint: true,
-                    scale: 2
-                }).then(function(canvas) {
-                    var imgData = canvas.toDataURL('image/png');
-                    var imgWidth = 280;
-                    var pageHeight = 210;
-                    var imgHeight = canvas.height * imgWidth / canvas.width;
-                    var heightLeft = imgHeight;
-                    var position = 10;
+    // Function to update table content
+    function updateTableContent(appointments) {
+        let tableBody = '';
+        appointments.forEach(function(appointment) {
+            const appointmentDate = appointment.appointment_date ? new Date(appointment.appointment_date).toLocaleDateString('en-US') : '-';
+            const startTime = appointment.start_time ? formatTime(appointment.start_time) : '-';
+            const endTime = appointment.end_time ? formatTime(appointment.end_time) : '-';
 
-                    doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    doc.save('appointment-reports.pdf');
-                });
+            let statusBadge = '';
+            switch(appointment.status) {
+                case 'pending':
+                    statusBadge = '<span class="badge bg-warning">Pending</span>';
+                    break;
+                case 'accepted':
+                    statusBadge = '<span class="badge bg-success">Accepted</span>';
+                    break;
+                case 'finished':
+                    statusBadge = '<span class="badge bg-info">Finished</span>';
+                    break;
+                case 'declined':
+                    statusBadge = '<span class="badge bg-danger">Declined</span>';
+                    break;
+                default:
+                    statusBadge = `<span class="badge bg-secondary">${appointment.status}</span>`;
             }
 
-            // Print functionality
-            function printTable() {
-                window.print();
-            }
-        </script>
+            let mode = appointment.mode === 'on-site' ? 'On-site' : 
+                      appointment.mode === 'tele-therapy' ? 'Tele-therapy' : 
+                      appointment.mode;
+
+            tableBody += `
+                <tr>
+                    <td>${appointment.therapist.name}</td>
+                    <td>${appointment.patient.name}</td>
+                    <td>${appointmentDate}</td>
+                    <td>${startTime} - ${endTime}</td>
+                    <td>${mode}</td>
+                    <td>${statusBadge}</td>
+                </tr>
+            `;
+        });
+        $('.report-table tbody').html(tableBody);
+    }
+
+    function formatTime(timeString) {
+        return new Date('1970-01-01T' + timeString).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
+    // Clear button functionality
+    $('#clearButton').click(function(e) {
+        e.preventDefault();
+        // Reset all filters and search
+        $('#modeFilterSelect').val('all');
+        $('#statusFilterSelect').val('all');
+        $('#startDate').val('');
+        $('#endDate').val('');
+        $('#specificNameInput').val('');
+        currentFilters = {
+            mode: 'all',
+            status: 'all',
+            start_date: '',
+            end_date: ''
+        };
+        window.location.href = "{{ route('admin.appointmentr') }}";
+    });
+    // PDF generation functionality
+    window.generatePDF = function() {
+        window.jsPDF = window.jspdf.jsPDF;
+        var doc = new jsPDF('l', 'mm', 'a4');
+        var element = document.getElementById('printableTable');
+
+        html2canvas(element).then(function(canvas) {
+            var imgData = canvas.toDataURL('image/png');
+            var imgWidth = 280;
+            var pageHeight = 210;
+            var imgHeight = canvas.height * imgWidth / canvas.width;
+            var position = 10;
+
+            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            doc.save('appointment-reports.pdf');
+        });
+    };
+
+    // Print functionality
+    window.printTable = function() {
+        window.print();
+    };
+});
+</script>
+
     </body>
     </html>
 </x-admin-layout>
