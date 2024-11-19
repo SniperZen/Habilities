@@ -6,47 +6,6 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="{{ asset('css/patient/p-feedback.css') }}">
       <title>Feedback</title>
-      <style>
-          .modal {
-              display: none;
-              position: fixed;
-              z-index: 1;
-              left: 0;
-              top: 0;
-              width: 100%;
-              height: 100%;
-              overflow: auto;
-              background-color: rgba(0,0,0,0.4);
-          }
-          .modal-content {
-              background-color: #fefefe;
-              margin: 15% auto;
-              padding: 20px;
-              border: 1px solid #888;
-              width: 80%;
-              max-width: 500px;
-              border-radius: 5px;
-              text-align: center;
-          }
-          .modal-buttons {
-              margin-top: 20px;
-          }
-          .modal-buttons button {
-              margin: 0 10px;
-              padding: 10px 20px;
-              border: none;
-              border-radius: 5px;
-              cursor: pointer;
-          }
-          .modal-buttons button:first-child {
-              background-color: #4CAF50;
-              color: white;
-          }
-          .modal-buttons button:last-child {
-              background-color: #f44336;
-              color: white;
-          }
-      </style>
   </head>
   <body>
       <div class="feedback-content">
@@ -74,15 +33,24 @@
 
       <!-- Confirmation Modal -->
       <div id="confirmationModal" class="modal">
-          <div class="modal-content">
-              <h2>Confirm Submission</h2>
-              <p>Are you sure you want to submit this feedback?</p>
-              <div class="modal-buttons">
-                  <button onclick="submitFeedback()">Yes, Submit</button>
-                  <button onclick="closeModal()">Cancel</button>
-              </div>
-          </div>
-      </div>
+            <div class="modal-content">
+                <div class="heads"></div>
+                <div class="mod-cont">
+                    <div class="inner">
+                        <div class="top">
+                            <h2>Confirm Submission</h2>
+                        </div>
+                        <div class="bot">
+                            <p>Are you sure you want to submit this feedback?</p>
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal()">Cancel</button>
+                        <button class="yes" onclick="submitFeedback()">Yes, Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
       <script>
           function showConfirmationModal() {
