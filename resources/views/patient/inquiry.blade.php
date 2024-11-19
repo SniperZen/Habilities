@@ -43,16 +43,16 @@
                     <div class="form-group">
                         <label for="concerns">What are the concerns, issues, or difficulties?</label>
                         <div class="select-wrapper">
-                            <select id="concerns" name="concerns">
-                                <option value="">Select...</option>
-                                <option value="Autism">Autism</option>
-                                <option value="ADHD">Attention Deficit Hyperactivity Disorder (ADHD)</option>
-                                <option value="down_syndrome">Down Syndrome</option>
-                                <option value="GDD">Global Developmental Delay (GDD)</option>
-                                <option value="Behavioral Problems">Behavioral Problems</option>
-                                <option value="Learning Disabilities">Learning Disabilities</option>
-                                <option value="Others">Others</option>
-                            </select>
+                        <select id="concerns" name="concerns">
+                            <option value="">Select...</option>
+                            <option value="Autism" {{ old('concerns') == 'Autism' ? 'selected' : '' }}>Autism</option>
+                            <option value="ADHD" {{ old('concerns') == 'ADHD' ? 'selected' : '' }}>Attention Deficit Hyperactivity Disorder (ADHD)</option>
+                            <option value="down_syndrome" {{ old('concerns') == 'down_syndrome' ? 'selected' : '' }}>Down Syndrome</option>
+                            <option value="GDD" {{ old('concerns') == 'GDD' ? 'selected' : '' }}>Global Developmental Delay (GDD)</option>
+                            <option value="Behavioral Problems" {{ old('concerns') == 'Behavioral Problems' ? 'selected' : '' }}>Behavioral Problems</option>
+                            <option value="Learning Disabilities" {{ old('concerns') == 'Learning Disabilities' ? 'selected' : '' }}>Learning Disabilities</option>
+                            <option value="Others" {{ old('concerns') == 'Others' ? 'selected' : '' }}>Others</option>
+                        </select>
                         </div>
                         <div class="inf">
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,9 +64,13 @@
 
                     <div class="form-group textarea-wrapper">
                         <label for="elaboration">Please elaborate the case:</label>
-                        <textarea id="elaboration" name="elaboration" rows="5" placeholder="Type here..."></textarea>
+                        <textarea id="elaboration" name="elaboration" rows="5" placeholder="Type here...">{{ old('elaboration') }}</textarea>
                         <small id="charCount">500 characters left</small>
+                        @error('elaboration')
+                            <div class="error-message" style="color: red; margin-top: 5px;">{{ $message }}</div>
+                        @enderror
                     </div>
+
 
                     <div class="button-group">
                     <a href="{{ route('patient.inquiry01') }}" class="button">Back</a>
@@ -78,17 +82,45 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('elaboration');
-            const charCountDisplay = document.getElementById('charCount');
-            const maxChars = 500;
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const textarea = document.getElementById('elaboration');
+        const charCountDisplay = document.getElementById('charCount');
+        const maxChars = 500;
 
-            textarea.addEventListener('input', function() {
-                const currentLength = textarea.value.length;
-                const charsLeft = maxChars - currentLength;
-                charCountDisplay.textContent = `${charsLeft} characters left`;
-            });
+        // Set initial character count
+        const initialLength = textarea.value.length;
+        const initialCharsLeft = maxChars - initialLength;
+        charCountDisplay.textContent = `${initialCharsLeft} characters left`;
+
+        textarea.addEventListener('input', function() {
+            const currentLength = textarea.value.length;
+            const charsLeft = maxChars - currentLength;
+            charCountDisplay.textContent = `${charsLeft} characters left`;
+            
+            if (currentLength > maxChars) {
+                charCountDisplay.style.color = 'red';
+            } else {
+                charCountDisplay.style.color = '';
+            }
         });
+
+        form.addEventListener('submit', function(e) {
+            const currentLength = textarea.value.length;
+            if (currentLength > maxChars) {
+                e.preventDefault();
+                Toastify({
+                    text: "The elaboration field must not exceed 500 characters",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                    stopOnFocus: true,
+                    close: true,
+                }).showToast();
+            }
+        });
+    });
     </script>
     </div>
 

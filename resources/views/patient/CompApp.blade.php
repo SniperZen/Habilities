@@ -151,6 +151,8 @@ $(document).ready(function() {
 
     $('#closeModalButton').on('click', function() {
         $('#confirmationModal').removeClass('show');
+        // Set a flag in sessionStorage before redirecting
+        sessionStorage.setItem('showAppointmentToast', 'true');
         window.location.href = "{{ route('patient.appntmnt') }}";
     });
 
@@ -161,7 +163,6 @@ $(document).ready(function() {
         }
     });
 });
-
 
 </script>
 

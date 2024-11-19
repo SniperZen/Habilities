@@ -25,6 +25,23 @@
         color: #666;
         background-color: #f9f9f9;
     }
+    .toastify {
+    font-family: 'Your-Font-Family', sans-serif;
+    padding: 12px 20px;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toastify-content {
+    display: flex;
+    align-items: center;
+}
+
+.toastify-content i {
+    margin-right: 8px;
+}
 </style>
 
 </head>
@@ -432,5 +449,27 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast("{{ session('error') }}", 'error');
         </script>
     @endif
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we should show the toast
+    if (sessionStorage.getItem('showAppointmentToast')) {
+        Toastify({
+            text: "Appointment request has been sent successfully!",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#4CAF50",
+            stopOnFocus: true,
+            close: true,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
+
+        // Remove the flag from sessionStorage
+        sessionStorage.removeItem('showAppointmentToast');
+    }
+});
+</script>
 </html>
 </x-patient-layout>

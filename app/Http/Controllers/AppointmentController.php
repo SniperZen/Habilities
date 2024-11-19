@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Notifications\AppointmentRequested;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Mail\AppointmentAccepted;
+use App\Notifications\AcceptedNotification;
 
 
 class AppointmentController extends Controller
@@ -157,10 +159,69 @@ public function getTherapistAppointments()
     return response()->json($events);
 }
 
+public function addAppointment(Request $request)  // Remove $appointmentId parameter
+{
+    // Validate the incoming request data
+    $request->validate([
+        'date' => [
+            'required',
+            'date',
+            function ($attribute, $value, $fail) {
+                if (Carbon::parse($value)->startOfDay() < now()->startOfDay()) {
+                    $fail('The appointment date cannot be in the past.');
+                }
+            },
+        ],
+        'start_time' => 'required|date_format:H:i',
+        'end_time' => 'required|date_format:H:i|after:start_time',
+        'patient_id' => 'required|exists:users,id',
+        'mode' => 'required|in:on-site,teletherapy',
+    ]);
+
+    // Check for conflicting appointments
+    $conflict = Appointment::where('appointment_date', $request->date)
+        ->where(function ($query) use ($request) {
+            $query->where('start_time', '<', $request->end_time)
+                  ->where('end_time', '>', $request->start_time);
+        })
+        ->exists();
+
+    if ($conflict) {
+        return back()->withErrors(['msg' => 'The selected time slot is already booked.']);
+    }
+
+    // Create new appointment
+    $appointment = new Appointment();
+    $appointment->appointment_date = $request->date;
+    $appointment->start_time = $request->start_time;
+    $appointment->end_time = $request->end_time;
+    $appointment->status = 'accepted';
+    $appointment->patient_id = $request->patient_id;
+    $appointment->therapist_id = Auth::id(); // Add the current therapist's ID
+    $appointment->mode = $request->mode;
+    $appointment->save();
+
+    // Optional: Send notifications
+    if ($appointment->patient) {
+        $appointment->patient->notify(new AcceptedNotification($appointment));
+        
+        Mail::to($appointment->patient->email)
+            ->later(now()->addSeconds(5), new AppointmentAccepted($appointment));
+    }
+
+    return redirect()->route('therapist.AppSched')->with('success', 'Appointment added successfully!');
+}
 
 
+public function searchPatients(Request $request)
+{
+    $patients = DB::table('users')
+        ->where('role', 'patient')
+        ->select('id', 'first_name', 'middle_name', 'last_name')
+        ->get();
 
-
+    return response()->json($patients);
+}
 
 
 

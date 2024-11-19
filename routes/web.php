@@ -155,8 +155,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/appointments', [AppointmentController::class, 'index']);
             Route::get('/appointments/{id}', [AppointmentController::class, 'view']);
         
-        
-
+ 
 
             });
         });
@@ -204,6 +203,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/therapist/inquiry', [InquiryController::class, 'showInquiries'])->name('therapist.inquiry');
             Route::post('/therapist/feedback', [TherapistController::class, 'stores'])->name('therapist.feedback.stores');
             Route::get('/therapist/my-history', [TherapistController::class, 'myHistory'])->name('therapist.myHistory');
+            Route::post('/therapist/appointments/add', [AppointmentController::class, 'addAppointment'])->name('therapist.appointments.add');
 
                 
 

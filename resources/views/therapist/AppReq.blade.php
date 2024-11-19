@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     const filterButton = document.querySelector('.dropdown-btn');
@@ -43,6 +44,52 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
     </script>
+<style>
+
+#patientList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.patient-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.patient-item:hover {
+    background-color: #f5f5f5;
+}
+
+.error-messages {
+    color: #f44336;
+    margin-bottom: 15px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+}
+
+.error-messages ul {
+    margin: 0;
+    padding: 0;
+}
+
+.error-messages li {
+    margin-bottom: 5px;
+}
+
+.error-messages li:last-child {
+    margin-bottom: 0;
+}
+</style>
+
+
 </head>
 <body>
     <div class="content">
@@ -55,6 +102,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="arSort">
             <div class="section-title"><h2>Appointment Requests</h2></div>
+            <div class="error-messages" style="color: red; margin-bottom: 15px;">
+                @if ($errors->any())
+                    <ul style="list-style: none; padding: 0;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
             <div class="filter-buttons">
                 <div>
                     <button class="btn-primary" id="addAppointmentBtn"> <i class="fas fa-plus"></i>Add Appointment</button>
@@ -120,53 +176,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
         <!-- Add Appointment Modal -->
-        <div class="modal" id="addAppointmentModal">
-            <div class="modal-content">
-                <div class="heads"></div>
-                <div class="mod-cont">
-                    <div class="inner">
-                        <div class="top">
-                            <div class="modal-header">Add Appointment</div>
-                        </div>
-                        <div class="bot">
-                            <form action="" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="patientSearch">Search Patient</label>
-                                    <input type="text" id="patientSearch" name="patient" placeholder="Search by name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="appointmentMode">Mode of Appointment</label>
-                                    <select id="appointmentMode" name="mode" required>
-                                        <option value="on-site">On-Site</option>
-                                        <option value="teletherapy">Teletherapy</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="appointmentDate">Date</label>
-                                    <input type="date" id="appointmentDate" name="date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="newStartTime">Start Time</label>
-                                    <input type="time" id="newStartTime" name="start_time" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="newEndTime">End Time</label>
-                                    <input type="time" id="newEndTime" name="end_time" required>
+<div class="modal" id="addAppointmentModal">
+    <div class="modal-content">
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <div class="modal-header">Add Appointment</div>
+                </div>
+                <div class="bot">
+                <form action="{{ route('therapist.appointments.add') }}" method="POST" id="appointmentForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="patientSearch">Search Patient</label>
+                            <div class="search-container" style="position: relative;">
+                                <input type="text" id="patientSearch" placeholder="Click to see all patients or type to search" autocomplete="off">
+                                <input type="hidden" name="patient_id" id="patient_id" required>
+                                <div id="patientList" class="patient-list-dropdown">
+                                    <!-- Patients will be populated here -->
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="appointmentMode">Mode of Appointment</label>
+                            <select id="appointmentMode" name="mode" required>
+                                <option value="on-site">On-Site</option>
+                                <option value="tele-therapy">Tele-therapy</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentDate">Date</label>
+                            <input type="date" id="appointmentDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newStartTime">Start Time</label>
+                            <input type="time" id="newStartTime" name="start_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newEndTime">End Time</label>
+                            <input type="time" id="newEndTime" name="end_time" required>
+                        </div>
                         <div class="modal-buttons">
-                            <button type="button" class="btn-secondary" id="closeModalBtn" style="margin: 0;">Cancel</button>
-                            <button type="submit" class="btn-primary" style="margin: 0;">Add Appointment</button>
+                            <button type="button" class="btn-secondary" id="closeModalBtn">Cancel</button>
+                            <button type="submit" class="btn-primary">Add Appointment</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
     </div>
-
     <script>
         document.getElementById('addAppointmentBtn').addEventListener('click', function () {
             document.getElementById('addAppointmentModal').style.display = 'flex';
@@ -188,6 +249,92 @@ document.addEventListener('DOMContentLoaded', function () {
             showToast("{{ session('error') }}", 'error');
         </script>
     @endif
+
+    <script>
+$(document).ready(function() {
+    const patientSearch = $('#patientSearch');
+    const patientList = $('#patientList');
+    const patientIdInput = $('#patient_id');
+
+    // Add CSRF token to all AJAX requests
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    patientSearch.on('focus', function() {
+        $.ajax({
+            url: '/search-users', // Use your existing route
+            method: 'GET',
+            data: {
+                query: patientSearch.val()
+            },
+            success: function(response) {
+                let html = '';
+                if (response.length > 0) {
+                    response.forEach(user => {
+                        html += `<div class="patient-item" data-id="${user.id}">${user.name}</div>`;
+                    });
+                } else {
+                    html = '<div class="patient-item">No patients found</div>';
+                }
+                patientList.html(html);
+                patientList.show();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                patientList.html('<div class="patient-item">Error loading patients</div>');
+                patientList.show();
+            }
+        });
+    });
+
+    // Handle patient selection
+    $(document).on('click', '.patient-item', function() {
+        const patientId = $(this).data('id');
+        const patientName = $(this).text();
+        patientIdInput.val(patientId);
+        patientSearch.val(patientName);
+        patientList.hide();
+    });
+
+    // Close dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.search-container').length) {
+            patientList.hide();
+        }
+    });
+
+    // Real-time search as user types
+    patientSearch.on('input', function() {
+        if ($(this).val().length > 0) {
+            $.ajax({
+                url: '/search-users',
+                method: 'GET',
+                data: {
+                    query: $(this).val()
+                },
+                success: function(response) {
+                    let html = '';
+                    if (response.length > 0) {
+                        response.forEach(user => {
+                            html += `<div class="patient-item" data-id="${user.id}">${user.name}</div>`;
+                        });
+                    } else {
+                        html = '<div class="patient-item">No patients found</div>';
+                    }
+                    patientList.html(html);
+                    patientList.show();
+                }
+            });
+        } else {
+            patientList.hide();
+        }
+    });
+});
+</script>
+
 </body>
 </html>
 </x-therapist-layout>
