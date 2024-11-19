@@ -175,10 +175,21 @@
 
                 <!-- Chart Section -->
                 <section class="chart-section card">
-                                    <h3>Weekly Usage Report</h3>
-                                    <canvas id="weekly-usage-chart" style="height: 400px; width: 100%;"></canvas>
-                                </section>
-                                </div>
+                    <div id="chart-container">
+                        <h1>System Usage Report</h1>
+                        <div class="chart-header">
+                            <select id="timeframeSelect">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="chart" id="system-usage-chart">
+                            <canvas style="height: 762px; width: 1900px;"></canvas>
+                        </div>
+                    </div>
+                </section>
+        </div>
                                 <aside class="sidebarr">
                             <div class="notifications card">
                     <div class="notifications-header">
@@ -220,7 +231,42 @@
                         @endif
                     </ul>
                 </div>
+                <section class="therapy-center-reports">
+        <div class="chart-card card">
+            <h1>Onsite Appointments Report</h1>
+                <div>
+                    <select id="filterSelect" class="form-select">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            <div class="chart-container">
+                <canvas id="appointmentChart"></canvas>
+            </div>
+        </div>
 
+        <div class="chart-card card">
+            <h1>Tele-therapy Appointments Report</h1>
+                <div>
+                    <select id="teletherapyFilterSelect" class="form-select">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="teletherapyChart"></canvas>
+                </div>
+        </div>
+        <div class="chart-card card">
+            <h1>Gender Count</h1>
+                <div class="chart-container">
+                    <canvas id="gender-chart"></canvas>
+                </div>
+
+        </div>
+    </section>
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const toggleButton = document.getElementById('toggleNotifications');
@@ -344,67 +390,372 @@
         }
     }
 
-    async function fetchSystemUsage() {
-        try {
-            const response = await fetch('/admin/system-usage');
-            const data = await response.json();
+//system usage report
+    document.addEventListener('DOMContentLoaded', function() {
+    let chart;
+    const ctx = document.querySelector('#system-usage-chart canvas').getContext('2d');
+    const timeframeSelect = document.getElementById('timeframeSelect');
 
-            // Update Visits card
-            const latestDaily = data.daily[data.daily.length - 1];
-            document.getElementById('visitsCount').innerText = latestDaily ? latestDaily.count : 0;
-            document.getElementById('visitsGrowth').innerText = data.daily_growth.toFixed(2);
-            updateGrowthIndicator('visitsGrowth', data.daily_growth, 'visitsGrowthArrow');
-        } catch (error) {
-            console.error('Error fetching system usage:', error);
-        }
+    function formatWeekLabel(isoWeek) {
+        // Extract the week number from the ISO format (last two digits)
+        const weekNumber = parseInt(isoWeek.toString().slice(-2));
+        return `Week ${weekNumber}`;
     }
 
-    async function fetchWeeklyUsage() {
-    try {
-        const response = await fetch('/admin/system-usage');
-        const data = await response.json();
+    function createChart(data, label) {
+        if (chart) {
+            chart.destroy();
+        }
 
-        const weeklyData = data.weekly;
-        const labels = weeklyData.map(entry => `Week ${entry.week % 100}`); // Adjust based on your week format
-        const counts = weeklyData.map(entry => entry.count);
-
-        const ctx = document.getElementById('weekly-usage-chart').getContext('2d');
-        new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels,
+                labels: data.map(item => {
+                    if (label === 'Weekly') {
+                        return formatWeekLabel(item.week);
+                    }
+                    return item.date || item.month;
+                }),
                 datasets: [{
-                    label: 'Weekly User Logins',
-                    data: counts,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 2,
+                    label: label,
+                    data: data.map(item => item.count),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
                             text: 'Number of Users'
+                        },
+                        ticks: {
+                            stepSize: 1
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Weeks'
+                            text: label
                         }
                     }
                 }
             }
         });
+    }
+
+    function fetchData() {
+        fetch('/admin/system-usage')
+            .then(response => response.json())
+            .then(data => {
+                timeframeSelect.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    switch(selectedValue) {
+                        case 'daily':
+                            createChart(data.daily, 'Daily');
+                            break;
+                        case 'weekly':
+                            createChart(data.weekly, 'Weekly');
+                            break;
+                        case 'monthly':
+                            createChart(data.monthly, 'Monthly');
+                            break;
+                    }
+                });
+
+                // Initial load
+                createChart(data.daily, 'Daily');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    fetchData();
+});
+//system usage report/on-site chart
+document.addEventListener('DOMContentLoaded', function() {
+        let chart;
+        const ctx = document.getElementById('appointmentChart').getContext('2d');
+        const filterSelect = document.getElementById('filterSelect');
+
+        function createChart() {
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Onsite Appointments',
+                        data: [],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 40,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'Number of Appointments'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time Period'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function fetchData() {
+            const filter = filterSelect.value;
+            fetch(`/admin/onsite-appointments-data?filter=${filter}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.labels.length === 0) {
+                        console.warn('No data received from the server');
+                    }
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }
+
+        function updateChart(data) {
+            chart.data.labels = data.labels;
+            chart.data.datasets[0].data = data.values;
+            chart.update();
+        }
+
+        createChart();
+        fetchData();
+
+        filterSelect.addEventListener('change', fetchData);
+    });
+
+//onsite chart tele-therapist chart
+document.addEventListener('DOMContentLoaded', function() {
+        let chart;
+        const ctx = document.getElementById('teletherapyChart').getContext('2d');
+        const teletherapyFilterSelect = document.getElementById('teletherapyFilterSelect');
+
+        function createChart() {
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Teletherapy Appointments',
+                        data: [],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 40,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'Number of Appointments'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time Period'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function fetchData() {
+            const filter = teletherapyFilterSelect.value;
+            fetch(`/admin/teletherapy-appointments-data?filter=${filter}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.labels.length === 0) {
+                        console.warn('No data received from the server');
+                    }
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }
+
+        function updateChart(data) {
+            chart.data.labels = data.labels;
+            chart.data.datasets[0].data = data.values;
+            chart.update();
+        }
+
+        createChart();
+        fetchData();
+
+        teletherapyFilterSelect.addEventListener('change', fetchData);
+    });
+//end tele-therapy chart gender chart
+// Function to fetch gender data
+async function fetchGenderData() {
+    try {
+        const response = await fetch('/admin/dashboard-counts');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.gender_distribution;
     } catch (error) {
-        console.error('Error fetching weekly usage:', error);
+        console.error('Error fetching gender data:', error);
+        return null;
     }
 }
 
+// Modified createGenderChart function with loading state
+function createGenderChart(genderData) {
+    const canvas = document.getElementById('gender-chart');
+    if (!canvas) {
+        console.error('Cannot find gender chart canvas element');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (window.genderChart instanceof Chart) {
+        window.genderChart.destroy();
+    }
+
+    // Calculate percentages
+    const total = Object.values(genderData).reduce((a, b) => a + b, 0);
+    const percentages = {};
+    Object.entries(genderData).forEach(([key, value]) => {
+        percentages[key] = ((value / total) * 100).toFixed(1);
+    });
+
+    window.genderChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(genderData),
+            datasets: [{
+                data: Object.values(percentages),
+                backgroundColor: [
+                    '#68a85c',  // Darker green (Male)
+                    '#a8d6a0',  // Medium green (Female)
+                    '#c5e5bc'   // Lighter green (Others)
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        padding: 20
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Gender Distribution 2024',
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            // Add both percentage and actual count
+                            const count = genderData[context.label];
+                            label += context.formattedValue + '% (' + count + ')';
+                            return label;
+                        }
+                    }
+                }
+            },
+            cutout: '70%',
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        }
+    });
+}
+
+// Function to show loading state
+function showChartLoading() {
+    const canvas = document.getElementById('gender-chart');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#666';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Loading...', canvas.width/2, canvas.height/2);
+    }
+}
+
+// Function to show error state
+function showChartError() {
+    const canvas = document.getElementById('gender-chart');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#dc3545';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Error loading data', canvas.width/2, canvas.height/2);
+    }
+}
+
+// Function to initialize and update the chart
+async function updateGenderChart() {
+    showChartLoading();
+    const genderData = await fetchGenderData();
+    if (genderData) {
+        createGenderChart(genderData);
+    } else {
+        showChartError();
+    }
+}
+
+// Initialize the chart when the DOM is loaded
+document.addEventListener('DOMContentLoaded', updateGenderChart);
+
+// Update the chart every 5 minutes (300000 milliseconds)
+setInterval(updateGenderChart, 300000);
+
+//end gender chart
 
     function updateCard(elementId, value) {
         document.getElementById(elementId).innerText = value;
