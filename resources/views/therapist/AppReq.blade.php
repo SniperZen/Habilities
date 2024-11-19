@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/therapist/AppReq.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     const filterButton = document.querySelector('.dropdown-btn');
@@ -45,42 +45,45 @@ document.addEventListener('DOMContentLoaded', function () {
     </script>
 </head>
 <body>
-        <div class="content">
-            <div class="tabs">
-                <div class="tabi">
-                    <div class="tab active">Appointment Requests</div>
-                    <a href="{{ route('therapist.AppSched') }}"><div class="tab tab1">Appointment Schedule</div></a>
-                    </div>
-                </div>
-
-            <div class="arSort">
-                <div class="section-title"><h2>Appointment Requests</h2></div>
-                    <div class="filter-buttons">
-                            <button class="filter-btn">
-                                <span class="filter-icon">🔍</span> Filters
-                            </button>
-
-                            <form id="filterForm" action="{{ route('therapist.AppReq') }}" method="GET">
-                                <div class="dropdown-wrapper">
-                                    <button type="button" class="dropdown-btn">
-                                        {{ request('filter') ? ucfirst(str_replace('_', ' ', request('filter'))) : 'All' }}
-                                    </button>
-                                    <div class="dropdown-content">
-                                        <a href="#" data-filter="today">Today</a>
-                                        <a href="#" data-filter="yesterday">Yesterday</a>
-                                        <a href="#" data-filter="last_7_days">Last 7 Days</a>
-                                        <a href="#" data-filter="last_14_days">Last 14 Days</a>
-                                        <a href="#" data-filter="last_21_days">Last 21 Days</a>
-                                        <a href="#" data-filter="last_28_days">Last 28 Days</a>
-                                        <a href="#" data-filter="all">All</a>
-                                    </div>
-                                
-                                </div>
-                                <input type="hidden" name="filter" id="filterInput" value="{{ request('filter', 'all') }}">
-                            </form>
-                     </div>
+    <div class="content">
+        <div class="tabs">
+            <div class="tabi">
+                <div class="tab active">Appointment Requests</div>
+                <a href="{{ route('therapist.AppSched') }}"><div class="tab tab1">Appointment Schedule</div></a>
             </div>
-            <div class="table-wrapper">
+        </div>
+
+        <div class="arSort">
+            <div class="section-title"><h2>Appointment Requests</h2></div>
+            <div class="filter-buttons">
+                <div>
+                    <button class="btn-primary" id="addAppointmentBtn"> <i class="fas fa-plus"></i>Add Appointment</button>
+                </div>
+                <button class="filter-btn">
+                    <span class="filter-icon">🔍</span> Filters
+                </button>
+
+                <form id="filterForm" action="{{ route('therapist.AppReq') }}" method="GET">
+                    <div class="dropdown-wrapper">
+                        <button type="button" class="dropdown-btn">
+                            {{ request('filter') ? ucfirst(str_replace('_', ' ', request('filter'))) : 'All' }}
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" data-filter="today">Today</a>
+                            <a href="#" data-filter="yesterday">Yesterday</a>
+                            <a href="#" data-filter="last_7_days">Last 7 Days</a>
+                            <a href="#" data-filter="last_14_days">Last 14 Days</a>
+                            <a href="#" data-filter="last_21_days">Last 21 Days</a>
+                            <a href="#" data-filter="last_28_days">Last 28 Days</a>
+                            <a href="#" data-filter="all">All</a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="filter" id="filterInput" value="{{ request('filter', 'all') }}">
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -113,32 +116,68 @@ document.addEventListener('DOMContentLoaded', function () {
                     @endif
                 </tbody>
             </table>
+        </div>
 
-            <style>
-            table td[colspan="5"] {
-    font-size: 16px;
-    color: #666;
-    background-color: #f9f9f9;
-    border: none;
-}
-</style>
+    
+        <!-- Add Appointment Modal -->
+        <div class="modal" id="addAppointmentModal">
+            <div class="modal-content">
+                <div class="heads"></div>
+                <div class="mod-cont">
+                    <div class="inner">
+                        <div class="top">
+                            <div class="modal-header">Add Appointment</div>
+                        </div>
+                        <div class="bot">
+                            <form action="" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="patientSearch">Search Patient</label>
+                                    <input type="text" id="patientSearch" name="patient" placeholder="Search by name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointmentMode">Mode of Appointment</label>
+                                    <select id="appointmentMode" name="mode" required>
+                                        <option value="on-site">On-Site</option>
+                                        <option value="teletherapy">Teletherapy</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointmentDate">Date</label>
+                                    <input type="date" id="appointmentDate" name="date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newStartTime">Start Time</label>
+                                    <input type="time" id="newStartTime" name="start_time" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newEndTime">End Time</label>
+                                    <input type="time" id="newEndTime" name="end_time" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" class="btn-secondary" id="closeModalBtn" style="margin: 0;">Cancel</button>
+                            <button type="submit" class="btn-primary" style="margin: 0;">Add Appointment</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
+
     <script>
-        function showToast(message, type = 'success') {
-            Toastify({
-                text: message,
-                duration: 3000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
-                stopOnFocus: true,
-                close: true,
-            }).showToast();
-        }
+        document.getElementById('addAppointmentBtn').addEventListener('click', function () {
+            document.getElementById('addAppointmentModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('addAppointmentModal').style.display = 'none';
+        });
     </script>
-     @if(session('success'))
+
+    @if(session('success'))
         <script>
             showToast("{{ session('success') }}");
         </script>

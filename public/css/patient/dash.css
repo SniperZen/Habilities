@@ -357,6 +357,14 @@ table{
         stroke: #fff;
     }
   }
+
+
+@media (max-width: 768px){
+    .dropdown{
+        top: 64px;
+        width: 162px;
+    }
+}
   
 @media (min-width: 1px){
     .header-left .logo {
