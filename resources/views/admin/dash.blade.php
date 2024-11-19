@@ -74,7 +74,6 @@
         }
         .chart-section {
             padding: 1rem;
-            margin: 1rem 0;
         }
 
         .chart {
@@ -97,6 +96,7 @@
                 </header>
 
                 <div class="incont">
+                    <div class="top">
                     <div class="left">
                 <!-- Navigation Section -->
                 <nav class="dashboard-nav">
@@ -193,7 +193,12 @@
                                 <aside class="sidebarr">
                             <div class="notifications card">
                     <div class="notifications-header">
+                        <div style="display:flex; gap:5px;">
+                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.1225 18.6539L3.7475 18.0044H3.7475L4.1225 18.6539ZM3.35962 18.0803L2.61535 17.9877H2.61535L3.35962 18.0803ZM2.75572 14.8715L2.10163 15.2386L2.1062 15.2465L2.75572 14.8715ZM1.84402 13.247L2.49811 12.8799L2.49354 12.872L1.84402 13.247ZM16.1902 11.6867L16.5652 12.3362L16.1902 11.6867ZM16.0865 10.7497L16.3923 10.0648L16.3923 10.0648L16.0865 10.7497ZM13.6373 8.58901L12.983 8.95569L12.9878 8.96401L13.6373 8.58901ZM12.7718 7.04445L13.4261 6.67778L13.4213 6.66945L12.7718 7.04445ZM4.11189 4.70195L3.73689 4.05243L4.11189 4.70195ZM9.8328 18.5782L10.2078 19.2278L9.8328 18.5782ZM4.10388 18.1729C4.23011 17.1581 4.15269 15.7911 3.40523 14.4965L2.1062 15.2465C2.64424 16.1784 2.71439 17.1916 2.61535 17.9877L4.10388 18.1729ZM3.40976 14.5045L2.49806 12.88L1.18998 13.6141L2.10168 15.2386L3.40976 14.5045ZM16.3923 10.0648C15.6714 9.74301 14.8338 9.16143 14.2868 8.21401L12.9878 8.96401C13.7351 10.2584 14.8592 11.0231 15.7808 11.4345L16.3923 10.0648ZM14.2916 8.22237L13.4261 6.67781L12.1175 7.41109L12.9831 8.95565L14.2916 8.22237ZM13.4213 6.66945C11.46 3.27237 7.12537 2.09609 3.73689 4.05243L4.48689 5.35147C7.15211 3.8127 10.5718 4.73398 12.1223 7.41945L13.4213 6.66945ZM16.5652 12.3362C17.0741 12.0423 17.1889 11.4976 17.1414 11.1131C17.0941 10.7297 16.8659 10.2763 16.3923 10.0648L15.7808 11.4345C15.7201 11.4075 15.6868 11.3691 15.6722 11.3469C15.6586 11.3261 15.6543 11.3098 15.6527 11.2969C15.6512 11.2847 15.6493 11.2515 15.6686 11.2031C15.6903 11.1487 15.7374 11.082 15.8152 11.0372L16.5652 12.3362ZM2.49354 12.872C0.968569 10.2307 1.86562 6.86486 4.48689 5.35147L3.73689 4.05243C0.392359 5.9834 -0.741314 10.2691 1.1945 13.622L2.49354 12.872ZM3.7475 18.0044C3.82707 17.9585 3.90998 17.9517 3.96784 17.9607C4.01905 17.9686 4.04552 17.9869 4.0538 17.9932C4.06271 18.0001 4.07376 18.011 4.08439 18.0327C4.09576 18.056 4.11231 18.1051 4.10388 18.1729L2.61535 17.9877C2.55028 18.5109 2.83032 18.9438 3.13728 19.1807C3.44471 19.418 3.98009 19.6022 4.4975 19.3035L3.7475 18.0044ZM15.8152 11.0372L3.7475 18.0044L4.4975 19.3035L16.5652 12.3362L15.8152 11.0372ZM10.3654 15.0496C10.9062 15.9863 10.5624 17.291 9.4578 17.9287L10.2078 19.2278C11.9496 18.2221 12.6643 16.0314 11.6644 14.2996L10.3654 15.0496ZM9.4578 17.9287C8.35323 18.5664 7.05143 18.2118 6.51064 17.2752L5.2116 18.0252C6.21146 19.757 8.46603 20.2334 10.2078 19.2278L9.4578 17.9287ZM4.18845 2.36718C4.52913 2.95724 4.32696 3.71175 3.73689 4.05243L4.48689 5.35147C5.7944 4.59658 6.24238 2.92468 5.48749 1.61718L4.18845 2.36718ZM3.73689 4.05243C3.14683 4.3931 2.39232 4.19093 2.05164 3.60087L0.752603 4.35087C1.50749 5.65837 3.17939 6.10635 4.48689 5.35147L3.73689 4.05243ZM2.05164 3.60087C1.71097 3.0108 1.91314 2.25629 2.5032 1.91561L1.7532 0.616576C0.445699 1.37146 -0.00228405 3.04336 0.752603 4.35087L2.05164 3.60087ZM2.5032 1.91561C3.09327 1.57494 3.84778 1.77711 4.18845 2.36718L5.48749 1.61718C4.73261 0.309673 3.06071 -0.138312 1.7532 0.616576L2.5032 1.91561Z" fill="#303B1D"/>
+                        </svg>
                         <h3>Notifications</h3>
+                        </div>
                         <a href="#" id="toggleNotifications" class="see-more">See More ›</a>
                     </div>
                     <ul id="notificationsList" class="notifications-list">
@@ -233,38 +238,10 @@
                 </div>
                 <section class="therapy-center-reports">
         <div class="chart-card card">
-            <h1>Onsite Appointments Report</h1>
-                <div>
-                    <select id="filterSelect" class="form-select">
-                    <option value="monthly">Monthly</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="yearly">Yearly</option>
-                    </select>
-                </div>
-            <div class="chart-container">
-                <canvas id="appointmentChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card card">
-            <h1>Tele-therapy Appointments Report</h1>
-                <div>
-                    <select id="teletherapyFilterSelect" class="form-select">
-                    <option value="monthly">Monthly</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="yearly">Yearly</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    <canvas id="teletherapyChart"></canvas>
-                </div>
-        </div>
-        <div class="chart-card card">
             <h1>Gender Count</h1>
                 <div class="chart-container">
                     <canvas id="gender-chart"></canvas>
                 </div>
-
         </div>
     </section>
                 <script>
@@ -340,10 +317,40 @@
 
 
 
-                            <div class="calendar">
+                            <!-- <div class="calendar">
                                 <div id="calendar"></div>
-                            </div>
+                            </div> -->
                             </aside>
+                            </div>
+                            <div class="bottom">
+                            <div class="chart-card card">
+            <h1>Onsite Appointments Report</h1>
+                <div>
+                    <select id="filterSelect" class="form-select">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            <div class="chart-container">
+                <canvas id="appointmentChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card card">
+            <h1>Tele-therapy Appointments Report</h1>
+                <div>
+                    <select id="teletherapyFilterSelect" class="form-select">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="teletherapyChart"></canvas>
+                </div>
+        </div>
+                            </div>
                 </div>
             </div>
         </div>
@@ -552,6 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let chart;
         const ctx = document.getElementById('teletherapyChart').getContext('2d');
         const teletherapyFilterSelect = document.getElementById('teletherapyFilterSelect');
+        
 
         function createChart() {
             chart = new Chart(ctx, {

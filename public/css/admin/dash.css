@@ -125,7 +125,6 @@ body {
 
 .chart {
     height: 250px; 
-    background-color: #e5f1df;
     border-radius: 12px;
     margin-top: 10px;
 }
@@ -155,8 +154,12 @@ body {
 
 .incont{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
+}
+
+.top{
+    display: flex;
 }
 
 table{
@@ -334,3 +337,7 @@ table{
 }
 
 
+.chart-container{
+    height: 350px;
+    text-align: left;
+}
