@@ -229,6 +229,7 @@
                                         @php
                                             $hours = $settings->business_hours[$dayKey] ?? null;
                                             $isClosed = $hours['is_closed'] ?? true;
+                                            $isTeletherapy = $hours['is_teletherapy'] ?? false;
                                             $startTime = $hours['start_time'] ?? '';
                                             $endTime = $hours['end_time'] ?? '';
                                         @endphp
@@ -236,6 +237,8 @@
                                         {{ $dayLabel }}: 
                                         @if($isClosed)
                                             Closed
+                                        @elseif($isTeletherapy)
+                                            <span class="teletherapy-badge">Tele-therapy Only</span>
                                         @else
                                             {{ \Carbon\Carbon::parse($startTime)->format('h:i A') }} - {{ \Carbon\Carbon::parse($endTime)->format('h:i A') }}
                                         @endif
