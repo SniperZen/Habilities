@@ -170,7 +170,7 @@
                                     <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
                                 </p>
                                 <p><label>Tele-therapy link:</label> 
-                                    <a id="teletherapy-link" href="" target="_blank">Join Video Call</a>
+                                    <div class="link"><a id="teletherapy-link" href="" target="_blank">Join Video Call</a></div>
                                 </p>
                             </div>
                         </div>

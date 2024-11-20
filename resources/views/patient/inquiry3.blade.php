@@ -138,7 +138,7 @@
         // Show modal when confirm button is clicked
         confirmButton.addEventListener('click', function () {
             console.log("Confirm button clicked");
-            modalOverlay.style.display = 'flex';
+            modalOverlay.style.display = 'block';
         });
 
         // Hide modal when cancel button is clicked

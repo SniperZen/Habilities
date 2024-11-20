@@ -87,6 +87,12 @@
     .feedback-content ol {
         list-style-type: decimal !important;
     }
+
+    @media (max-width:1200px) {
+        .fc .fc-toolbar-title {
+        font-size: 1.3em;
+    }
+    }
     </style>
 </head>
 
@@ -375,55 +381,6 @@
                             .fc-daygrid-event {
                                 background: none !important;
                                 border: none !important;
-                            }
-                            .modal-content {
-                                background-color: #fefefe;
-                                margin: 6% auto;
-                                border: 1px solid #888;
-                                width: 100%;
-                                max-width: 700px;
-                                border-radius: 10px;
-                            }
-                            .modal {
-                                display: none;
-                                position: fixed;
-                                z-index: 1000000;
-                                left: 0;
-                                top: 0;
-                                width: 100%;
-                                height: 100%;
-                                overflow: auto;
-                                background-color: rgba(0,0,0,0.4);
-                            }
-
-                            .modal-content h2{
-                                margin-bottom: 19px;
-                            }
-
-                            .scroller{
-                                max-height: 60vh;
-                                overflow-y: auto;
-                            }
-
-                            .inners{
-                                padding: 28px;
-                            }
-
-                            .modal-content .content-wrapper {
-                                white-space: pre-wrap;
-                                word-wrap: break-word;
-                            }
-                            .close {
-                                color: #aaa;
-                                float: right;
-                                font-size: 28px;
-                                font-weight: bold;
-                                cursor: pointer;
-                            }
-                            .close:hover, .close:focus {
-                                color: black;
-                                text-decoration: none;
-                                cursor: pointer;
                             }
                             .fc .fc-button-group {
                                 position: relative;

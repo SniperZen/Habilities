@@ -184,7 +184,7 @@ h2 {
 
 .modal-contents {
     width: 500px;
-    height: 400px;
+    height: auto;
 }
 
 .heads{
@@ -237,13 +237,14 @@ h2 {
 
 .modal-contentss {
     width: 500px;
-    height: 300px;
+    height: auto;
     align-items: center;
 }
 
 .modal-content {
     width: 400px;
-    height: 500px;
+    height: auto;
+    overflow: hidden;
 }
 
 .modal-contents h3, .modal-contentss h3, .modal-content h3 {
@@ -444,6 +445,39 @@ tr:hover{
         width: 60px;
         height: 29px;
         padding: 4px 11px;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+
+    .top {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .icon {
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .bot p {
+        font-size: 12px;
+    }
+
+    .modal-btn {
+        font-size: 12px;
+        padding: 8px 15px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
     }
 }
 
