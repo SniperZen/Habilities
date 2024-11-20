@@ -144,11 +144,10 @@
                 <!-- Statistics Section -->
                 <section class="statistics-section">
                     <div class="stat-card card">
-                        <h3>New Users</h3>
-                        <p class="stat-number" id="newUsersCount">--</p>
+                        <h3>Supervised Accounts</h3>
+                        <p class="stat-number" id="supervisedCount">--</p>
                         <p class="stat-change">
-                            <span id="newUsersGrowth">--</span>% 
-                            <span id="newUsersGrowthArrow">&#8599;</span>
+                            <span>Total Child Accounts</span>
                         </p>
                     </div>
 
@@ -164,12 +163,9 @@
 
 
                     <div class="stat-card card">
-                        <h3>Visits</h3>
-                        <p class="stat-number" id="visitsCount">--</p>
-                        <p class="stat-change">
-                            <span id="visitsGrowth">--</span>% 
-                            <span id="visitsGrowthArrow">&#8599;</span>
-                        </p>
+                        <h3>On-site Visits</h3>
+                        <p class="stat-number" id="successfulVisitsCount">--</p>
+                        <p class="stat-change"></p>
                     </div>
                 </section>
 
@@ -237,13 +233,13 @@
                     </ul>
                 </div>
                 <section class="therapy-center-reports">
-        <div class="chart-card card">
-            <h1>Gender Count</h1>
-                <div class="chart-container">
-                    <canvas id="gender-chart"></canvas>
-                </div>
-        </div>
-    </section>
+                    <div class="chart-card card">
+                        <h1>Inquired Clinical Diagnosis Chart</h1>
+                            <div class="chart-container">
+                                <canvas id="concernsChart"></canvas>
+                            </div>
+                    </div>
+                </section>
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const toggleButton = document.getElementById('toggleNotifications');
@@ -380,22 +376,63 @@
     });
 </script>
 <script>
-    async function fetchDashboardCounts() {
-        try {
-            const response = await fetch('/admin/dashboard-counts');
-            const data = await response.json();
+function fetchDashboardCounts() {
+    fetch('/admin/dashboard-counts')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Dashboard data:', data); // For debugging
 
-            // Update New Users card
-            updateCard('newUsersCount', data.new_users);
-            updateGrowthIndicator('newUsersGrowth', data.new_user_growth, 'newUsersGrowthArrow');
+            // Update existing counts
+            if (document.getElementById('supervisedCount')) {
+                document.getElementById('supervisedCount').textContent = data.supervised_accounts;
+            }
 
-            // Update Active Users card
-            updateCard('activeUsersCount', data.active_users);
+            if (document.getElementById('activeUsersCount')) {
+                document.getElementById('activeUsersCount').textContent = data.active_users;
+            }
+
+            if (document.getElementById('newUsersCount')) {
+                document.getElementById('newUsersCount').textContent = data.new_users;
+            }
+
+            // Update successful visits count
+            if (document.getElementById('successfulVisitsCount')) {
+                document.getElementById('successfulVisitsCount').textContent = data.successful_visits;
+            }
+
+            // Update all growth indicators
             updateGrowthIndicator('userGrowth', data.user_growth, 'growthArrow');
-        } catch (error) {
+            updateGrowthIndicator('newUsersGrowth', data.new_user_growth, 'newUsersGrowthArrow');
+            updateGrowthIndicator('visitsGrowth', data.visits_growth, 'visitsGrowthArrow');
+        })
+        .catch(error => {
             console.error('Error fetching dashboard counts:', error);
-        }
+        });
+}
+
+function updateGrowthIndicator(growthElementId, growthValue, arrowElementId) {
+    const growthElement = document.getElementById(growthElementId);
+    const arrowElement = document.getElementById(arrowElementId);
+    
+    if (growthElement && arrowElement) {
+        growthElement.textContent = growthValue.toFixed(2);
+        const arrow = growthValue > 0 ? '&#8599;' : (growthValue < 0 ? '&#8600;' : '');
+        arrowElement.innerHTML = arrow;
+
+        // Add color coding for growth indicators
+        growthElement.style.color = growthValue > 0 ? '#28a745' : (growthValue < 0 ? '#dc3545' : '#6c757d');
     }
+}
+
+// Initialize when document loads
+document.addEventListener('DOMContentLoaded', function() {
+    fetchDashboardCounts();
+    // Refresh every 5 minutes
+    setInterval(fetchDashboardCounts, 300000);
+});
+
+
+
 
 //system usage report
     document.addEventListener('DOMContentLoaded', function() {
@@ -781,6 +818,48 @@ setInterval(updateGenderChart, 300000);
         fetchSystemUsage();
         fetchWeeklyUsage();
     };
+
+//concerns inquiries
+fetch('/admin/concerns-data') // Make sure this matches your route
+        .then(response => response.json())
+        .then(chartData => {
+            const ctx = document.getElementById('concernsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        data: chartData.data,
+                        backgroundColor: [
+                            '#2E7D32', // Dark green
+                            '#4CAF50', // Regular green
+                            '#81C784', // Light green
+                            '#A5D6A7', // Lighter green
+                            '#C8E6C9', // Very light green
+                            '#66BB6A', // Medium green
+                            '#43A047', // Forest green
+                            '#388E3C', // Deep green
+                            '#1B5E20', // Very dark green
+                            '#B9F6CA'  // Mint green
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Inquired Clinical Diagnosis'
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
 </script>
 
 

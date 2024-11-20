@@ -60,10 +60,10 @@
 
                     <div class="date-filter">
                         <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" name="start_date" value="{{ request('start_date') }}">
+                        <input type="date" id="startDate" name="start_date" value="{{ request('start_date') }}" max="<?php echo date('Y-m-d'); ?>">
                         
                         <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" name="end_date" value="{{ request('end_date') }}">
+                        <input type="date" id="endDate" name="end_date" value="{{ request('end_date') }}" max="<?php echo date('Y-m-d'); ?>">
                     </div>
                     
                     <button class="filter" type="submit">Apply Filters</button>
