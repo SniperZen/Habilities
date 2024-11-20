@@ -68,10 +68,10 @@
 
                 <div class="date-filter">
                     <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate">
+                    <input type="date" id="startDate" max="<?php echo date('Y-m-d'); ?>">
                     
                     <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate">
+                    <input type="date" id="endDate" max="<?php echo date('Y-m-d'); ?>">
                 </div>
                 
                 <button id="applyFilter" class="filt">Apply Filter</button>

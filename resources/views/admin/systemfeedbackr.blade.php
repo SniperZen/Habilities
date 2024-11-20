@@ -36,10 +36,10 @@
                 <input type="text" id="specificNameInput" placeholder="Enter user name">
                 <div class="date-filter">
                     <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" name="start_date">
+                    <input type="date" id="startDate" name="start_date" max="<?php echo date('Y-m-d'); ?>">
                     
                     <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" name="end_date">
+                    <input type="date" id="endDate" name="end_date" max="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <button id="applyFilter" class="filt">Apply Filter</button>
                 <button id="clearButton">Clear</button>
