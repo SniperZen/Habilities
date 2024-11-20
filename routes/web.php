@@ -33,8 +33,25 @@ Route::post('/mark-notification-as-read/{id}', [NotificationController::class, '
 Route::middleware([ShareUserData::class])->group(function () {
     // Public routes
     Route::get('/', function () {
+        // Check if user is authenticated
+        if (Auth::check()) {
+            $usertype = Auth::user()->usertype;
+            
+            // Define redirect paths based on usertype
+            $redirectPaths = [
+                'admin' => '/admin/dash',
+                'therapist' => '/therapist/dash',
+                'user' => '/patient/dash'
+            ];
+            
+            // Redirect to appropriate dashboard
+            return redirect($redirectPaths[$usertype] ?? '/dashboard');
+        }
+        
+        // If not authenticated, show welcome view
         return view('welcome');
-    });
+    })->name('home');
+    
 
     Route::get('/account-type', function () {
         return view('auth.account_type_selection');

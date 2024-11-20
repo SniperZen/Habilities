@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BusinessSetting;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -11,8 +12,21 @@ class HomeController extends Controller
     {
         return view('admin.dashboard');
     }
-    public function  home(){
-        $settings = BusinessSetting::first();
-        return view('welcome', compact('settings'));
-     }
+    public function home()
+    {
+        if (Auth::check()) {
+            $usertype = Auth::user()->usertype;
+            
+            $redirectPaths = [
+                'admin' => '/admin/dash',
+                'therapist' => '/therapist/dash',
+                'user' => '/patient/dash'
+            ];
+            
+            return redirect($redirectPaths[$usertype] ?? '/dashboard');
+        }
+        
+        return view('welcome');
+    }
+    
 }
