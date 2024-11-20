@@ -785,6 +785,59 @@
         //    }
        // };
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateOfBirthInput = document.getElementById('date_of_birth');
+    const accountType = "{{ $accountType }}"; // Gets the account type from Laravel
+    
+    function updateDateRestrictions() {
+        // Get current date
+        const today = new Date();
+        
+        // Set max date to today (can't select future dates)
+        dateOfBirthInput.setAttribute('max', today.toISOString().split('T')[0]);
+        
+        if (accountType === 'self') {
+            // Calculate date for 13 years ago
+            const minDate = new Date();
+            minDate.setFullYear(today.getFullYear() - 120); // Set absolute minimum
+            const maxDate = new Date();
+            maxDate.setFullYear(today.getFullYear() - 13); // Set maximum to 13 years ago
+            
+            // Set the min and max dates for the input
+            dateOfBirthInput.setAttribute('min', minDate.toISOString().split('T')[0]);
+            dateOfBirthInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
+        } else {
+            // For guardian/child account, only restrict future dates
+            const minDate = new Date();
+            minDate.setFullYear(today.getFullYear() - 120); // Set reasonable minimum
+            dateOfBirthInput.setAttribute('min', minDate.toISOString().split('T')[0]);
+            dateOfBirthInput.setAttribute('max', today.toISOString().split('T')[0]);
+        }
+    }
+
+    // Initial setup of date restrictions
+    updateDateRestrictions();
+});
+</script>
+<style>
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+input[type="date"] {
+    position: relative;
+}
+</style>
 
 
 </x-guest-layout>
