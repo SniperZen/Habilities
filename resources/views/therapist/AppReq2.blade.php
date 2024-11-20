@@ -21,8 +21,13 @@
 
         <div class="profile">
             <div><img src="{{ Storage::url($appointment->profile_image) }}" alt="Profile Image" class="prof"></div>
-            <div><p><strong>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</strong></p>
-            <p>Patient ID: P-{{ str_pad($appointment->patient_id, 4, '0', STR_PAD_LEFT) }}</p></div>
+            <div>
+                <p><strong>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</strong></p>
+                <p>Patient ID: P-{{ str_pad($appointment->patient_id, 4, '0', STR_PAD_LEFT) }}</p>
+                @if($appointment->account_type === 'child')
+                    <span class="supervised-badge">Supervised Account</span>
+                @endif
+            </div>
         </div>
 
         <div class="appointment-details">
@@ -120,9 +125,20 @@
             }).showToast();
         }
 
-        // Your existing JavaScript
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('newDate').setAttribute('min', today);
+        // Get today's date
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+
+        // Calculate date 1 year from today
+        const nextYear = new Date();
+        nextYear.setFullYear(today.getFullYear() + 1);
+        const maxDate = nextYear.toISOString().split('T')[0];
+
+        // Set both min and max attributes
+        const dateInput = document.getElementById('newDate');
+        dateInput.setAttribute('min', todayString);
+        dateInput.setAttribute('max', maxDate);
+
 
         function openAddModal() {
             var modal = document.getElementById("addAppointmentModal");

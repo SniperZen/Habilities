@@ -40,6 +40,9 @@
             <div class="profile-details">
                 <h3>{{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}</h3>
                 <p>Patient ID: <strong>{{ sprintf('P-%04d', $inquiry->user->id) }}</strong></p>
+                @if($inquiry->user->account_type === 'child')
+                    <span class="supervised-badge">Supervised Account</span>
+                @endif
             </div>
         </div>
         <p class="timestamp">{{ $inquiry->created_at->format('F d, Y, h:i A') }}</p>

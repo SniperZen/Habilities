@@ -64,6 +64,9 @@
             <div class="profile-details">
                 <h3>{{ $feedback->recipient->name }}</h3>
                 <p>Patient ID: <strong>{{ sprintf('P-%04d', $feedback->recipient->id) }}</strong></p>
+                @if($feedback->recipient->account_type === 'child')
+                    <span class="supervised-badge">Supervised Account</span>
+                @endif
             </div>
         </div>
         <p class="timestamp">{{ $feedback->recipient->created_at->format('F d, Y, h:i A') }}</p>

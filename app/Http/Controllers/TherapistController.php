@@ -63,7 +63,7 @@ class TherapistController extends Controller
     {
         $appointment = DB::table('appointments')
             ->join('users', 'appointments.patient_id', '=', 'users.id')
-            ->select('appointments.*', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.profile_image')
+            ->select('appointments.*', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.profile_image','users.account_type')
             ->where('appointments.id', $id)
             ->first();
     

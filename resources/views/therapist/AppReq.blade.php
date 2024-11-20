@@ -334,6 +334,47 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+    // Date restrictions for appointment
+    document.addEventListener('DOMContentLoaded', function() {
+        const appointmentDateInput = document.getElementById('appointmentDate');
+        
+        // Get today's date
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
+        // Calculate date 1 year from today
+        const nextYear = new Date();
+        nextYear.setFullYear(today.getFullYear() + 1);
+        const maxDate = nextYear.toISOString().split('T')[0];
+        
+        // Set both min and max attributes
+        appointmentDateInput.setAttribute('min', todayString);
+        appointmentDateInput.setAttribute('max', maxDate);
+    });
+
+    // Time validation for appointment
+    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+        const startTime = document.getElementById('newStartTime').value;
+        const endTime = document.getElementById('newEndTime').value;
+        
+        if (startTime >= endTime) {
+            e.preventDefault();
+            showToast('End time must be later than start time', 'error');
+        }
+    });
+
+    // Toast function if you haven't defined it yet
+    function showToast(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: type === 'success' ? "#4CAF50" : "#f44336",
+        }).showToast();
+    }
+</script>
 
 </body>
 </html>
