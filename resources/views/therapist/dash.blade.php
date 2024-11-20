@@ -198,7 +198,7 @@
         </thead>
         <tbody>
             @if(count($acceptedAppointments) > 0)
-                @foreach($acceptedAppointments as $appointment)
+             @foreach($acceptedAppointments->take(5) as $appointment)
                     @if($appointment->status != 'declined')
                         <tr data-id="{{ $appointment->id }}">
                             <td>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</td>
