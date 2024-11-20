@@ -207,13 +207,14 @@
         </main>
 
         <aside class="right-sidebar">
-
         <div class="upcoming">
             <h3>Upcoming</h3>
             <div class="upcoming-session" id="upcomingSession">
-                <p>Loading...</p>
+                <p><a href="{{ route('therapist.AppSched') }}" style="color: #4F4A6E; text-decoration: none; cursor: pointer;">Loading...</a></p>
             </div>
         </div>
+
+
 
             <div class="calendar card">
                 <div id="calendar"></div>
@@ -392,19 +393,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Capitalize first letter of the mode
                 const capitalizedMode = nextEvent.title.charAt(0).toUpperCase() + nextEvent.title.slice(1);
 
+                // Wrap the content in a link
                 upcomingSessionDiv.innerHTML = `
-                    <p>${capitalizedMode} with ${nextEvent.extendedProps.patientName}</p>
-                    <p>${appointmentDate} | ${startTime}</p>
+                    <a href="{{ route('therapist.AppSched') }}" style="color: #4F4A6E; text-decoration: none; display: block; cursor: pointer;">
+                        <p>${capitalizedMode} with ${nextEvent.extendedProps.patientName}</p>
+                        <p>${appointmentDate} | ${startTime}</p>
+                    </a>
                 `;
             } else {
-                upcomingSessionDiv.innerHTML = '<p>No upcoming sessions scheduled</p>';
+                upcomingSessionDiv.innerHTML = `
+                    <a href="{{ route('therapist.AppSched') }}" style="color: #4F4A6E; text-decoration: none; display: block; cursor: pointer;">
+                        <p>No upcoming sessions scheduled</p>
+                    </a>
+                `;
             }
         })
         .catch(error => {
             console.error('Error fetching appointments:', error);
-            document.getElementById('upcomingSession').innerHTML = '<p>Error loading appointments</p>';
+            upcomingSessionDiv.innerHTML = `
+                <a href="{{ route('therapist.AppSched') }}" style="color: #4F4A6E; text-decoration: none; display: block; cursor: pointer;">
+                    <p>Error loading appointments</p>
+                </a>
+            `;
         });
 });
+
 </script>
 
 
