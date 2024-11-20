@@ -62,6 +62,7 @@
     </head>
     <body>
         <div class="reports-container">
+            <div class="int">
             <h1>Inquiry Reports</h1>
             <div class="report-dropdown">
                 <form action="{{ route('admin.inquiryr') }}" method="GET" id="filterForm">
@@ -90,6 +91,7 @@
             </div>
 
             <div id="printableTable">
+            <div class="table-container">
                 <table class="report-table">
                     <!-- Your existing table content -->
                     <thead>
@@ -109,6 +111,8 @@
                             <td>{{ $inquiry->concerns }}</td>
                             <!--<td>{{ $inquiry->elaboration }}</td>-->
                             <td>
+                                <div class="out">
+                                <div class="cont">
                                 @if($inquiry->identification_card)
                                     <div>
                                         <a href="{{ Storage::url($inquiry->identification_card) }}" target="_blank" class="document-link">
@@ -130,6 +134,8 @@
                                         </a>
                                     </div>
                                 @endif
+                                </div>
+                                </div>
                             </td>
                             <td>{{ $inquiry->created_at->format('m/d/Y') }}</td>
                             <td>{{ $inquiry->completed_at ? 'Completed' : 'Pending' }}</td>
@@ -138,7 +144,7 @@
                     </tbody>
                 </table>
             </div>
-
+            </div>
             <div class="button-container">
                 <!-- <button class="export-btn" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Export PDF
@@ -148,7 +154,7 @@
                 </button>
             </div>
         </div>
-
+    </div>
         <script>
 $(document).ready(function() {
     let searchTimeout;

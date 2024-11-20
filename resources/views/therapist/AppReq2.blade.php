@@ -56,31 +56,35 @@
     <!-- Add Appointment Modal -->
     <div id="addAppointmentModal" class="modal">
         <div class="modal-content">
-            <form action="{{ route('therapist.addAppointment', $appointment->id) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h2>Add Appointment</h2>
-                    <span class="close" onclick="closeAddModal()">&times;</span>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label for="newDate">Date</label>
-                        <input type="date" id="newDate" name="date" required>
+            <div class="heads"></div>
+                <div class="mod-cont">
+                    <div class="inner">
+                        <div class="top">
+                        <h2>Add Appointment</h2>
+                        </div>
+                        <div class="bot">
+                            <form action="{{ route('therapist.addAppointment', $appointment->id) }}" method="POST">
+                                @csrf
+                                    <div class="form-group">
+                                        <label for="newDate">Date</label>
+                                        <input type="date" id="newDate" name="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newStartTime">Start Time</label>
+                                        <input type="time" id="newStartTime" name="start_time" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newEndTime">End Time</label>
+                                        <input type="time" id="newEndTime" name="end_time" required>
+                                    </div>
+                                </div>
                     </div>
-                    <div class="form-group">
-                        <label for="newStartTime">Start Time</label>
-                        <input type="time" id="newStartTime" name="start_time" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newEndTime">End Time</label>
-                        <input type="time" id="newEndTime" name="end_time" required>
-                    </div>
-                </div>
-                <div class="button-group">
-                    <button type="button" class="cancel-button" onclick="closeAddModal()">Cancel</button>
-                    <button type="submit" class="save-button">Add Appointment</button>
-                </div>
-            </form>
+                                <div class="modal-buttons">
+                                    <button type="button" class="cancel-button" onclick="closeAddModal()">Cancel</button>
+                                    <button type="submit" class="save-button">Add Appointment</button>
+                                </div>
+                            </form>
+                        </div>
         </div>
     </div>
     

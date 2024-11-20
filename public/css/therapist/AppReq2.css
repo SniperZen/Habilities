@@ -157,7 +157,6 @@ p{
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto;
-    padding: 20px;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
@@ -384,4 +383,8 @@ a{
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+}
+
+.bot form {
+    width: 100%;
 }

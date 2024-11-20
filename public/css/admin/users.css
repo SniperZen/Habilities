@@ -113,7 +113,12 @@ h2{
     height: calc(100vh - 120px); 
     margin: 0; 
     padding: 20px;
-    overflow-y: auto;
+    overflow: hidden auto;
+    flex-wrap: wrap;
+}
+
+.int{
+    height: auto;
 }
 .profile-card {
     display: flex;

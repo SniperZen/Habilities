@@ -581,6 +581,11 @@ td, th {
   display: inline-block;
   font-size: 11px;
 }
+
+.user-name,.messenger-headTitle{
+  color: #838383;
+  text-decoration: none;
+}
 .message-card .message .message-time:before {
   content: "";
   background: transparent;

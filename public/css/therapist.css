@@ -14,7 +14,7 @@ body {
 h3, h2, h1, th, p{
     color: #1E1D3B;
 }
-th{
+thead th{
     position: sticky;
     top: 0;
     z-index: 1; 

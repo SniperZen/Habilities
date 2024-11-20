@@ -137,7 +137,7 @@
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
+                        <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
                         <button type="button" class="save-btn" onclick="openConfirmModal()">Save Changes</button>
                     </div>
                 </form>

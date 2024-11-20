@@ -30,6 +30,7 @@
     </head>
     <body>
         <div class="reports-container" id="reports-section">
+            <div class="int">
             <h1>System Feedback Reports</h1>
             <div class="report-dropdown">
                 <label for="specificNameInput">Search: </label>
@@ -44,7 +45,7 @@
                 <button id="applyFilter" class="filt">Apply Filter</button>
                 <button id="clearButton">Clear</button>
             </div>
-            
+            <div class="table-container">
             <table class="report-table" id="reportTable">
                 <thead>
                     <tr>
@@ -63,6 +64,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             
             <div style="margin-top: 20px;">
                 <button class="export-btn" onclick="window.print()">
@@ -70,7 +72,7 @@
                 </button>
             </div>
         </div>
-
+    </div>
         <script>
             $.ajaxSetup({
                 headers: {

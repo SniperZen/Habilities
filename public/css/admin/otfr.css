@@ -35,8 +35,13 @@ body {
 .reports-container {
     padding: 20px;
     border-radius: 8px;
+    height: calc(100vh - 120px);
+    overflow: hidden auto;
 }
 
+.int{
+    height: auto;
+}
 h1 {
     font-size: 28px;
     color: #303B1D;
@@ -235,4 +240,9 @@ h1 {
 .reports-container button:hover{
     transform: scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+    max-height: 600px;
+    overflow: hidden auto;
 }

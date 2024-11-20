@@ -419,7 +419,9 @@ body {
     gap: 20px;
 }
 
-
+.check-icon{
+    color: red;
+}
 
 
 /* Responsive Styles */

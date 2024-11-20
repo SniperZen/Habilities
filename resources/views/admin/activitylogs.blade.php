@@ -43,6 +43,7 @@
     </head>
     <body>
         <div class="reports-container">
+            <div class="int">
             <h1>Activity Logs</h1>
             <div class="report-dropdown">
                 <label for="specificNameInput">Search: </label>
@@ -111,7 +112,7 @@
                 </button>
             </div>
         </div>
-
+    </div>
         <script>
             let searchTimeout;
             let currentFilters = {

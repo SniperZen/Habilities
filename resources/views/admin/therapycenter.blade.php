@@ -10,6 +10,7 @@
     </head>
     <body>
         <div class="therapy-container">
+            <div class="int">
             <div class="content">
             <!-- About Us Section -->
             <section class="headers" style="background: url('{{ asset('images/awbg.png') }}') center center/cover no-repeat;">
@@ -260,6 +261,7 @@
                 </div>
             </section>
             </div>
+        </div>
         </div>
     </body>
     </html>

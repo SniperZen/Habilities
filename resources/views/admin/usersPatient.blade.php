@@ -66,6 +66,7 @@
 
 
     <div class="dashboard-container">
+        <div class="int">
     <div x-show="!showDetails">
         <h2>Manage Users &gt; Patients</h2>
         <div class="search_area">
@@ -489,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
-
+</div>
 
 </div>
 

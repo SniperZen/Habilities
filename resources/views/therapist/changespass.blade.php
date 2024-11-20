@@ -77,7 +77,7 @@
                     </p>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
+                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
                     <button type="button" class="save-btn" id="submitButton" disabled>Change Password</button>
                 </div>
             </form>
@@ -111,70 +111,79 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordInput = document.getElementById('password');
-            const uppercaseCheck = document.getElementById('uppercase-check');
-            const lowercaseCheck = document.getElementById('lowercase-check');
-            const numberCheck = document.getElementById('number-check');
-            const specialCharCheck = document.getElementById('special-char-check');
-            const minLengthCheck = document.getElementById('min-length-check');
-            const submitButton = document.getElementById('submitButton');
-            const passwordForm = document.getElementById('passwordForm');
-            const confirmModal = document.getElementById('confirmModal');
-            const noButton = document.getElementById('noButton');
-            const yesButton = document.getElementById('yesButton');
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const uppercaseCheck = document.getElementById('uppercase-check');
+        const lowercaseCheck = document.getElementById('lowercase-check');
+        const numberCheck = document.getElementById('number-check');
+        const specialCharCheck = document.getElementById('special-char-check');
+        const minLengthCheck = document.getElementById('min-length-check');
+        const submitButton = document.getElementById('submitButton');
+        const passwordForm = document.getElementById('passwordForm');
+        const confirmModal = document.getElementById('confirmModal');
+        const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
 
-            function checkPasswordRequirements() {
-                const password = passwordInput.value;
-                const hasUppercase = /[A-Z]/.test(password);
-                const hasLowercase = /[a-z]/.test(password);
-                const hasNumber = /\d/.test(password);
-                const hasSpecialChar = /[~`!@#$%^&*()_\-+={}[\]|;:"<>,./?]/.test(password);
-                const isAtLeast8Chars = password.length >= 8;
+        // Function to update check text and color
+        function updateCheck(element, isValid) {
+            element.textContent = isValid ? '✓' : '✕';
+            element.style.color = isValid ? 'green' : 'red';
+        }
 
-                uppercaseCheck.textContent = hasUppercase ? '✓' : '✕';
-                lowercaseCheck.textContent = hasLowercase ? '✓' : '✕';
-                numberCheck.textContent = hasNumber ? '✓' : '✕';
-                specialCharCheck.textContent = hasSpecialChar ? '✓' : '✕';
-                minLengthCheck.textContent = isAtLeast8Chars ? '✓' : '✕';
+        function checkPasswordRequirements() {
+            const password = passwordInput.value;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[~`!@#$%^&*()_\-+={}[\]|;:"<>,./?]/.test(password);
+            const isAtLeast8Chars = password.length >= 8;
 
-                const isValid = hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isAtLeast8Chars;
-                submitButton.disabled = !isValid;
-            }
+            // Update each requirement using the reusable function
+            updateCheck(uppercaseCheck, hasUppercase);
+            updateCheck(lowercaseCheck, hasLowercase);
+            updateCheck(numberCheck, hasNumber);
+            updateCheck(specialCharCheck, hasSpecialChar);
+            updateCheck(minLengthCheck, isAtLeast8Chars);
 
-            passwordInput.addEventListener('input', checkPasswordRequirements);
+            // Enable or disable the submit button based on overall validity
+            const isValid = hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isAtLeast8Chars;
+            submitButton.disabled = !isValid;
+        }
 
-            // Show confirmation modal on submit button click
-            submitButton.addEventListener('click', function() {
-                confirmModal.style.display = 'block';
-            });
+        passwordInput.addEventListener('input', checkPasswordRequirements);
 
-            // Handle no button click
-            noButton.addEventListener('click', function() {
-                confirmModal.style.display = 'none';
-            });
-
-            // Handle yes button click
-            yesButton.addEventListener('click', function() {
-                confirmModal.style.display = 'none';
-                Toastify({
-                    text: "Changing password...",
-                    duration: 2000,
-                    gravity: "top",
-                    position: "right",
-                    style: {
-                        background: "blue",
-                        color: "white"
-                    }
-                }).showToast();
-                
-                // Submit the form after a short delay
-                setTimeout(function() {
-                    passwordForm.submit();
-                }, 2000);
-            });
+        // Show confirmation modal on submit button click
+        submitButton.addEventListener('click', function() {
+            confirmModal.style.display = 'block';
         });
-    </script>
+
+        // Handle no button click
+        noButton.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+        });
+
+        // Handle yes button click
+        yesButton.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+            Toastify({
+                text: "Changing password...",
+                duration: 2000,
+                gravity: "top",
+                position: "right",
+                style: {
+                    background: "blue",
+                    color: "white"
+                }
+            }).showToast();
+            
+            // Submit the form after a short delay
+            setTimeout(function() {
+                passwordForm.submit();
+            }, 2000);
+        });
+    });
+</script>
+
 </body>
 </html>
 </x-therapist-layout>

@@ -94,7 +94,7 @@
                     <input type="text" id="home_address" name="home_address" value="{{ old('home_address', auth()->user()->home_address) }}">
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
+                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
                     <button type="submit" class="save-btn">Save Changes</button>
                 </div>
             </form>

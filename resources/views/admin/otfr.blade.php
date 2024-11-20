@@ -40,6 +40,7 @@
     </head>
     <body>
         <div class="reports-container">
+            <div class="int">
             <h1>OTF Reports</h1>
             <div class="report-dropdown">
             <form action="{{ route('admin.otfr') }}" method="GET" id="filterForm" onsubmit="event.preventDefault(); updateTable();">   
@@ -84,7 +85,6 @@
                     </table>
                 </div>
             </div>
-
             <div class="button-container">
                 <!-- <button class="export-btn" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Export PDF
@@ -94,7 +94,7 @@
                 </button>
             </div>
         </div>
-
+    </div>
         <script>
                 $(document).ready(function() {
                     // Form submission handler with explicit date handling
