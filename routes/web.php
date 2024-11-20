@@ -83,7 +83,8 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/admin/activitylogs', [AdminController::class, 'activitylogs'])->name('admin.activitylogs');
             Route::get('/admin/systemfeedbackr', [AdminController::class, 'systemfeedbackr'])->name('admin.systemfeedbackr');
             Route::get('/admin/inquiryr', [AdminController::class, 'showInquiries'])->name('admin.inquiryr');
-
+            Route::get('/admin/concerns-data', [AdminController::class, 'getConcernsData']);
+        
             
         });
 

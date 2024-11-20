@@ -420,7 +420,7 @@ public function updateUser(Request $request)
 }
 public function getDashboardCounts()
 {
-    // Active Users count and growth
+    // Existing counts
     $currentActiveUsers = User::where('account_status', 'active')->count();
     $lastMonthActiveUsers = User::where('account_status', 'active')
         ->where('created_at', '<=', Carbon::now()->subMonth())
@@ -431,47 +431,35 @@ public function getDashboardCounts()
         $userGrowth = (($currentActiveUsers - $lastMonthActiveUsers) / $lastMonthActiveUsers) * 100;
     }
 
-    // New Users count (registered within the last month)
-    $newUsersCount = User::where('account_status', 'active')
-        ->where('created_at', '>=', Carbon::now()->subMonth())
+    // Get current month's successful visits
+    $currentSuccessfulVisits = Appointment::where('mode', 'on-site')
+        ->where('status', 'finished')
+        ->whereMonth('created_at', now()->month)
         ->count();
 
-    // New Users growth calculation
-    $lastMonthNewUsers = User::where('account_status', 'active')
-        ->where('created_at', '>=', Carbon::now()->subMonth())
-        ->where('created_at', '<', Carbon::now()->subMonth()->addMonth())
+    // Get last month's successful visits
+    $lastMonthSuccessfulVisits = Appointment::where('mode', 'on-site')
+        ->where('status', 'finished')
+        ->whereMonth('created_at', now()->subMonth()->month)
         ->count();
 
-    $newUserGrowth = 0;
-    if ($lastMonthNewUsers > 0) {
-        $newUserGrowth = (($newUsersCount - $lastMonthNewUsers) / $lastMonthNewUsers) * 100;
+    // Calculate visits growth
+    $visitsGrowth = 0;
+    if ($lastMonthSuccessfulVisits > 0) {
+        $visitsGrowth = (($currentSuccessfulVisits - $lastMonthSuccessfulVisits) / $lastMonthSuccessfulVisits) * 100;
     }
-
-    // Account counts
-    $therapistAccounts = User::where('usertype', 'therapist')->count();
-    $patientAccounts = User::where('usertype', 'user')->count();
-    $supervisedAccounts = User::where('account_type', 'child')->count();
-
-    // Gender distribution
-    $genderDistribution = User::select('gender', DB::raw('count(*) as count'))
-        ->whereNotNull('gender')
-        ->groupBy('gender')
-        ->get()
-        ->mapWithKeys(function ($item) {
-            return [$item->gender => $item->count];
-        });
 
     return response()->json([
         'active_users' => $currentActiveUsers,
         'user_growth' => round($userGrowth, 2),
-        'new_users' => $newUsersCount,
-        'new_user_growth' => round($newUserGrowth, 2), // Include new user growth
-        'therapist_accounts' => $therapistAccounts,
-        'patient_accounts' => $patientAccounts,
-        'supervised_accounts' => $supervisedAccounts,
-        'gender_distribution' => $genderDistribution
+        'new_users' => User::where('created_at', '>=', Carbon::now()->subMonth())->count(),
+        'new_user_growth' => 0,
+        'supervised_accounts' => User::where('account_type', 'child')->count(),
+        'successful_visits' => $currentSuccessfulVisits,
+        'visits_growth' => round($visitsGrowth, 2)
     ]);
 }
+
 
 
 
@@ -775,6 +763,19 @@ public function getDashboardCounts()
         }
     
         return view('admin.inquiryr', compact('inquiries'));
+    }
+    
+    public function getConcernsData()
+    {
+        $concerns = DB::table('inquiries')
+            ->select('concerns', DB::raw('count(*) as total'))
+            ->groupBy('concerns')
+            ->get();
+    
+        return response()->json([
+            'labels' => $concerns->pluck('concerns'),
+            'data' => $concerns->pluck('total')
+        ]);
     }
     
     

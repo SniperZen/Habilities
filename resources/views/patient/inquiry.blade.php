@@ -47,7 +47,7 @@
                             <option value="">Select...</option>
                             <option value="Autism" {{ old('concerns') == 'Autism' ? 'selected' : '' }}>Autism</option>
                             <option value="ADHD" {{ old('concerns') == 'ADHD' ? 'selected' : '' }}>Attention Deficit Hyperactivity Disorder (ADHD)</option>
-                            <option value="down_syndrome" {{ old('concerns') == 'down_syndrome' ? 'selected' : '' }}>Down Syndrome</option>
+                            <option value="Down Syndrome" {{ old('concerns') == 'Down Syndrome' ? 'selected' : '' }}>Down Syndrome</option>
                             <option value="GDD" {{ old('concerns') == 'GDD' ? 'selected' : '' }}>Global Developmental Delay (GDD)</option>
                             <option value="Behavioral Problems" {{ old('concerns') == 'Behavioral Problems' ? 'selected' : '' }}>Behavioral Problems</option>
                             <option value="Learning Disabilities" {{ old('concerns') == 'Learning Disabilities' ? 'selected' : '' }}>Learning Disabilities</option>
