@@ -60,22 +60,28 @@
                                     id="{{ $day }}StartTime" 
                                     name="hours[{{ $day }}][start_time]" 
                                     value="{{ $businessHours[$day]['start_time'] ?? '' }}"
-                                    {{ ($businessHours[$day]['is_closed'] ?? true) ? 'disabled' : '' }}
+                                    {{ ($businessHours[$day]['is_closed'] ?? true) || ($businessHours[$day]['is_teletherapy'] ?? false) ? 'disabled' : '' }}
                                 > 
                                 to 
                                 <input type="time" 
                                     id="{{ $day }}EndTime" 
                                     name="hours[{{ $day }}][end_time]" 
                                     value="{{ $businessHours[$day]['end_time'] ?? '' }}"
-                                    {{ ($businessHours[$day]['is_closed'] ?? true) ? 'disabled' : '' }}
+                                    {{ ($businessHours[$day]['is_closed'] ?? true) || ($businessHours[$day]['is_teletherapy'] ?? false) ? 'disabled' : '' }}
                                 >
                                 <input type="checkbox" 
                                     id="{{ $day }}Closed" 
                                     name="hours[{{ $day }}][is_closed]"
                                     {{ ($businessHours[$day]['is_closed'] ?? true) ? 'checked' : '' }}
                                 > Closed
+                                <input type="checkbox" 
+                                    id="{{ $day }}Teletherapy" 
+                                    name="hours[{{ $day }}][is_teletherapy]"
+                                    {{ ($businessHours[$day]['is_teletherapy'] ?? false) ? 'checked' : '' }}
+                                > Tele-therapy
                             </div>
                         @endforeach
+
                     </div>
                 </form>
             </div>
@@ -141,17 +147,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmationModal = document.getElementById('confirmationModal');
     const successModal = document.getElementById('successModal');
     
-    // Handle checkbox changes to enable/disable time inputs
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const day = this.id.replace('Closed', '').toLowerCase();
-            const startTime = document.getElementById(day + 'StartTime');
-            const endTime = document.getElementById(day + 'EndTime');
-            
-            startTime.disabled = this.checked;
-            endTime.disabled = this.checked;
-        });
+// Update the checkbox event listener section
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const day = this.id.replace('Closed', '').replace('Teletherapy', '').toLowerCase();
+        const startTime = document.getElementById(day + 'StartTime');
+        const endTime = document.getElementById(day + 'EndTime');
+        const isClosed = document.getElementById(day + 'Closed');
+        const isTeletherapy = document.getElementById(day + 'Teletherapy');
+        
+        // If this is the Closed checkbox
+        if (this.id.includes('Closed')) {
+            if (this.checked) {
+                startTime.disabled = true;
+                endTime.disabled = true;
+                isTeletherapy.checked = false;
+            } else {
+                startTime.disabled = isTeletherapy.checked;
+                endTime.disabled = isTeletherapy.checked;
+            }
+        }
+        
+        // If this is the Teletherapy checkbox
+        if (this.id.includes('Teletherapy')) {
+            if (this.checked) {
+                startTime.disabled = true;
+                endTime.disabled = true;
+                isClosed.checked = false;
+            } else {
+                startTime.disabled = isClosed.checked;
+                endTime.disabled = isClosed.checked;
+            }
+        }
     });
+});
+
 
     // Show confirmation modal when Save Changes is clicked
     document.getElementById('saveBusinessHours').addEventListener('click', function() {

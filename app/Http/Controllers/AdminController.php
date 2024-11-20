@@ -267,7 +267,7 @@ class AdminController extends Controller
         return view('admin.therapycenter', compact('settings'));
     }
 
-    public function editTCenter()  // Changed from ediTCenter to editTCenter
+    public function editTCenter()
 {
     $settings = BusinessSetting::first();
     return view('admin.editTCenter', compact('settings'));
@@ -282,7 +282,8 @@ public function updateCenter(Request $request)
         $businessHours[$day] = [
             'start_time' => $request->input("hours.{$day}.start_time"),
             'end_time' => $request->input("hours.{$day}.end_time"),
-            'is_closed' => $request->boolean("hours.{$day}.is_closed")
+            'is_closed' => $request->boolean("hours.{$day}.is_closed"),
+            'is_teletherapy' => $request->boolean("hours.{$day}.is_teletherapy") // Add this line
         ];
     }
 
@@ -297,6 +298,7 @@ public function updateCenter(Request $request)
 
     return response()->json(['message' => 'Settings updated successfully']);
 }
+
 
 
     public function chat()
