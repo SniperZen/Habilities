@@ -101,11 +101,11 @@
                 <div class="ïmg"><img src="{{ asset('images/icons/design.png') }}" alt="Patient Avatar" class="patient-avatar"></div>
                 <div class="bod"><h2>Hello, {{ Auth::user()->first_name }}!</h2>
                 <p>Today is a new opportunity to inspire hope and foster healing. Let’s continue making a difference, one step at a time.</p><br>
-                <div class="but"><a href="">Check Session  &#8250;</a></div></div>
+                <div class="but"><a href="AppSched">Check Session  &#8250;</a></div></div>
             </header>
             <div class="actions">
                 <div class="action">
-                    <a href="{{ route('therapist.inquiry') }}">
+                    <a href="{{ route('therapist.AppSched')}}">
                         <button>
                             <img src="{{ asset('images/icons/tinquiry.png') }}" alt="">
                             <p class="p">No. of Inquiries</p>
