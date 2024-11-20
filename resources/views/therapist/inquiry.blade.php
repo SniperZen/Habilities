@@ -89,7 +89,7 @@
                                         @csrf
                                         <button type="submit" class="complete-btn">Complete</button>
                                     </form>
-                                    <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a>
+                                    <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">Expand</button></a>
                                 </td>
                             </tr>
                         @endif
@@ -167,7 +167,7 @@
                             <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
                             <td>{{ $inquiry->completed_at ? Carbon::parse($inquiry->completed_at)->format('m/d/Y') : 'N/A' }}</td>
                             <td>Completed</td>
-                            <td><a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a></td>
+                            <td><a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">Expand</button></a></td>
                         </tr>
                     @empty
                         <tr>

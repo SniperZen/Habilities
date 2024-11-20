@@ -11,10 +11,7 @@
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
-            .table-container {
-                max-height: 500px;
-                overflow-y: auto;
-            }
+
             @media print {
                 body * {
                     visibility: hidden;
@@ -35,6 +32,7 @@
     </head>
     <body>
         <div class="reports-container">
+            <div class="int">
             <h1>Appointment Reports</h1>
 
             <div class="report-dropdown">
@@ -143,7 +141,7 @@
                 </button>
             </div>
         </div>
-
+        </div>
 <script>
 $(document).ready(function() {
     let searchTimeout;

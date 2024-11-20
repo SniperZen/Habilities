@@ -52,7 +52,7 @@ body {
 
 
 .content {
-    height: 98vh;
+    height: calc(100vh - 120px);
     padding: 30px 50px;
     background-color: white;
     overflow-y: auto;

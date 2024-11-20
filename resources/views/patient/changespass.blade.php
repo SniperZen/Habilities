@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
+                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
                     <button type="button" class="save-btn" id="submitButton" disabled>Change Password</button>
                 </div>
             </form>
@@ -118,6 +118,12 @@
             const noButton = document.getElementById('noButton');
             const yesButton = document.getElementById('yesButton');
 
+            // Function to update text and color
+            function updateCheck(element, isValid) {
+                element.textContent = isValid ? '✓' : '✕';
+                element.style.color = isValid ? 'green' : 'red';
+            }
+
             function checkPasswordRequirements() {
                 const password = passwordInput.value;
                 const hasUppercase = /[A-Z]/.test(password);
@@ -126,11 +132,12 @@
                 const hasSpecialChar = /[~`!@#$%^&*()_\-+={}[\]|;:"<>,./?]/.test(password);
                 const isAtLeast8Chars = password.length >= 8;
 
-                uppercaseCheck.textContent = hasUppercase ? '✓' : '✕';
-                lowercaseCheck.textContent = hasLowercase ? '✓' : '✕';
-                numberCheck.textContent = hasNumber ? '✓' : '✕';
-                specialCharCheck.textContent = hasSpecialChar ? '✓' : '✕';
-                minLengthCheck.textContent = isAtLeast8Chars ? '✓' : '✕';
+                // Update UI using the reusable function
+                updateCheck(uppercaseCheck, hasUppercase);
+                updateCheck(lowercaseCheck, hasLowercase);
+                updateCheck(numberCheck, hasNumber);
+                updateCheck(specialCharCheck, hasSpecialChar);
+                updateCheck(minLengthCheck, isAtLeast8Chars);
 
                 const isValid = hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isAtLeast8Chars;
                 submitButton.disabled = !isValid;
@@ -161,11 +168,12 @@
                         color: "white"
                     }
                 }).showToast();
-                
+
                 // Submit the form after a short delay
                 passwordForm.submit();
             });
         });
+
     </script>
 </body>
 </html>
