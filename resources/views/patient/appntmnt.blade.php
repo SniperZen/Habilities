@@ -151,36 +151,39 @@
         </table>
         </div>
 
-            <div id="appointmentModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <div class="heads"></div>
-                    <div class="mod-cont">
-                        <div class="inner">
-                            <div class="top">
-                                <h3>Appointment Details</h3>
-                            </div>
-                            <div class="bot">
-                                <input type="hidden" id="appointmentId" name="appointmentId"> 
-                                <p><label>Therapist Name:</label> <span id="therapist-name"></span></p>
-                                <p><label>Date:</label> <span id="appointment-date"></span></p>
-                                <p><label>Time:</label> <span id="appointment-time"></span></p>
-                                <p><label>Status:</label> <span id="appointment-status"></span></p>
-                                <p><label>Mode of Appointment:</label> 
-                                    <input type="radio" name="mode" value="on-site" disabled id="mode-onsite"> On-site
-                                    <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
-                                </p>
-                                <p><label>Tele-therapy link:</label> 
-                                    <div class="link"><a id="teletherapy-link" href="" target="_blank">Join Video Call</a></div>
-                                </p>
+        <div id="appointmentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="heads"></div>
+                <div class="mod-cont">
+                    <div class="inner">
+                        <div class="top">
+                            <h3>Appointment Details</h3>
+                        </div>
+                        <div class="bot">
+                            <input type="hidden" id="appointmentId" name="appointmentId"> 
+                            <p><label>Therapist Name:</label> <span id="therapist-name"></span></p>
+                            <p><label>Date:</label> <span id="appointment-date"></span></p>
+                            <p><label>Time:</label> <span id="appointment-time"></span></p>
+                            <p><label>Status:</label> <span id="appointment-status"></span></p>
+                            <p><label>Mode of Appointment:</label> 
+                                <input type="radio" name="mode" value="on-site" disabled id="mode-onsite"> On-site
+                                <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
+                            </p>
+                            <p><label>Tele-therapy link:</label></p>
+                            <!-- Link container relative to the modal -->
+                            <div class="link-container">
+                                <a id="teletherapy-link" href="#" target="_blank">Join Video Call</a>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button class="back-btn">Back</button>
-                            <button class="cancel-appointment-btn">Cancel Appointment</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="back-btn">Back</button>
+                        <button class="cancel-appointment-btn">Cancel Appointment</button>
                     </div>
                 </div>
             </div>
+        </div>
+
 
 
  <!-- Appointment Cancellation Modal -->

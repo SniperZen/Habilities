@@ -347,3 +347,17 @@ table{
     flex-direction: row;
     gap: 10px;
 }
+
+#concernsChart {
+    width: 100%;
+    height: auto;
+    max-width: 400px; 
+    max-height: 400px;
+}
+
+.chart-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: auto;
+}

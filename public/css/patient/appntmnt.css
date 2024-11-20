@@ -394,6 +394,26 @@ tr:hover{
     background-color: #ddeeff;
 }
 
+.modal .link-container {
+    word-wrap: break-word;
+    text-align: left;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.modal .link-container a {
+    text-decoration: none;
+    word-break: break-all;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+.modal .link-container a:hover {
+    text-decoration: underline;
+}
+
 /* Responsive Styles */
 
 /* For devices less than 1200px */
