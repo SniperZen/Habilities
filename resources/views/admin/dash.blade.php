@@ -77,7 +77,7 @@
         }
 
         .chart {
-            height: 300px;  /* Adjust height as needed */
+            height: 407px;
             width: 100%;
             position: relative;
         }
