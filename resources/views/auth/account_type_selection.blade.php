@@ -147,6 +147,70 @@
                 font-size: 12px;
             }
         }
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 400px;
+    text-align: center;
+}
+
+.age-verification-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.age-verification-buttons button {
+    max-width: 100px !important;
+    margin: 0 !important;
+    height: 40px !important;
+}
+
+.modal h2 {
+    color: #333;
+    font-size: 24px !important;
+    margin-bottom: 15px !important;
+}
+
+.modal p {
+    color: #666;
+    font-size: 16px !important;
+    margin-bottom: 15px !important;
+    line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 30% auto;
+        padding: 20px;
+        width: 90%;
+    }
+    
+    .modal h2 {
+        font-size: 20px !important;
+    }
+    
+    .modal p {
+        font-size: 14px !important;
+    }
+}
+
         </style>
 
         <div class="container">
@@ -176,4 +240,79 @@
             
             <div class="image-side"></div>
         </div>
+        
+<!-- Age Verification Modal -->
+<div id="ageVerificationModal" class="modal">
+    <div class="modal-content">
+        <h2>Age Verification</h2>
+        <p>Are you 13 years of age or older?</p>
+        <div class="age-verification-buttons">
+            <button onclick="confirmAge(true)">Yes</button>
+            <button onclick="confirmAge(false)">No</button>
+        </div>
+    </div>
+</div>
+
+<!-- Age Restriction Message Modal -->
+<div id="ageRestrictionModal" class="modal">
+    <div class="modal-content">
+        <h2>Age Restriction</h2>
+        <p>You must be 13 years or older to create an account for yourself. Please ask for assistance with your guardian.</p>
+        <div class="age-verification-buttons">
+            <button onclick="closeAgeRestrictionModal()">Okay</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the self account button
+        const selfButton = document.querySelector('button[value="self"]');
+        
+        // Add click event listener to the self account button
+        selfButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission
+            document.getElementById('ageVerificationModal').style.display = 'block';
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const ageVerificationModal = document.getElementById('ageVerificationModal');
+            const ageRestrictionModal = document.getElementById('ageRestrictionModal');
+            if (event.target === ageVerificationModal) {
+                ageVerificationModal.style.display = 'none';
+            }
+            if (event.target === ageRestrictionModal) {
+                ageRestrictionModal.style.display = 'none';
+            }
+        });
+    });
+
+    // Function to handle age verification
+    function confirmAge(isOldEnough) {
+        const ageVerificationModal = document.getElementById('ageVerificationModal');
+        const ageRestrictionModal = document.getElementById('ageRestrictionModal');
+        const form = document.querySelector('form');
+        
+        if (isOldEnough) {
+            // If user is 13 or older, proceed with form submission
+            ageVerificationModal.style.display = 'none';
+            form.submit();
+        } else {
+            // If user is under 13, show restriction message
+            ageVerificationModal.style.display = 'none';
+            ageRestrictionModal.style.display = 'block';
+        }
+    }
+
+    // Function to close the age restriction modal
+    function closeAgeRestrictionModal() {
+        document.getElementById('ageRestrictionModal').style.display = 'none';
+    }
+</script>
+
+
+
     </x-guest-layout>
