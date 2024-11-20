@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="birth-certificate">Birth Certificate</label>
+                        <label for="birth-certificate">Birth Certificate<span style="color: red;">*</span></label>
                         <div class="file-upload">
                             <input type="file" name="birth_certificate" id="birth-certificate" accept=".jpg,.png,.pdf,.docx" required>
                         </div>
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="diagnosis-reports">Working Diagnosis / Doctor's Reports</label>
+                        <label for="diagnosis-reports">Working Diagnosis / Doctor's Reports<span style="color: red;">*</span></label>
                         <div class="file-upload">
                             <input type="file" name="diagnosis_reports" id="diagnosis-reports" accept=".jpg,.png,.pdf,.docx" required>
                         </div>

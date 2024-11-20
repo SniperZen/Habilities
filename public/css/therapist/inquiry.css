@@ -59,7 +59,7 @@ body {
 }
 
 .inquiry-table, .inquiry-history-table {
-    margin: 40px 0;
+    margin: 20px 0;
 }
 
 .content-header {
@@ -319,7 +319,6 @@ th {
 }
 .inner{
     display: flex;
-    gap: 20px;
     flex-direction: column;
     position: relative;
 }

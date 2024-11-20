@@ -160,7 +160,7 @@
                 confirmModal.style.display = 'none';
                 Toastify({
                     text: "Changing password...",
-                    duration: 2000,
+                    duration: 3000,
                     gravity: "top",
                     position: "right",
                     style: {

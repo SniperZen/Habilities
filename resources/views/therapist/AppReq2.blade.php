@@ -66,15 +66,15 @@
                             <form action="{{ route('therapist.addAppointment', $appointment->id) }}" method="POST">
                                 @csrf
                                     <div class="form-group">
-                                        <label for="newDate">Date</label>
+                                        <label for="newDate">Date<span style="color: red;">*</span></label>
                                         <input type="date" id="newDate" name="date" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="newStartTime">Start Time</label>
+                                        <label for="newStartTime">Start Time<span style="color: red;">*</span></label>
                                         <input type="time" id="newStartTime" name="start_time" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="newEndTime">End Time</label>
+                                        <label for="newEndTime">End Time<span style="color: red;">*</span></label>
                                         <input type="time" id="newEndTime" name="end_time" required>
                                     </div>
                                 </div>

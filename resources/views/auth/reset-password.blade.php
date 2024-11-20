@@ -58,10 +58,13 @@
 
         .input-container input:focus + label,
         .input-container input:not(:placeholder-shown) + label {
-            top: -8px;
-            left: 5px;
+            top: 0;
+            left: 10px;
+            width: 40px;
+            padding-left: 2px;
             font-size: 12px;
             color: #74A36B;
+            background-color: white;
         }
 
         .form-box button {
@@ -96,6 +99,25 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
+        #password-restrictions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #password-restrictions li {
+            margin: 5px 0;
+        }
+
+        .invalid {
+            color: red;
+        }
+
+        .valid {
+            color: green;
+        }
+
         @media (max-width: 768px) {
             .form-box {
                 padding: 30px;
@@ -121,6 +143,52 @@
         }
     </style>
 
+<script>
+    function validatePassword() {
+        const password = document.getElementById('password').value;
+        const restrictions = document.getElementById('password-restrictions');
+        const uppercase = /[A-Z]/.test(password);
+        const lowercase = /[a-z]/.test(password);
+        const number = /[0-9]/.test(password);
+        const special = /[~!@#$%^&*(),.?":{}|<>]/.test(password);
+        const length = password.length >= 8;
+
+        // Show or hide the restrictions container
+        if (password) {
+            restrictions.style.display = 'block';
+        } else {
+            restrictions.style.display = 'none';
+        }
+
+        // Update restriction statuses
+        document.getElementById('uppercase').className = uppercase ? 'valid' : 'invalid';
+        document.getElementById('uppercase').textContent = uppercase
+            ? '✔️ Contain at least one uppercase letter (A-Z)'
+            : '❌ Contain at least one uppercase letter (A-Z)';
+
+        document.getElementById('lowercase').className = lowercase ? 'valid' : 'invalid';
+        document.getElementById('lowercase').textContent = lowercase
+            ? '✔️ Contain at least one lowercase letter (a-z)'
+            : '❌ Contain at least one lowercase letter (a-z)';
+
+        document.getElementById('number').className = number ? 'valid' : 'invalid';
+        document.getElementById('number').textContent = number
+            ? '✔️ Contain at least one number (0-9)'
+            : '❌ Contain at least one number (0-9)';
+
+        document.getElementById('special').className = special ? 'valid' : 'invalid';
+        document.getElementById('special').textContent = special
+            ? '✔️ Contain at least one special character (~!@#$%^&*)'
+            : '❌ Contain at least one special character (~!@#$%^&*)';
+
+        document.getElementById('length').className = length ? 'valid' : 'invalid';
+        document.getElementById('length').textContent = length
+            ? '✔️ Be at least 8 characters long'
+            : '❌ Be at least 8 characters long';
+    }
+</script>
+
+
     <div class="container">
         <div class="form-box">
             <h1>{{ __('Reset Password') }}</h1>
@@ -138,12 +206,18 @@
                 </div>
 
                 <div class="input-container">
-                    <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password">
-                    <label for="password">{{ __('Password') }}<span style="color: red;">*</span></label>
-                    @error('password')
-                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
-                    @enderror
+                    <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password" oninput="validatePassword()">
+                    <label for="password">Password<span style="color: red;">*</span></label>
                 </div>
+                <div id="password-restrictions" class="mt-2" style="display: none;">
+                        <ul>
+                            <li id="uppercase" class="invalid">❌ Contain at least one uppercase letter (A-Z)</li>
+                            <li id="lowercase" class="invalid">❌ Contain at least one lowercase letter (a-z)</li>
+                            <li id="number" class="invalid">❌ Contain at least one number (0-9)</li>
+                            <li id="special" class="invalid">❌ Contain at least one special character (~!@#$%^&*)</li>
+                            <li id="length" class="invalid">❌ Be at least 8 characters long</li>
+                        </ul>
+                    </div>
 
                 <div class="input-container">
                     <input placeholder=" " id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">

@@ -62,6 +62,12 @@
         .fc-direction-ltr {
             height: 469px;
         }
+        .error{
+            color: red;
+            border-color: #f5c6cb;
+            font-weight: bold;
+        }
+
         .feedback-content {
         padding: 20px;
         line-height: 1.6;
