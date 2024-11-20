@@ -259,7 +259,7 @@
 
     .signin p {
         color: #74A36B;
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 500;
     }
 

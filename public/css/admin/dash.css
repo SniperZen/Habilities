@@ -338,6 +338,12 @@ table{
 
 
 .chart-container{
-    height: 350px;
+    height: 300px;
     text-align: left;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }

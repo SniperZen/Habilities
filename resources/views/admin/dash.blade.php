@@ -320,10 +320,10 @@
                             <!-- <div class="calendar">
                                 <div id="calendar"></div>
                             </div> -->
-                            </aside>
-                            </div>
-                            <div class="bottom">
-                            <div class="chart-card card">
+                </aside>
+            </div>
+            <div class="bottom">
+            <div class="chart-card card" style="width: 50%;">
             <h1>Onsite Appointments Report</h1>
                 <div>
                     <select id="filterSelect" class="form-select">
@@ -337,7 +337,7 @@
             </div>
         </div>
 
-        <div class="chart-card card">
+        <div class="chart-card card" style="width: 50%;">
             <h1>Tele-therapy Appointments Report</h1>
                 <div>
                     <select id="teletherapyFilterSelect" class="form-select">

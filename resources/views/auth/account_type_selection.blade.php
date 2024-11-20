@@ -157,44 +157,101 @@
     height: 100%;
     background-color: rgba(0,0,0,0.5);
 }
-
 .modal-content {
+    display: block;
     background-color: white;
     margin: 15% auto;
-    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    max-width: 400px;
+    width: 450px;
     text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
-.age-verification-buttons {
+.heads{
+    width: 100%;
+    background-color: #74A36B;
+    height: 15px;
+    border-radius: 10px 10px 0 0;
+}
+
+.mod-cont{
+    padding: 20px;
+}
+
+.modal-buttons {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    border-top: 1px solid #afafaf;
+    padding-top: 20px;
+    gap: 20px;
 }
 
-.age-verification-buttons button {
-    max-width: 100px !important;
-    margin: 0 !important;
-    height: 40px !important;
+.top{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #afafaf;
+    width: 100%;
+    h2{
+        margin: 0;
+    }
+}
+.bot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: justify;
+    padding: 0 10px;
+}
+.inner{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    position: relative;
 }
 
 .modal h2 {
+    margin-top: 0;
     color: #333;
-    font-size: 24px !important;
-    margin-bottom: 15px !important;
+    /* font-size: 1.5rem; */
 }
 
 .modal p {
     color: #666;
-    font-size: 16px !important;
-    margin-bottom: 15px !important;
-    line-height: 1.5;
+    margin-bottom: 1.5rem;
 }
 
-/* Responsive adjustments */
+.yes{
+    background-color: #74A36B;
+    display: inline-block;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.no{
+    display: inline-block;
+    background-color: #ffffff;
+    color: #74A36B;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+    border: 1px solid #74A36B;
+}
+
 @media (max-width: 480px) {
     .modal-content {
         margin: 30% auto;
@@ -244,11 +301,20 @@
 <!-- Age Verification Modal -->
 <div id="ageVerificationModal" class="modal">
     <div class="modal-content">
-        <h2>Age Verification</h2>
-        <p>Are you 13 years of age or older?</p>
-        <div class="age-verification-buttons">
-            <button onclick="confirmAge(true)">Yes</button>
-            <button onclick="confirmAge(false)">No</button>
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Are you 13 years of age or older?</h2>
+                </div>
+                <div class="bot">
+                    <p>If not please ask your supervised guardian or parent to create an account for you, otherwise please click yes and proceed with the registration</p>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="no" onclick="confirmAge(false)">No</button>
+                <button class="yes" onclick="confirmAge(true)">Yes</button>
+            </div>
         </div>
     </div>
 </div>
@@ -256,11 +322,20 @@
 <!-- Age Restriction Message Modal -->
 <div id="ageRestrictionModal" class="modal">
     <div class="modal-content">
-        <h2>Age Restriction</h2>
-        <p>You must be 13 years or older to create an account for yourself. Please ask for assistance with your guardian.</p>
-        <div class="age-verification-buttons">
-            <button onclick="closeAgeRestrictionModal()">Okay</button>
-        </div>
+        <div class="heads"></div>
+            <div class="mod-cont">
+                <div class="inner">
+                    <div class="top">
+                        <h2>Age Restriction</h2>
+                    </div>
+                    <div class="bot">
+                        <p>You must be 13 years or older to create an account for yourself. Please ask for assistance with your guardian.</p>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="yes" onclick="closeAgeRestrictionModal()">Okay</button>
+                </div>
+            </div>
     </div>
 </div>
 

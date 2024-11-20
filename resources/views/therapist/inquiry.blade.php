@@ -84,12 +84,12 @@
                                 <td>{{ ucfirst($inquiry->concerns) }}</td>
                                 <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
                                 <td>{{ $inquiry->created_at->format('m/d/Y') }}</td>
-                                <td>
+                                <td style="display:flex;     align-items: center; justify-content: center;">
                                     <form method="POST" action="{{ route('inquiry.complete', ['id' => $inquiry->id]) }}">
                                         @csrf
-                                        <button type="submit" class="complete-btn">Complete</button>\
-                                        <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a>
+                                        <button type="submit" class="complete-btn">Complete</button>
                                     </form>
+                                    <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a>
                                 </td>
                             </tr>
                         @endif
