@@ -233,7 +233,7 @@
                     </ul>
                 </div>
                 <section class="therapy-center-reports">
-                    <div class="chart-card card">
+                    <div class="chart-card card" style="display: flex;flex-direction: column;align-items: center;">
                         <h1>Inquired Clinical Diagnosis Chart</h1>
                             <div class="chart-container">
                                 <canvas id="concernsChart"></canvas>

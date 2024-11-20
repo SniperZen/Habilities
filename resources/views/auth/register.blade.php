@@ -83,6 +83,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         box-sizing: border-box;
+        background-color: white !important;
     }
 
     .form-box input:focus,
