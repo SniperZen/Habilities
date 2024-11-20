@@ -95,7 +95,7 @@
                     <x-side-nav-bar href="{{ route('patient.myHistory') }}" class="{{ request()->routeIs('patient.myHistory')? 'active' : '' }}">
                     <svg style="margin-right: 3px;" width="37" height="37" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.0714 17.5L16.5021 16.9307C16.1806 16.6092 16 16.1731 16 15.7185V14M6 20H5C3.89543 20 3 19.1046 3 18V10M21 7V6.5C21 5.39543 20.1046 4.5 19 4.5H18M3 10H6M3 10V6.5C3 5.39543 3.89543 4.5 5 4.5H6M18 3V4.5M18 4.5H12M12 3V4.5M12 4.5H6M6 3V4.5M22 16C22 19.3137 19.3137 22 16 22C12.6863 22 10 19.3137 10 16C10 12.6863 12.6863 10 16 10C19.3137 10 22 12.6863 22 16Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>My History
+                    </svg>Appointment History
                     </x-side-nav-bar>
                 </li>
                 <li>
