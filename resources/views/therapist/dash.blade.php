@@ -187,17 +187,17 @@
            
             <section class="appointments">
     <h3>Scheduled Appointments</h3>
-    @if(count($acceptedAppointments) > 0)
-        <table>
-            <thead>
-                <tr>
-                    <th>Patient Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Mode</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Mode</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(count($acceptedAppointments) > 0)
                 @foreach($acceptedAppointments as $appointment)
                     @if($appointment->status != 'declined')
                         <tr data-id="{{ $appointment->id }}">
@@ -208,14 +208,17 @@
                         </tr>
                     @endif
                 @endforeach
-            </tbody>
-        </table>
-    @else
-        <div class="no-appointments">
-            <p>No scheduled appointments available at the moment.</p>
-        </div>
-    @endif
+            @else
+                <tr>
+                    <td colspan="4" class="no-appointments" style="text-align: center;">
+                        No scheduled appointments available at the moment.
+                    </td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
 </section>
+
 
         </main>
 
