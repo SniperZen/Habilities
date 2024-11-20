@@ -41,7 +41,7 @@
                 <form action="{{ route('patient.storeInquiryStep1') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="concerns">What are the concerns, issues, or difficulties?</label>
+                        <label for="concerns">What are the concerns, issues, or difficulties?<span style="color: red;">*</span></label>
                         <div class="select-wrapper">
                         <select id="concerns" name="concerns">
                             <option value="">Select...</option>
@@ -63,11 +63,13 @@
                     </div>
 
                     <div class="form-group textarea-wrapper">
-                        <label for="elaboration">Please elaborate the case:</label>
-                        <textarea id="elaboration" name="elaboration" rows="5" placeholder="Type here...">{{ old('elaboration') }}</textarea>
+                        <div class="pad">
+                            <label for="elaboration">Please elaborate the case:<span style="color: red;">*</span></label>
+                            <textarea id="elaboration" name="elaboration" rows="5" placeholder="Type here...">{{ old('elaboration') }}</textarea>
+                        </div>
                         <small id="charCount">500 characters left</small>
                         @error('elaboration')
-                            <div class="error-message" style="color: red; margin-top: 5px;">{{ $message }}</div>
+                            <div class="error-message" style="color: red; margin-top: 5px; font-weight:bold;">{{ $message }}</div>
                         @enderror
                     </div>
 

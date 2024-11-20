@@ -423,6 +423,11 @@ body {
     color: red;
 }
 
+.error{
+    color: red;
+    border-color: #f5c6cb;
+    font-weight: bold;
+}
 
 /* Responsive Styles */
 

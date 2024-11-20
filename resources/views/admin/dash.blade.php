@@ -847,6 +847,7 @@ fetch('/admin/concerns-data') // Make sure this matches your route
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: {
                             position: 'top',

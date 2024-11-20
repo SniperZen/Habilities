@@ -70,6 +70,9 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
     </style>
+    <head>
+    <link rel="icon" href="images/logo.png" type="image/x-icon">
+    </head>
 
     <div class="container">
         <div class="message-box">

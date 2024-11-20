@@ -182,13 +182,13 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="mod-cont">
             <div class="inner">
                 <div class="top">
-                    <div class="modal-header">Add Appointment</div>
+                    <div class="modal-header"><h2>Add Appointment</h2></div>
                 </div>
                 <div class="bot">
                 <form action="{{ route('therapist.appointments.add') }}" method="POST" id="appointmentForm">
                         @csrf
                         <div class="form-group">
-                            <label for="patientSearch">Search Patient</label>
+                            <label for="patientSearch">Search Patient<span style="color: red;">*</span></label>
                             <div class="search-container" style="position: relative;">
                                 <input type="text" id="patientSearch" placeholder="Click to see all patients or type to search" autocomplete="off">
                                 <input type="hidden" name="patient_id" id="patient_id" required>
@@ -198,22 +198,22 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="appointmentMode">Mode of Appointment</label>
+                            <label for="appointmentMode">Mode of Appointment<span style="color: red;">*</span></label>
                             <select id="appointmentMode" name="mode" required>
                                 <option value="on-site">On-Site</option>
                                 <option value="tele-therapy">Tele-therapy</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="appointmentDate">Date</label>
+                            <label for="appointmentDate">Date<span style="color: red;">*</span></label>
                             <input type="date" id="appointmentDate" name="date" required>
                         </div>
                         <div class="form-group">
-                            <label for="newStartTime">Start Time</label>
+                            <label for="newStartTime">Start Time<span style="color: red;">*</span></label>
                             <input type="time" id="newStartTime" name="start_time" required>
                         </div>
                         <div class="form-group">
-                            <label for="newEndTime">End Time</label>
+                            <label for="newEndTime">End Time<span style="color: red;">*</span></label>
                             <input type="time" id="newEndTime" name="end_time" required>
                         </div>
                         <div class="modal-buttons">

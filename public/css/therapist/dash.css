@@ -488,7 +488,7 @@ tr{
     flex: 1;
 }
 .notifications-container {
-    max-height: 357px;
+    max-height: 360px;
     overflow-y: auto;
     transition: max-height 0.3s ease;
 }
