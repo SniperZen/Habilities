@@ -434,6 +434,7 @@ tr:hover{
 
     .modal-contents, .modal-contentss, .modal-content {
         width: 90%;
+        height: auto;
     }
 }
 

@@ -189,7 +189,7 @@
                     <div class="service1 fade-in-left">
                     <div><img src="{{asset('images/s1.png')}}" alt="SpEd Tutorials" class="service-img"></div>
                     <div><h3>SpEd Tutorials</h3>
-                        <p>Special Education tutorials provide personalized learning experiences for children with special needs, focusing on academic skills and overall learning development.</p>
+                        <p>Special Education provides basic academic skills, pre vocational, vocational, transition, Independent living skills, self help and socialization skills.</p>
                     </div></div>
                     <div class="services fade-in-right">
                     <div><img src="{{asset('images/s2.png')}}" alt="Speech Therapy" class="service-img"></div>

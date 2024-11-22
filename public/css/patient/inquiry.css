@@ -238,6 +238,10 @@ a {
         padding: 20px;
     }
 
+    button{
+        width: auto;;
+    }
+
     .main-content {
         width: 100%;
         padding: 15px;
