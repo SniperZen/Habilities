@@ -99,7 +99,7 @@
             </svg>
         <nav>
             <a href="#about"><i class="fas fa-info-circle"></i> About</a>
-            <a href="#services"><i class="fas fa-hand-holding-heart"></i> Services</a>
+            <a href="#servicess"><i class="fas fa-hand-holding-heart"></i> Services</a>
             <a href="#cases"><i class="fas fa-heartbeat"></i> Cases</a>
             <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
         </nav>
