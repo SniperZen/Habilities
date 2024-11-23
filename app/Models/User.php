@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'availability',
         'account_status',
         'teletherapist_link' => 'nullable|url',
+        'guardian_name',
 
     ];
 

@@ -38,9 +38,9 @@ class RegisteredUserController extends Controller
     {
         // Validate the incoming request data
         $request->validate($this->validationRules());
-
-        // Create a new user instance
-        $user = User::create([
+    
+        // Prepare user data
+        $userData = [
             'email' => $request->email,
             'last_name' => $request->last_name,
             'first_name' => $request->first_name,
@@ -51,18 +51,26 @@ class RegisteredUserController extends Controller
             'home_address' => $request->home_address,
             'password' => Hash::make($request->password),
             'account_type' => $request->account_type,
-        ]);
-
+        ];
+    
+        // Add guardian name if account type is child
+        if ($request->account_type === 'child') {
+            $userData['guardian_name'] = $request->guardian_name;
+        }
+    
+        // Create a new user instance
+        $user = User::create($userData);
+    
         // Fire the registered event
         event(new Registered($user));
-
+    
         // Log the user in
         Auth::login($user);
-
+    
         // Redirect to verification notice
         return redirect()->route('verification.notice');
     }
-
+    
     /**
      * Get the validation rules for user registration.
      *
@@ -70,7 +78,7 @@ class RegisteredUserController extends Controller
      */
     protected function validationRules(): array
     {
-        return [
+        $rules = [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'last_name' => ['required', 'string', 'max:255'],
             'first_name' => ['required', 'string', 'max:255'],
@@ -97,13 +105,21 @@ class RegisteredUserController extends Controller
                 'required',
                 'confirmed',
                 'string',
-                'min:8', // Minimum length
-                'regex:/[A-Z]/', // At least one uppercase letter
-                'regex:/[a-z]/', // At least one lowercase letter
-                'regex:/[0-9]/', // At least one number
-                'regex:/[~`!@#$%^&*()\-_\+={}[\]|\\;:"<>,.\/?]/', // At least one special character
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[~`!@#$%^&*()\-_\+={}[\]|\\;:"<>,.\/?]/',
             ],
             'account_type' => ['required', 'string', 'in:self,child'],
         ];
+    
+        // Add guardian_name validation if account type is child
+        if (request()->input('account_type') === 'child') {
+            $rules['guardian_name'] = ['required', 'string', 'max:255'];
+        }
+    
+        return $rules;
     }
+    
 }
