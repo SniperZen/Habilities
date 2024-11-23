@@ -18,7 +18,9 @@ use App\Models\BusinessSetting;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Registered;
 class AdminController extends Controller
 {
 
@@ -780,6 +782,37 @@ public function getDashboardCounts()
         ]);
     }
     
+    public function store(Request $request)
+    {
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'specialization' => ['required', 'string', 'max:255'],
+            'contact_number' => ['required', 'string', 'max:20'],
+        ]);
+    
+        $defaultPassword = 'Welcome@123';
+    
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($defaultPassword),
+            'specialization' => $request->specialization,
+            'contact_number' => $request->contact_number,
+            'usertype' => 'therapist',
+            'account_status' => 'active',
+            'email_verified_at' => now(), // Bypass email verification
+        ]);
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Therapist account created successfully',
+            'default_password' => $defaultPassword
+        ]);
+    }
     
 }
 

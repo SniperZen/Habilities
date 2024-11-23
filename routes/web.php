@@ -101,7 +101,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/admin/systemfeedbackr', [AdminController::class, 'systemfeedbackr'])->name('admin.systemfeedbackr');
             Route::get('/admin/inquiryr', [AdminController::class, 'showInquiries'])->name('admin.inquiryr');
             Route::get('/admin/concerns-data', [AdminController::class, 'getConcernsData']);
-        
+            Route::post('/admin/therapists/store', [AdminController::class, 'store'])->name('admin.therapists.store');
             
         });
 

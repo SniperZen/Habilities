@@ -25,6 +25,26 @@
             position: relative;
             z-index: 900;
         }
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1200;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +78,7 @@
         <div class="int">
     <div x-show="!showDetails">
     <h2>Manage Users &gt; Therapist</h2>
+    <button type="button" onclick="document.getElementById('addTherapistModal').style.display='block'">Add Therapist</button>
     <div class="search_area">
             <input class="search" 
                    type="text" 
@@ -76,7 +97,7 @@
                 <th>Therapist Name</th>
                 <th>Therapist ID</th>
                 <th>Specialization</th>
-                <th>User Level</th>
+                <!--<th>User Level</th>-->
                 <th>Account Status</th>
                 <th>Details</th>
             </tr>
@@ -87,7 +108,7 @@
                     <td>{{ $therapist->name }}</td>
                     <td>{{ 'T-000' . $therapist->id }}</td>
                     <td>{{ $therapist->specialization ?? 'Not Specified' }}</td>
-                    <td>
+                    <!--<td>
                     <div class="select-wrapper">
                         <select class="user-type-select" 
                                 @change="
@@ -100,7 +121,7 @@
                             <option value="therapist" {{ $therapist->usertype == 'therapist' ? 'selected' : '' }}>Therapist</option>
                         </select>
                     </div>
-                    </td>
+                    </td>-->
                     <td>
                         <span class="status {{ $therapist->account_status == 'active' ? 'active' : 'deactivated' }}">
                             {{ ucfirst($therapist->account_status) }}
@@ -434,6 +455,113 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 </div>
+<!-- Add Therapist Modal -->
+<div id="addTherapistModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Add New Therapist</h2>
+                </div>
+                <form id="addTherapistForm" action="{{ route('admin.therapists.store') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="middle_name">Middle Name</label>
+                        <input type="text" id="middle_name" name="middle_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialization">Specialization</label>
+                        <input type="text" id="specialization" name="specialization" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact_number">Contact Number</label>
+                        <input type="text" id="contact_number" name="contact_number" required>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="cancel-btn" onclick="document.getElementById('addTherapistModal').style.display='none'">Cancel</button>
+                        <button type="submit" class="save-btn">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Account Created Successfully!</h2>
+        <p>Default password for the therapist: <strong id="defaultPassword"></strong></p>
+        <p>Please share this password with the therapist securely.</p>
+        <div class="modal-actions">
+            <button class="save-btn" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.className === 'modal') {
+        event.target.style.display = "none";
+    }
+}
+
+// Handle form submission
+document.getElementById('addTherapistForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+
+    fetch('/admin/therapists/store', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('addTherapistModal').style.display = 'none';
+            document.getElementById('defaultPassword').textContent = data.default_password;
+            document.getElementById('successModal').style.display = 'block';
+            this.reset();
+        } else {
+            alert('Error creating therapist account');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error creating therapist account');
+    });
+});
+
+function closeSuccessModal() {
+    document.getElementById('successModal').style.display = 'none';
+    window.location.reload();
+}
+</script>
+
 </body>
 </html>
 </x-admin-layout>

@@ -79,7 +79,7 @@
                 <tr>
                     <th>Patient Name</th>
                     <th>Patient ID</th>
-                    <th>User Level</th>
+                    <!--<th>User Level</th>-->
                     <th>Account Status</th>
                     <th>Details</th>
                 </tr>
@@ -89,7 +89,7 @@
                     <tr>
                         <td>{{ $patient->name }}</td>
                         <td>{{ 'P-000' . $patient->id }}</td>
-                        <td>
+                        <!--<td>
                         <div class="select-wrapper">
                         <select class="user-type-select" 
                                 @change="
@@ -102,7 +102,7 @@
                             <option value="therapist" {{ $patient->usertype == 'therapist' ? 'selected' : '' }}>Therapist</option>
                         </select>
                         </div>
-                        </td>
+                        </td>-->
                         <td>
                             <span class="status {{ $patient->account_status == 'active' ? 'active' : 'deactivated' }}">
                                 {{ ucfirst($patient->account_status) }}
