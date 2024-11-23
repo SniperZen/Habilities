@@ -77,7 +77,7 @@
         }
 
         .chart {
-            height: 300px;  /* Adjust height as needed */
+            height: 356px;
             width: 100%;
             position: relative;
         }
@@ -233,7 +233,7 @@
                     </ul>
                 </div>
                 <section class="therapy-center-reports">
-                    <div class="chart-card card" style="display: flex;flex-direction: column;align-items: center;">
+                    <div class="chart-card card" style="display: flex;flex-direction: column;align-items: center; margin:0 auto;">
                         <h1>Inquired Clinical Diagnosis Chart</h1>
                             <div class="chart-container">
                                 <canvas id="concernsChart"></canvas>
