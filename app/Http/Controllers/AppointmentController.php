@@ -175,7 +175,7 @@ public function addAppointment(Request $request)  // Remove $appointmentId param
         'start_time' => 'required|date_format:H:i',
         'end_time' => 'required|date_format:H:i|after:start_time',
         'patient_id' => 'required|exists:users,id',
-        'mode' => 'required|in:on-site,teletherapy',
+        'mode' => 'required|in:on-site,tele-therapy',
     ]);
 
     // Check for conflicting appointments

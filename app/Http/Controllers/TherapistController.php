@@ -610,10 +610,14 @@ public function AppReq(Request $request)
 {
     $filter = $request->input('filter', 'all');
     
+    // Get the logged-in therapist's ID
+    $therapist_id = auth()->id(); // Assuming you're using Laravel's authentication
+    
     $query = Appointment::query()
         ->join('users', 'appointments.patient_id', '=', 'users.id')
         ->select('appointments.*', 'users.first_name', 'users.middle_name', 'users.last_name')
-        ->where('appointments.status', 'pending'); // Only show pending appointments
+        ->where('appointments.status', 'pending')
+        ->where('appointments.therapist_id', $therapist_id); // Add this line to filter by therapist_id
 
     switch ($filter) {
         case 'today':
@@ -636,7 +640,7 @@ public function AppReq(Request $request)
             break;
         case 'all':
         default:
-            // 'all' or any other value will show all pending appointments
+            // 'all' or any other value will show all pending appointments for this therapist
             break;
     }
 
@@ -644,6 +648,7 @@ public function AppReq(Request $request)
 
     return view('therapist.AppReq', compact('appointments', 'filter'));
 }
+
 
 public function stores(Request $request)
 {
