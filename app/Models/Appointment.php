@@ -26,6 +26,10 @@ class Appointment extends Model
 
     protected $casts = [
         'appointment_date' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
 

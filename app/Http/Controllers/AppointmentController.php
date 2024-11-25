@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Mail\AppointmentAccepted;
 use App\Notifications\AcceptedNotification;
+use Illuminate\Http\JsonResponse;
 
 
 class AppointmentController extends Controller
@@ -159,59 +160,100 @@ public function getTherapistAppointments()
     return response()->json($events);
 }
 
-public function addAppointment(Request $request)  // Remove $appointmentId parameter
+public function addAppointment(Request $request)
 {
-    // Validate the incoming request data
-    $request->validate([
-        'date' => [
-            'required',
-            'date',
-            function ($attribute, $value, $fail) {
-                if (Carbon::parse($value)->startOfDay() < now()->startOfDay()) {
-                    $fail('The appointment date cannot be in the past.');
-                }
-            },
-        ],
-        'start_time' => 'required|date_format:H:i',
-        'end_time' => 'required|date_format:H:i|after:start_time',
-        'patient_id' => 'required|exists:users,id',
-        'mode' => 'required|in:on-site,tele-therapy',
-    ]);
+    try {
+        // Validate the incoming request data
+        $request->validate([
+            'date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if (Carbon::parse($value)->startOfDay() < now()->startOfDay()) {
+                        $fail('The appointment date cannot be in the past.');
+                    }
+                },
+            ],
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'patient_id' => 'required|exists:users,id',
+            'mode' => 'required|in:on-site,tele-therapy',
+        ]);
 
-    // Check for conflicting appointments
-    $conflict = Appointment::where('appointment_date', $request->date)
-        ->where(function ($query) use ($request) {
-            $query->where('start_time', '<', $request->end_time)
-                  ->where('end_time', '>', $request->start_time);
-        })
-        ->exists();
+        $therapistId = Auth::id();
+        $patientId = $request->patient_id;
+        $appointmentDate = $request->date;
+        $startTime = $request->start_time;
+        $endTime = $request->end_time;
 
-    if ($conflict) {
-        return back()->withErrors(['msg' => 'The selected time slot is already booked.']);
+        // Check for conflicting appointments for both therapist and patient
+        $conflict = Appointment::where('appointment_date', $appointmentDate)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($q) use ($startTime, $endTime) {
+                    $q->where('start_time', '<', $endTime)
+                      ->where('end_time', '>', $startTime);
+                });
+            })
+            ->where(function ($query) use ($therapistId, $patientId) {
+                $query->where('therapist_id', $therapistId)
+                      ->orWhere('patient_id', $patientId);
+            })
+            ->where('status', 'accepted')
+            ->exists();
+
+        if ($conflict) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The selected time slot conflicts with an existing appointment.'
+            ], 422);
+        }
+
+        // Calculate duration in hours
+        $duration = Carbon::parse($startTime)->diffInHours(Carbon::parse($endTime));
+        if ($duration < 1 || $duration > 2) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Appointment duration must be between 1 and 2 hours.'
+            ], 422);
+        }
+
+        // Create new appointment
+        $appointment = new Appointment();
+        $appointment->appointment_date = $appointmentDate;
+        $appointment->start_time = $startTime;
+        $appointment->end_time = $endTime;
+        $appointment->status = 'accepted';
+        $appointment->patient_id = $patientId;
+        $appointment->therapist_id = $therapistId;
+        $appointment->mode = $request->mode;
+        $appointment->save();
+
+        // Get patient and therapist details
+        $patient = User::findOrFail($patientId);
+        $therapist = User::findOrFail($therapistId);
+
+        // Send notification to patient
+        try {
+            $patient->notify(new AppointmentAccepted($appointment));
+            
+            // Send email with delay to prevent blocking
+            Mail::to($patient->email)
+                ->later(now()->addSeconds(5), new AppointmentAccepted($appointment));
+        } catch (\Exception $e) {
+            // Log notification error but don't stop the process
+        }
+
+        // Return success response
+        return redirect()->route('therapist.AppSched')->with('success', 'Appointment accepted successfully!');
+
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while adding the appointment.'
+        ], 500);
     }
-
-    // Create new appointment
-    $appointment = new Appointment();
-    $appointment->appointment_date = $request->date;
-    $appointment->start_time = $request->start_time;
-    $appointment->end_time = $request->end_time;
-    $appointment->status = 'accepted';
-    $appointment->patient_id = $request->patient_id;
-    $appointment->therapist_id = Auth::id(); // Add the current therapist's ID
-    $appointment->mode = $request->mode;
-    $appointment->save();
-
-    // Optional: Send notifications
-    if ($appointment->patient) {
-        $appointment->patient->notify(new AcceptedNotification($appointment));
-        
-        Mail::to($appointment->patient->email)
-            ->later(now()->addSeconds(5), new AppointmentAccepted($appointment));
-    }
-
-    return redirect()->route('therapist.AppSched')->with('success', 'Appointment added successfully!');
 }
-
 
 public function searchPatients(Request $request)
 {
@@ -221,6 +263,98 @@ public function searchPatients(Request $request)
         ->get();
 
     return response()->json($patients);
+}
+public function getAcceptedAppointments(): JsonResponse
+{
+    try {
+        // Get request parameters
+        $currentTherapistId = Auth::id();
+        $patientId = request('patient_id');
+        $selectedDate = request('date');
+
+        // Validate required parameters
+        if (!$patientId) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Patient ID is required'
+            ], 400);
+        }
+
+        // Build the query
+        $appointments = Appointment::where('status', 'accepted')
+            ->where(function($query) use ($currentTherapistId, $patientId) {
+                $query->where('therapist_id', $currentTherapistId)
+                      ->orWhere('patient_id', $patientId);
+            });
+
+        // Add date filter if provided
+        if ($selectedDate) {
+            $appointments->whereDate('appointment_date', Carbon::parse($selectedDate));
+        }
+
+        // Execute query
+        $appointments = $appointments->get();
+
+        // Format appointments
+        $formattedAppointments = $appointments->map(function ($appointment) {
+            return [
+                'appointment_details' => [
+                    'id' => $appointment->id,
+                    'schedule' => [
+                        'date' => Carbon::parse($appointment->appointment_date)->format('F d, Y'),
+                        'start' => Carbon::parse($appointment->start_time)->format('h:i A'),
+                        'end' => Carbon::parse($appointment->end_time)->format('h:i A'),
+                    ],
+                    'consultation_type' => $appointment->mode,
+                    'status' => ucfirst($appointment->status),
+                ],
+                'participants' => [
+                    'patient' => [
+                        'id' => $appointment->patient_id,
+                        'name' => $appointment->patient->name ?? 'Unknown Patient', // Add patient name if needed
+                    ],
+                    'therapist' => [
+                        'id' => $appointment->therapist_id,
+                        'name' => $appointment->therapist->name ?? 'Unknown Therapist', // Add therapist name if needed
+                    ]
+                ],
+                'notes' => $appointment->note ?? 'No notes available',
+                'metadata' => [
+                    'created' => [
+                        'date' => Carbon::parse($appointment->created_at)->format('F d, Y'),
+                        'time' => Carbon::parse($appointment->created_at)->format('h:i A'),
+                    ],
+                    'last_updated' => [
+                        'date' => Carbon::parse($appointment->updated_at)->format('F d, Y'),
+                        'time' => Carbon::parse($appointment->updated_at)->format('h:i A'),
+                    ]
+                ]
+            ];
+        });
+
+        // Return success response
+        return response()->json([
+            'status' => 'success',
+            'timestamp' => now(),
+            'total_accepted_appointments' => $appointments->count(),
+            'appointments' => $formattedAppointments,
+            'therapist_id' => $currentTherapistId,
+            'filters' => [
+                'date' => $selectedDate ? Carbon::parse($selectedDate)->format('F d, Y') : null,
+                'patient_id' => $patientId
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        // Log the error for debugging
+        
+        // Return error response
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching appointments',
+            'debug' => config('app.debug') ? $e->getMessage() : null
+        ], 500);
+    }
 }
 
 

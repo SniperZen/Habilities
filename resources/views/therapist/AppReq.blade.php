@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -176,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
         <!-- Add Appointment Modal -->
+<!-- Update the Add Appointment Modal section -->
 <div class="modal" id="addAppointmentModal">
     <div class="modal-content">
         <div class="heads"></div>
@@ -185,16 +188,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="modal-header"><h2>Add Appointment</h2></div>
                 </div>
                 <div class="bot">
-                <form action="{{ route('therapist.appointments.add') }}" method="POST" id="appointmentForm">
+                    <form action="{{ route('therapist.appointments.add') }}" method="POST" id="appointmentForm">
                         @csrf
                         <div class="form-group">
                             <label for="patientSearch">Search Patient<span style="color: red;">*</span></label>
                             <div class="search-container" style="position: relative;">
                                 <input type="text" id="patientSearch" placeholder="Click to see all patients or type to search" autocomplete="off">
                                 <input type="hidden" name="patient_id" id="patient_id" required>
-                                <div id="patientList" class="patient-list-dropdown">
-                                    <!-- Patients will be populated here -->
-                                </div>
+                                <div id="patientList" class="patient-list-dropdown"></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -205,16 +206,22 @@ document.addEventListener('DOMContentLoaded', function () {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="appointmentDate">Date<span style="color: red;">*</span></label>
-                            <input type="date" id="appointmentDate" name="date" required>
+                            <label for="newDate">Date<span style="color: red;">*</span></label>
+                            <input type="date" id="newDate" name="date" required>
                         </div>
                         <div class="form-group">
                             <label for="newStartTime">Start Time<span style="color: red;">*</span></label>
-                            <input type="time" id="newStartTime" name="start_time" required>
+                            <select id="newStartTime" name="start_time" required>
+                                <option value="">Select a date first</option>
+                            </select>
+                            <input type="hidden" id="formattedStartTime" name="formatted_start_time">
                         </div>
                         <div class="form-group">
                             <label for="newEndTime">End Time<span style="color: red;">*</span></label>
-                            <input type="time" id="newEndTime" name="end_time" required>
+                            <select id="newEndTime" name="end_time" required>
+                                <option value="">Select start time first</option>
+                            </select>
+                            <input type="hidden" id="formattedEndTime" name="formatted_end_time">
                         </div>
                         <div class="modal-buttons">
                             <button type="button" class="btn-secondary" id="closeModalBtn">Cancel</button>
@@ -226,7 +233,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 </div>
-
     </div>
     <script>
         document.getElementById('addAppointmentBtn').addEventListener('click', function () {
@@ -251,43 +257,93 @@ document.addEventListener('DOMContentLoaded', function () {
     @endif
 
     <script>
+// Filter dropdown functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const filterButton = document.querySelector('.dropdown-btn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const dropdownItems = dropdownContent.querySelectorAll('a');
+    const filterForm = document.getElementById('filterForm');
+    const filterInput = document.getElementById('filterInput');
+
+    // Filter dropdown toggle
+    filterButton.addEventListener('click', function () {
+        dropdownContent.classList.toggle('open');
+        filterButton.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        if (!filterButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.remove('open');
+            filterButton.classList.remove('active');
+        }
+    });
+
+    // Handle filter selection
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            const filter = this.getAttribute('data-filter');
+            filterButton.textContent = this.textContent;
+            filterInput.value = filter;
+            dropdownContent.classList.remove('open');
+            filterButton.classList.remove('active');
+            filterForm.submit();
+        });
+    });
+});
+
+// Modal control
+document.getElementById('addAppointmentBtn').addEventListener('click', function () {
+    document.getElementById('addAppointmentModal').style.display = 'flex';
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', function () {
+    document.getElementById('addAppointmentModal').style.display = 'none';
+});
+
+// Main appointment functionality
 $(document).ready(function() {
     const patientSearch = $('#patientSearch');
     const patientList = $('#patientList');
     const patientIdInput = $('#patient_id');
+    const startTimeSelect = $('#newStartTime');
+    const endTimeSelect = $('#newEndTime');
+    const dateInput = $('#newDate');
+    const formattedStartTime = $('#formattedStartTime');
+    const formattedEndTime = $('#formattedEndTime');
 
-    // Add CSRF token to all AJAX requests
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    // Initialize date restrictions
+    const today = new Date();
+    const nextYear = new Date(today);
+    nextYear.setFullYear(today.getFullYear() + 1);
+    dateInput.attr('min', today.toISOString().split('T')[0]);
+    dateInput.attr('max', nextYear.toISOString().split('T')[0]);
 
+    // Patient search functionality
     patientSearch.on('focus', function() {
         $.ajax({
-            url: '/search-users', // Use your existing route
+            url: '/search-users',
             method: 'GET',
-            data: {
-                query: patientSearch.val()
-            },
             success: function(response) {
-                let html = '';
-                if (response.length > 0) {
-                    response.forEach(user => {
-                        html += `<div class="patient-item" data-id="${user.id}">${user.name}</div>`;
-                    });
-                } else {
-                    html = '<div class="patient-item">No patients found</div>';
-                }
-                patientList.html(html);
-                patientList.show();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                patientList.html('<div class="patient-item">Error loading patients</div>');
-                patientList.show();
+                displayPatientList(response);
             }
         });
+    });
+
+    patientSearch.on('input', function() {
+        if ($(this).val().length > 0) {
+            $.ajax({
+                url: '/search-users',
+                method: 'GET',
+                data: { query: $(this).val() },
+                success: function(response) {
+                    displayPatientList(response);
+                }
+            });
+        } else {
+            patientList.hide();
+        }
     });
 
     // Handle patient selection
@@ -297,42 +353,284 @@ $(document).ready(function() {
         patientIdInput.val(patientId);
         patientSearch.val(patientName);
         patientList.hide();
+        dateInput.prop('disabled', false);
+        resetTimeSelections();
     });
 
-    // Close dropdown when clicking outside
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.search-container').length) {
-            patientList.hide();
+    dateInput.on('change', async function() {
+    const selectedDate = $(this).val();
+    const patientId = patientIdInput.val();
+
+    if (!patientId) {
+        showToast('Please select a patient first', 'error');
+        $(this).val('');
+        return;
+    }
+
+    try {
+        console.log('Selected date:', selectedDate);
+        
+        const response = await $.ajax({
+            url: '{{ route("therapist.getAcceptedAppointments") }}',
+            method: 'GET',
+            data: {
+                date: selectedDate,
+                patient_id: patientId
+            }
+        });
+
+        console.log('API Response:', response);
+        
+        if (response.status === 'success') {
+            // Log each appointment date for debugging
+            response.appointments.forEach(apt => {
+                console.log('Appointment date:', apt.appointment_details.schedule.date);
+                console.log('Comparing with selected:', moment(selectedDate).isSame(moment(apt.appointment_details.schedule.date, 'MMMM D, YYYY'), 'day'));
+            });
+
+            const availableSlots = generateAvailableTimeSlots(selectedDate, response.appointments);
+            console.log('Available slots:', availableSlots);
+            updateTimeSelectors(availableSlots);
+        } else {
+            console.error('API returned non-success status:', response);
+            showToast('Error loading time slots', 'error');
+        }
+    } catch (error) {
+        console.error('Error checking availability:', error);
+        showToast('Error loading available time slots', 'error');
+    }
+});
+
+    // Start time change handler
+    startTimeSelect.on('change', function() {
+        const selectedStartTime = $(this).val();
+        if (selectedStartTime) {
+            formattedStartTime.val(selectedStartTime);
+            updateEndTimeOptions(selectedStartTime);
         }
     });
 
-    // Real-time search as user types
-    patientSearch.on('input', function() {
-        if ($(this).val().length > 0) {
-            $.ajax({
-                url: '/search-users',
-                method: 'GET',
-                data: {
-                    query: $(this).val()
-                },
-                success: function(response) {
-                    let html = '';
-                    if (response.length > 0) {
-                        response.forEach(user => {
-                            html += `<div class="patient-item" data-id="${user.id}">${user.name}</div>`;
-                        });
-                    } else {
-                        html = '<div class="patient-item">No patients found</div>';
+    // End time change handler
+    endTimeSelect.on('change', function() {
+        formattedEndTime.val($(this).val());
+    });
+
+    $('#appointmentForm').on('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+        return;
+    }
+
+    const selectedDate = dateInput.val();
+    const startTime = formattedStartTime.val();
+    const endTime = formattedEndTime.val();
+    const patientId = patientIdInput.val();
+    const currentTherapistId = '{{ Auth::id() }}';
+
+    try {
+        const response = await $.ajax({
+            url: '{{ route("therapist.getAcceptedAppointments") }}',
+            method: 'GET',
+            data: {
+                patient_id: patientId,
+                date: selectedDate
+            }
+        });
+
+        const formattedSelectedDate = moment(selectedDate).format('MMMM D, YYYY');
+        const selectedStartMoment = moment(startTime, 'HH:mm');
+        const selectedEndMoment = moment(endTime, 'HH:mm');
+
+        const hasConflict = response.appointments.some(apt => {
+            if (apt.appointment_details.schedule.date === formattedSelectedDate) {
+                // Check for both therapist and patient conflicts
+                if (apt.participants.therapist.id == currentTherapistId || 
+                    apt.participants.patient.id == patientId) {
+                    
+                    const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
+                    const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
+                    
+                    const hasTimeConflict = (
+                        selectedStartMoment.isBetween(aptStart, aptEnd, null, '[]') ||
+                        selectedEndMoment.isBetween(aptStart, aptEnd, null, '[]') ||
+                        (selectedStartMoment.isSameOrBefore(aptStart) && selectedEndMoment.isSameOrAfter(aptEnd))
+                    );
+
+                    if (hasTimeConflict) {
+                        // Provide specific message about the conflict
+                        if (apt.participants.therapist.id == currentTherapistId) {
+                            showToast('You already have an appointment at this time', 'error');
+                        } else {
+                            showToast('The patient already has an appointment at this time', 'error');
+                        }
+                        return true;
                     }
-                    patientList.html(html);
-                    patientList.show();
                 }
+            }
+            return false;
+        });
+
+        if (hasConflict) {
+            return;
+        }
+
+        this.submit();
+    } catch (error) {
+        console.error('Error validating appointment:', error);
+        showToast('Error validating appointment time', 'error');
+    }
+});
+
+
+    // Helper Functions
+    function displayPatientList(patients) {
+        let html = '';
+        if (patients.length > 0) {
+            patients.forEach(user => {
+                html += `<div class="patient-item" data-id="${user.id}">${user.name}</div>`;
             });
         } else {
-            patientList.hide();
+            html = '<div class="patient-item">No patients found</div>';
         }
+        patientList.html(html).show();
+    }
+
+    function generateAvailableTimeSlots(selectedDate, existingAppointments) {
+    const timeSlots = [
+        { value: '09:00', display: '09:00 AM' },
+        { value: '10:00', display: '10:00 AM' },
+        { value: '11:00', display: '11:00 AM' },
+        { value: '13:00', display: '01:00 PM' },
+        { value: '14:00', display: '02:00 PM' },
+        { value: '15:00', display: '03:00 PM' },
+        { value: '16:00', display: '04:00 PM' },
+        { value: '17:00', display: '05:00 PM' }
+    ];
+
+    // Format selected date consistently
+    const selectedMoment = moment(selectedDate);
+    const currentTherapistId = '{{ Auth::id() }}';
+    const selectedPatientId = patientIdInput.val();
+    
+    return timeSlots.filter(slot => {
+        const isSlotAvailable = !existingAppointments.some(apt => {
+            // Parse the appointment date consistently
+            const aptDate = moment(apt.appointment_details.schedule.date, 'MMMM D, YYYY');
+            
+            // Compare dates using isSame
+            if (selectedMoment.isSame(aptDate, 'day')) {
+                if (apt.participants.therapist.id == currentTherapistId || 
+                    apt.participants.patient.id == selectedPatientId) {
+                    
+                    const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
+                    const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
+                    const slotTime = moment(slot.value, 'HH:mm');
+                    
+                    // Check for time conflicts
+                    return (
+                        slotTime.isBetween(aptStart, aptEnd, null, '[]') ||
+                        slotTime.clone().add(1, 'hour').isBetween(aptStart, aptEnd, null, '[]') ||
+                        slotTime.clone().add(2, 'hours').isBetween(aptStart, aptEnd, null, '[]')
+                    );
+                }
+            }
+            return false;
+        });
+
+        // If we're checking today's date, also filter out past times
+        if (selectedMoment.isSame(moment(), 'day')) {
+            const currentTime = moment();
+            const slotTime = moment(slot.value, 'HH:mm');
+            if (slotTime.isBefore(currentTime)) {
+                return false;
+            }
+        }
+        
+        return isSlotAvailable;
     });
+}
+
+
+
+    function updateTimeSelectors(availableSlots) {
+        startTimeSelect.html('<option value="">Select start time</option>');
+        endTimeSelect.html('<option value="">Select start time first</option>');
+
+        availableSlots.forEach(slot => {
+            startTimeSelect.append(`
+                <option value="${slot.value}">${slot.display}</option>
+            `);
+        });
+
+        startTimeSelect.prop('disabled', false);
+    }
+
+    function updateEndTimeOptions(startTime) {
+        const selectedStartMoment = moment(startTime, 'HH:mm');
+        endTimeSelect.html('<option value="">Select end time</option>');
+
+        // Generate end time options (1-2 hours after start time)
+        for (let i = 1; i <= 2; i++) {
+            const endTime = selectedStartMoment.clone().add(i, 'hours');
+            const value = endTime.format('HH:mm');
+            const display = endTime.format('hh:mm A');
+            endTimeSelect.append(`
+                <option value="${value}">${display}</option>
+            `);
+        }
+
+        endTimeSelect.prop('disabled', false);
+    }
+
+    function resetTimeSelections() {
+        startTimeSelect.html('<option value="">Select a date first</option>');
+        endTimeSelect.html('<option value="">Select start time first</option>');
+        formattedStartTime.val('');
+        formattedEndTime.val('');
+    }
+
+    function validateForm() {
+        const patientId = patientIdInput.val();
+        const date = dateInput.val();
+        const startTime = formattedStartTime.val();
+        const endTime = formattedEndTime.val();
+
+        if (!patientId) {
+            showToast('Please select a patient', 'error');
+            return false;
+        }
+
+        if (!date) {
+            showToast('Please select a date', 'error');
+            return false;
+        }
+
+        if (!startTime || !endTime) {
+            showToast('Please select both start and end times', 'error');
+            return false;
+        }
+
+        if (endTime <= startTime) {
+            showToast('End time must be after start time', 'error');
+            return false;
+        }
+
+        return true;
+    }
 });
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: 'right',
+        backgroundColor: type === 'success' ? "#4CAF50" : "#f44336",
+    }).showToast();
+}
+
 </script>
 <script>
     // Date restrictions for appointment

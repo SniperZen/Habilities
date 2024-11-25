@@ -172,18 +172,50 @@ class TherapistController extends Controller
     
         // Find the existing appointment with eager loaded relationships
         $appointment = Appointment::with(['patient', 'therapist'])->findOrFail($appointmentId);
+        
+        // Get the therapist and patient IDs
+        $therapistId = $appointment->therapist_id;
+        $patientId = $appointment->patient_id;
     
-        // Check for conflicting appointments
+        // Check for conflicting appointments for both therapist and patient
         $conflict = Appointment::where('appointment_date', $request->date)
             ->where('id', '!=', $appointmentId)
             ->where(function ($query) use ($request) {
                 $query->where('start_time', '<', $request->end_time)
                       ->where('end_time', '>', $request->start_time);
             })
+            ->where(function ($query) use ($therapistId, $patientId) {
+                $query->where('therapist_id', $therapistId)  // Check therapist conflicts
+                      ->orWhere('patient_id', $patientId);   // Check patient conflicts
+            })
+            ->where('status', 'accepted')  // Only check against accepted appointments
             ->exists();
     
         if ($conflict) {
-            return back()->withErrors(['msg' => 'The selected time slot is already booked.']);
+            // Return with a more specific error message
+            $existingAppointment = Appointment::where('appointment_date', $request->date)
+                ->where('id', '!=', $appointmentId)
+                ->where(function ($query) use ($request) {
+                    $query->where('start_time', '<', $request->end_time)
+                          ->where('end_time', '>', $request->start_time);
+                })
+                ->where(function ($query) use ($therapistId, $patientId) {
+                    $query->where('therapist_id', $therapistId)
+                          ->orWhere('patient_id', $patientId);
+                })
+                ->where('status', 'accepted')
+                ->first();
+    
+            $conflictType = '';
+            if ($existingAppointment) {
+                if ($existingAppointment->therapist_id === $therapistId) {
+                    $conflictType = 'Therapist already has';
+                } else {
+                    $conflictType = 'Patient already has';
+                }
+            }
+    
+            return back()->withErrors(['msg' => $conflictType . ' an appointment at this time slot.']);
         }
     
         // Update the appointment details
@@ -202,17 +234,14 @@ class TherapistController extends Controller
         // Send notification to the patient
         $appointment->patient->notify(new AcceptedNotification($appointment));
     
-        $patient = $appointment->user; // Get the patient
-        $patientEmail = $patient->email; // Get the patient's email
-    
         // Send email notification
         Mail::to($appointment->patient->email)
             ->later(now()->addSeconds(5), new AppointmentAccepted($appointment));
-            
     
         // Redirect with success message
         return redirect()->route('therapist.AppSched')->with('success', 'Appointment accepted successfully!');
     }
+    
     
     
     
@@ -611,7 +640,7 @@ public function AppReq(Request $request)
     $filter = $request->input('filter', 'all');
     
     // Get the logged-in therapist's ID
-    $therapist_id = auth()->id(); // Assuming you're using Laravel's authentication
+    $therapist_id = Auth::id(); // Assuming you're using Laravel's authentication
     
     $query = Appointment::query()
         ->join('users', 'appointments.patient_id', '=', 'users.id')
