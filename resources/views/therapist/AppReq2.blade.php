@@ -136,6 +136,7 @@ const TIME_SLOTS = [
     { display: "09:00 AM", value: "09:00" },
     { display: "10:00 AM", value: "10:00" },
     { display: "11:00 AM", value: "11:00" },
+    { value: '12:00', display: '12:00 PM' },
     { display: "01:00 PM", value: "13:00" },
     { display: "02:00 PM", value: "14:00" },
     { display: "03:00 PM", value: "15:00" },
