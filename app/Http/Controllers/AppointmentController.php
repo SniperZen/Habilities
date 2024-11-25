@@ -356,6 +356,91 @@ public function getAcceptedAppointments(): JsonResponse
         ], 500);
     }
 }
+public function getAcceptedAppointments2(): JsonResponse
+{
+    try {
+        $currentTherapistId = Auth::id();
+        $patientId = request('patient_id');
+        $selectedDate = request('date');
+
+        if (!$patientId) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Patient ID is required'
+            ], 400);
+        }
+
+        // Modified query to properly filter appointments
+        $appointments = Appointment::where('status', 'accepted')
+            ->whereDate('appointment_date', Carbon::parse($selectedDate))
+            ->where(function($query) use ($patientId) {
+                // Get appointments where this patient is involved
+                // OR appointments that might conflict with the time slot
+                $query->where('patient_id', $patientId)
+                      ->orWhere(function($q) use ($patientId) {
+                          $q->where('patient_id', '!=', $patientId)
+                            ->whereNotNull('patient_id');
+                      });
+            })
+            ->get();
+
+        // Rest of your code remains the same...
+        $formattedAppointments = $appointments->map(function ($appointment) {
+            return [
+                'appointment_details' => [
+                    'id' => $appointment->id,
+                    'schedule' => [
+                        'date' => Carbon::parse($appointment->appointment_date)->format('F d, Y'),
+                        'start' => Carbon::parse($appointment->start_time)->format('h:i A'),
+                        'end' => Carbon::parse($appointment->end_time)->format('h:i A'),
+                    ],
+                    'consultation_type' => $appointment->mode,
+                    'status' => ucfirst($appointment->status),
+                ],
+                'participants' => [
+                    'patient' => [
+                        'id' => $appointment->patient_id,
+                        'name' => $appointment->patient->name ?? 'Unknown Patient',
+                    ],
+                    'therapist' => [
+                        'id' => $appointment->therapist_id,
+                        'name' => $appointment->therapist->name ?? 'Unknown Therapist',
+                    ]
+                ],
+                'notes' => $appointment->note ?? 'No notes available',
+                'metadata' => [
+                    'created' => [
+                        'date' => Carbon::parse($appointment->created_at)->format('F d, Y'),
+                        'time' => Carbon::parse($appointment->created_at)->format('h:i A'),
+                    ],
+                    'last_updated' => [
+                        'date' => Carbon::parse($appointment->updated_at)->format('F d, Y'),
+                        'time' => Carbon::parse($appointment->updated_at)->format('h:i A'),
+                    ]
+                ]
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'timestamp' => now(),
+            'total_accepted_appointments' => $appointments->count(),
+            'appointments' => $formattedAppointments,
+            'therapist_id' => $currentTherapistId,
+            'filters' => [
+                'date' => $selectedDate ? Carbon::parse($selectedDate)->format('F d, Y') : null,
+                'patient_id' => $patientId
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching appointments',
+            'debug' => config('app.debug') ? $e->getMessage() : null
+        ], 500);
+    }
+}
 
 
 

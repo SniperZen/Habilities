@@ -223,6 +223,7 @@ Route::middleware([ShareUserData::class])->group(function () {
             Route::get('/therapist/my-history', [TherapistController::class, 'myHistory'])->name('therapist.myHistory');
             Route::post('/therapist/appointments/add', [AppointmentController::class, 'addAppointment'])->name('therapist.appointments.add');
             Route::get('/therapist/accepted-appointments', [AppointmentController::class, 'getAcceptedAppointments'])->name('therapist.getAcceptedAppointments');
+            Route::get('/therapist/accepted-appointments2', [AppointmentController::class, 'getAcceptedAppointments2'])->name('therapist.getAcceptedAppointments2');
 
 
 

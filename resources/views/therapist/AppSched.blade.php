@@ -10,6 +10,7 @@
     <!-- Add these in your layout head section -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 
    
@@ -138,48 +139,54 @@ svg.link[fill="#cccccc"] {
 
         </div>
 
-        <!-- The Modal -->
-        <div id="myModal" class="modals">
-            <div class="modal-contents">
-                <div class="heads"></div>
-                <div class="mod-cont">
-                    <div class="inner">
-                        <div class="top">
-                            <!-- <span class="close" onclick="closeModal()">&times;</span> -->
-                            <h2>Edit Appointment Information</h2>
+    <!-- The Modal -->
+<div id="myModal" class="modals">
+    <div class="modal-contents">
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Edit Appointment Information</h2>
+                </div>
+                <div class="bot">
+                    <form id="appointmentForm" method="POST" action="{{ route('therapist.updateAppointment', ':appointmentId') }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="appointmentId" name="appointmentId">
+                        <div class="form-group">
+                            <label for="patientName">Patient Name</label>
+                            <input type="text" id="patientName" disabled name="patientName">
                         </div>
-                        <div class="bot">
-                        <form id="appointmentForm" method="POST" action="{{ route('therapist.updateAppointment', ':appointmentId') }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" id="appointmentId" name="appointmentId">
-                            <div class="form-group">
-                                <label for="patientName">Patient Name</label>
-                                <input type="text" id="patientName" disabled name="patientName">
-                            </div>
-                            <div class="form-group">
-                                <label for="patientId">Patient ID</label>
-                                <input type="text" id="patientId" disabled name="patientId">
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Date</label>
-                                <input type="date" id="date" name="date" required>
-                            </div>
-                            <div class="form-group time">
-                                <label for="time">Time</label>
-                                <input type="time" id="startTime" name="start_time" required> to
-                                <input type="time" id="endTime" name="end_time" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="cancel-button" onclick="closeModal()">Cancel</button>
-                                <button type="submit" class="save-button">Save and Send to Patient</button>
-                            </div>
-                        </form>
+                        <div class="form-group">
+                            <label for="patientId">Patient ID</label>
+                            <input type="text" id="patientId" disabled name="patientId">
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        <div class="form-group time">
+                            <label for="startTime">Start Time</label>
+                            <select id="startTime" name="start_time" required>
+                                <option value="">Select start time</option>
+                            </select>
+                        </div>
+                        <div class="form-group time">
+                            <label for="endTime">End Time</label>
+                            <select id="endTime" name="end_time" required disabled>
+                                <option value="">Select end time</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="cancel-button" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="save-button">Save and Send to Patient</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+</div>
         
 
         <!-- Appointment Cancellation Modal -->
@@ -269,20 +276,25 @@ svg.link[fill="#cccccc"] {
         <script>
             // Function to open the modal and set patient details
             function openModal(patientName, patientId, date, startTime, endTime, appointmentId) {
-                    document.getElementById("patientName").value = patientName;
-                    document.getElementById("patientId").value = "P-" + String(patientId).padStart(4, '0');
-                    document.getElementById("date").value = date;
-                    document.getElementById("startTime").value = startTime;
-                    document.getElementById("endTime").value = endTime;
-                    document.getElementById("appointmentId").value = appointmentId;
+                document.getElementById("patientName").value = patientName;
+                document.getElementById("patientId").value = "P-" + String(patientId).padStart(4, '0');
+                document.getElementById("date").value = date;
+                
+                // Store original appointment times
+                window.originalAppointment.startTime = startTime;
+                window.originalAppointment.endTime = endTime;
 
-                    var modal = document.getElementById("myModal");
-                    modal.style.display = "block";
+                var modal = document.getElementById("myModal");
+                modal.style.display = "block";
 
-                    // Update the form action
-                    var form = document.getElementById("appointmentForm");
-                    form.action = form.action.replace(':appointmentId', appointmentId);
-                }
+                // Update the form action
+                var form = document.getElementById("appointmentForm");
+                form.action = form.action.replace(':appointmentId', appointmentId);
+                
+                // Update available time slots
+                updateAvailableTimeSlots(date, appointmentId);
+            }
+
 
 
             // Function to close the modal
@@ -327,7 +339,17 @@ svg.link[fill="#cccccc"] {
             });
         });
     }
+    const dateInput = document.getElementById('date');
+    const startTimeSelect = document.getElementById('startTime');
 
+    dateInput.addEventListener('change', function() {
+        const appointmentId = document.getElementById('appointmentId').value;
+        updateAvailableTimeSlots(this.value, appointmentId);
+    });
+
+    startTimeSelect.addEventListener('change', function() {
+        updateEndTimeOptions(this.value);
+    });
     // Setup filters for both sections
     setupFilter('acceptedFilterForm', 'dropdown-btn', 'dropdown-content', 'acceptedFilterInput');
 });
@@ -521,6 +543,142 @@ document.addEventListener('DOMContentLoaded', function() {
             close: true,
         }).showToast();
     }
+
+    // Store original appointment times
+window.originalAppointment = {
+    startTime: '',
+    endTime: ''
+};
+
+async function updateAvailableTimeSlots(selectedDate, currentAppointmentId) {
+    const startTimeSelect = document.getElementById('startTime');
+    const endTimeSelect = document.getElementById('endTime');
+    const patientId = document.getElementById('patientId').value.replace('P-', '');
+
+    try {
+        // Updated URL to match your route
+        const response = await fetch(`/therapist/accepted-appointments2?date=${selectedDate}&patient_id=${patientId}`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            // Define base time slots
+            const timeSlots = [
+                { value: '09:00', display: '09:00 AM' },
+                { value: '10:00', display: '10:00 AM' },
+                { value: '11:00', display: '11:00 AM' },
+                { value: '13:00', display: '01:00 PM' },
+                { value: '14:00', display: '02:00 PM' },
+                { value: '15:00', display: '03:00 PM' },
+                { value: '16:00', display: '04:00 PM' },
+                { value: '17:00', display: '05:00 PM' }
+            ];
+
+            // Filter available slots
+            const availableSlots = timeSlots.filter(slot => {
+                const slotTime = moment(slot.value, 'HH:mm');
+                
+                // Allow the original time slot for this appointment
+                if (slot.value === window.originalAppointment.startTime) {
+                    return true;
+                }
+
+                // Check if slot is in the past for today
+                if (moment(selectedDate).isSame(moment(), 'day') && 
+                    slotTime.isBefore(moment())) {
+                    return false;
+                }
+
+                // Check for conflicts with existing appointments
+                return !data.appointments.some(apt => {
+                    if (apt.appointment_details.id != currentAppointmentId) {
+                        const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
+                        const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
+                        
+                        // Check if the slot conflicts with any existing appointment
+                        const slotEnd = slotTime.clone().add(2, 'hours');
+                        return (
+                            slotTime.isBetween(aptStart, aptEnd, null, '[]') ||
+                            slotEnd.isBetween(aptStart, aptEnd, null, '[]') ||
+                            aptStart.isBetween(slotTime, slotEnd, null, '[]')
+                        );
+                    }
+                    return false;
+                });
+            });
+
+            // Update start time options
+            startTimeSelect.innerHTML = '<option value="">Select start time</option>';
+            availableSlots.forEach(slot => {
+                const option = new Option(slot.display, slot.value);
+                if (slot.value === window.originalAppointment.startTime) {
+                    option.selected = true;
+                }
+                startTimeSelect.add(option);
+            });
+
+            // Update end time options based on selected start time
+            updateEndTimeOptions(startTimeSelect.value);
+        } else {
+            throw new Error(data.message || 'Error loading time slots');
+        }
+    } catch (error) {
+        console.error('Error fetching available slots:', error);
+        showToast('Error loading available time slots: ' + error.message, 'error');
+    }
+}
+
+
+// Function to update end time options
+function updateEndTimeOptions(startTime) {
+    const endTimeSelect = document.getElementById('endTime');
+    endTimeSelect.innerHTML = '<option value="">Select end time</option>';
+
+    if (!startTime) {
+        endTimeSelect.disabled = true;
+        return;
+    }
+
+    const startMoment = moment(startTime, 'HH:mm');
+    const oneHourLater = startMoment.clone().add(1, 'hour');
+    const twoHoursLater = startMoment.clone().add(2, 'hours');
+
+    // Add one hour option
+    if (oneHourLater.hour() <= 17) {
+        const oneHourOption = new Option(
+            oneHourLater.format('hh:mm A'),
+            oneHourLater.format('HH:mm')
+        );
+        if (oneHourLater.format('HH:mm') === window.originalAppointment.endTime) {
+            oneHourOption.selected = true;
+        }
+        endTimeSelect.add(oneHourOption);
+    }
+
+    // Add two hour option
+    if (twoHoursLater.hour() <= 17) {
+        const twoHourOption = new Option(
+            twoHoursLater.format('hh:mm A'),
+            twoHoursLater.format('HH:mm')
+        );
+        if (twoHoursLater.format('HH:mm') === window.originalAppointment.endTime) {
+            twoHourOption.selected = true;
+        }
+        endTimeSelect.add(twoHourOption);
+    }
+
+    endTimeSelect.disabled = false;
+}
+
 </script>
 
 @if(session('success'))
