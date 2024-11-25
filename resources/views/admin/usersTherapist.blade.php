@@ -25,7 +25,7 @@
             position: relative;
             z-index: 900;
         }
-        .modal {
+        /* .modal {
     display: none;
     position: fixed;
     z-index: 1200;
@@ -43,7 +43,7 @@
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
-}
+} */
 
     </style>
     <meta charset="UTF-8">
@@ -78,8 +78,8 @@
         <div class="int">
     <div x-show="!showDetails">
     <h2>Manage Users &gt; Therapist</h2>
-    <button type="button" onclick="document.getElementById('addTherapistModal').style.display='block'">Add Therapist</button>
     <div class="search_area">
+        <button class="addtherap" type="button" onclick="document.getElementById('addTherapistModal').style.display='block'"><i class="fas fa-plus"></i>Add Therapist</button>
             <input class="search" 
                    type="text" 
                    id="searchInput"

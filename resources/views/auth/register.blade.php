@@ -465,18 +465,18 @@
                     </div>
                 </div>
                 @if($accountType === 'child')
-<div class="input-container">
-    <input placeholder=" " 
-           id="guardian_name" 
-           type="text" 
-           name="guardian_name" 
-           required 
-           autocomplete="name" 
-           value="{{ old('guardian_name') }}">
-    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
-    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
-</div>
-@endif
+                <div class="input-container">
+                    <input placeholder=" " 
+                        id="guardian_name" 
+                        type="text" 
+                        name="guardian_name" 
+                        required 
+                        autocomplete="name" 
+                        value="{{ old('guardian_name') }}">
+                    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
+                </div>
+                @endif
 
 
                 <!-- Date of Birth and Gender Inputs -->

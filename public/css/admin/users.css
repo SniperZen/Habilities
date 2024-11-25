@@ -466,3 +466,29 @@ button{
     pointer-events: none; 
 }
 
+
+.fa-add:before, .fa-plus:before {
+    content: "\2b";
+    font-size: 23px;
+}
+
+.addtherap:hover{
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.addtherap {
+    background-color: #74A36B;
+    display: flex;
+    gap: 3px;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+    align-items: center;
+    font-weight: bold;
+}
