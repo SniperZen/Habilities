@@ -249,10 +249,7 @@ h2{
 }
 
 
-.form-group {
-    margin-bottom: 20px;
-}
-.form-group input,
+/* .form-group input,
 .form-group select,
 .form-group textarea {
     display: block;
@@ -265,7 +262,7 @@ h2{
     text-align: left;
     color: #555;
     font-size: 14px;
-}
+} */
 button {
     padding: 10px 15px;
     color: white;
@@ -297,6 +294,17 @@ input[type="radio"] {
     display: block;
     background-color: white;
     margin: 15% auto;
+    border-radius: 10px;
+    width: 450px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.modal-contents {
+    display: block;
+    background-color: white;
+    margin: 8% auto;
     border-radius: 10px;
     width: 450px;
     text-align: center;
@@ -384,7 +392,10 @@ input[type="radio"] {
     border-radius: 50px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+
 }
 
 .save-btn:hover, .cancel-btn:hover{
@@ -491,4 +502,61 @@ button{
     transition: transform 0.3s ease;
     align-items: center;
     font-weight: bold;
+}
+
+input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input[type="tel"]:-webkit-autofill, input[type="date"]:-webkit-autofill {
+    background-color: white !important;
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    color: black !important;
+}
+
+/* General Input and Label Styles */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    height: 45px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    color: #999;
+    font-size: 14px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    background: white;
+    padding: 0 5px; 
+}
+
+/* Move the label to the top when input is focused or has value */
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: 0;
+    left: 10px;
+    font-size: 12px;
+    color: #74A36B;
+    background-color: white;
+    padding: 0 5px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #74A36B;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

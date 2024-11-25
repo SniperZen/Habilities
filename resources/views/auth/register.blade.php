@@ -28,7 +28,7 @@
         background-color: white;
         padding: 25px 40px;
         border-radius: 10px;
-        max-width: 450px;
+        max-width: 500px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         width: 100%;
         box-sizing: border-box;
@@ -377,7 +377,11 @@
         .check-icon.valid {
             color: green; /* Color when a condition is met */
         }
-
+        
+        .label{
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
         
 
     @media (max-width: 768px) {
@@ -440,14 +444,45 @@
 
         <div class="form-box">
             <img src="images/logo.png" alt="Logo">
-            <h1>Create your account</h1>
+            @if($accountType === 'child')
+            <h1>Create an account for your child</h1>
             <p class="p">Hello! We would like to know more of you.</p>
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf
-                <input type="hidden" name="account_type" value="{{ $accountType }}">
-                
+                <p class="label">Parent/Guardian Details:</p>
+                <div class="input-container">
+                    <input placeholder=" " 
+                        id="guardian_name" 
+                        type="text" 
+                        name="guardian_name" 
+                        required 
+                        autocomplete="name" 
+                        value="{{ old('guardian_name') }}">
+                    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
+                </div>
 
+                <!-- Contact Number and Home Address Inputs -->
+                <div class="input-container">
+                <input placeholder=" " id="contact_number" type="tel" name="contact_number" required autocomplete="tel" value="{{ old('contact_number') }}">
+                <label for="contact_number">Contact Number<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('contact_number') }}</div>
+                </div>
+                <div class="input-container">
+                <input placeholder=" " id="home_address" type="text" name="home_address" required autocomplete="street-address" value="{{ old('home_address') }}">
+                <label for="home_address">Home Address<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('home_address') }}</div>
+                </div>
+
+                <!-- Email Input -->
+                <div class="input-container">
+                <input placeholder=" " id="email" type="email" name="email" required autocomplete="email" value="{{ old('email') }}">
+                <label for="email">Email Address<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('email') }}</div>
+                </div>
+
+                <p class="label">Patient/Child Details:</p>
                 <!-- Name Inputs -->
                 <div class="input-group">
                     <div class="input-container">
@@ -464,19 +499,125 @@
                         <div class="error-message">{{ $errors->first('middle_name') }}</div>
                     </div>
                 </div>
-                @if($accountType === 'child')
-                <div class="input-container">
-                    <input placeholder=" " 
-                        id="guardian_name" 
-                        type="text" 
-                        name="guardian_name" 
-                        required 
-                        autocomplete="name" 
-                        value="{{ old('guardian_name') }}">
-                    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
-                    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
+
+
+                <!-- Date of Birth and Gender Inputs -->
+                <div class="input-groups">
+                    <div class="input-container">
+                    <input id="date_of_birth" type="date" name="date_of_birth" max="{{ now()->toDateString() }}" required value="{{ old('date_of_birth') }}">
+                    <label  for="date_of_birth">Date of Birth<span style="color: red;">*</span></label>
+                        <p class="mt-2">{{ $errors->first('date_of_birth') }}</p>
+                    </div>
+                    <div class="input-container">
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                        <label style="color: #74A36B; position: absolute;top:0;left: 8px;font-size: 14px;transform: translateY(-50%);pointer-events: none;transition: all 0.3s; background-color:white;" class="gender" for="gender">Gender<span style="color: red;">*</span></label>
+                        <p class="mt-2">{{ $errors->first('gender') }}</p>
+                    </div>
+
+                    <style>.gender {position: absolute;top: 0;left: 8px;color: #999;font-size: 14px;transform: translateY(-50%);pointer-events: none;transition: all 0.3s;
+                    }</style>
                 </div>
-                @endif
+
+                <div class="input-container">
+                    <input placeholder=" " id="password" type="password" name="password" required autocomplete="new-password" onfocus="showRestrictions()" onblur="hideRestrictions()">
+                    <label for="password">Password<span style="color: red;">*</span></label>
+                    <i class="far fa-eye toggle-password" onclick="togglePasswordVisibility('password', this)"></i> <!-- Eye Icon -->
+                    <div class="error-message">{{ $errors->first('password') }}</div>
+
+                    <script>
+                        document.getElementById('password').addEventListener('input', function () {
+                        const password = this.value;
+                        const hasUpperCase = /[A-Z]/.test(password);
+                        const hasLowerCase = /[a-z]/.test(password);
+                        const hasNumber = /[0-9]/.test(password);
+                        const hasSpecialChar = /[~`!@#$%^&*()\-_+={}[\]|\\:;"'<>,./?]/.test(password);
+                        const hasMinLength = password.length >= 8;
+
+                        updateCheck('uppercase-check', hasUpperCase);
+                        updateCheck('lowercase-check', hasLowerCase);
+                        updateCheck('number-check', hasNumber);
+                        updateCheck('special-char-check', hasSpecialChar);
+                        updateCheck('min-length-check', hasMinLength);
+                    });
+
+                    function updateCheck(elementId, isValid) {
+                        const element = document.getElementById(elementId);
+                        if (isValid) {
+                            element.textContent = '✔'; 
+                            element.style.color = 'green';
+                        } else {
+                            element.textContent = '✕'; 
+                            element.style.color = 'red';
+                        }
+                    }
+                    function showRestrictions() {
+                        document.getElementById('password-restrictions').style.display = 'block';
+                    }
+
+                    function hideRestrictions() {
+                        document.getElementById('password-restrictions').style.display = 'none';
+                    }
+                    </script>
+                </div>
+
+                <div id="password-restrictions" class="password-restrictions">
+                        <p>Password must meet the following criteria:</p>
+                            <span id="uppercase-check" class="check-icon">✕</span> Contain at least one uppercase letter (A-Z)<br>
+                            <span id="lowercase-check" class="check-icon">✕</span> Contain at least one lowercase letter (a-z)<br>
+                            <span id="number-check" class="check-icon">✕</span> Contain at least one number (0-9)<br>
+                            <span id="special-char-check" class="check-icon">✕</span> Contain at least one special character (~`! @#$%^&*()-_+={}[]|\;:"<>,./?)<br>
+                            <span id="min-length-check" class="check-icon">✕</span> Be at least 8 characters long
+                    </div>
+                <div class="input-container">
+                    <input placeholder=" " id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
+                    <label for="password_confirmation">Confirm Password<span style="color: red;">*</span></label>
+                    <i class="far fa-eye toggle-password" onclick="togglePasswordVisibility('password_confirmation', this)"></i> <!-- Eye Icon -->
+                    <div class="error-message">{{ $errors->first('password_confirmation') }}</div>
+                </div>
+
+                <!-- Terms and Conditions Checkbox -->
+                <div class="terms">
+                    <input type="checkbox" name="terms" required {{ old('terms') ? 'checked' : '' }}>
+                    <p>I agree to <span class="open-terms">Terms of Service</span> and <span class="open-privacy">Privacy Policies</span><span style="color: red;">*</span></p>
+                </div>
+
+                <!-- Register Button and Sign-In Link -->
+                <button type="submit">Register</button>
+                <div class="exist">
+                    <p>Already have an account?</p>
+                    <a class="signin" href="{{ route('login') }}">
+                        <p>Sign in</p>
+                    </a>
+                </div>
+
+                @else
+                <h1>Create your account</h1>
+            <p class="p">Hello! We would like to know more of you.</p>
+
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <input type="hidden" name="account_type" value="{{ $accountType }}">
+                <!-- Name Inputs -->
+                <div class="input-group">
+                    <div class="input-container">
+                    <input placeholder=" " id="last_name" type="text" name="last_name" required autofocus autocomplete="family-name" value="{{ old('last_name') }}">                        <label for="last_name">Last Name<span style="color: red;">*</span></label>
+                        <div class="error-message">{{ $errors->first('last_name') }}</div>
+                    </div>
+                    <div class="input-container">
+                    <input placeholder=" " id="first_name" type="text" name="first_name" required autocomplete="given-name" value="{{ old('first_name') }}">                        <label for="first_name">First Name<span style="color: red;">*</span></label>
+                        <div class="error-message">{{ $errors->first('first_name') }}</div>
+                    </div>
+                    <div class="input-container">
+                    <input placeholder=" " id="middle_name" type="text" name="middle_name" autocomplete="additional-name" value="{{ old('middle_name') }}">
+                    <label for="middle_name">Middle Name</span></label>
+                        <div class="error-message">{{ $errors->first('middle_name') }}</div>
+                    </div>
+                </div>
 
 
                 <!-- Date of Birth and Gender Inputs -->
@@ -591,6 +732,8 @@
                         <p>Sign in</p>
                     </a>
                 </div>
+                @endif
+
             </form>
         </div>
     </div>

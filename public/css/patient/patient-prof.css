@@ -623,7 +623,6 @@ body {
 
     .head_template .headers {
         flex-direction: column;
-        align-items: flex-start;
     }
 
     .head_template .logos img {

@@ -25,6 +25,8 @@
             position: relative;
             z-index: 900;
         }
+
+        
         /* .modal {
     display: none;
     position: fixed;
@@ -457,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <!-- Add Therapist Modal -->
 <div id="addTherapistModal" class="modal" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-contents">
         <div class="heads"></div>
         <div class="mod-cont">
             <div class="inner">
@@ -467,33 +469,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 <form id="addTherapistForm" action="{{ route('admin.therapists.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" id="first_name" name="first_name" required>
+                        <input type="text" id="first_name" name="first_name" placeholder=" " required>
+                        <label for="first_name">First Name<span style="color: red;">*</span></label>
                     </div>
                     
                     <div class="form-group">
+                        <input type="text" id="middle_name" name="middle_name" placeholder=" ">
                         <label for="middle_name">Middle Name</label>
-                        <input type="text" id="middle_name" name="middle_name">
                     </div>
 
                     <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" required>
+                        <input type="text" id="last_name" name="last_name" placeholder=" " required>
+                        <label for="last_name">Last Name<span style="color: red;">*</span></label>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Email<span style="color: red;">*</span></label>
                     </div>
 
                     <div class="form-group">
-                        <label for="specialization">Specialization</label>
-                        <input type="text" id="specialization" name="specialization" required>
+                        <input type="text" id="specialization" name="specialization" placeholder=" " required>
+                        <label for="specialization">Specialization<span style="color: red;">*</span></label>
                     </div>
 
                     <div class="form-group">
-                        <label for="contact_number">Contact Number</label>
-                        <input type="text" id="contact_number" name="contact_number" required>
+                        <input type="text" id="contact_number" name="contact_number" placeholder=" " required>
+                        <label for="contact_number">Contact Number<span style="color: red;">*</span></label>
                     </div>
 
                     <div class="modal-actions">
@@ -506,9 +508,11 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
+
 <!-- Success Modal -->
 <div id="successModal" class="modal" style="display: none;">
     <div class="modal-content">
+        
         <h2>Account Created Successfully!</h2>
         <p>Default password for the therapist: <strong id="defaultPassword"></strong></p>
         <p>Please share this password with the therapist securely.</p>

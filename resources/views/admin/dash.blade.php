@@ -303,7 +303,7 @@
                     color: inherit;
                 }
                 .notifications-list {
-                    max-height: 324px;
+                    height: 304px;
                     overflow-y: auto;
                     overflow-x: hidden;
                     transition: max-height 0.3s ease;
