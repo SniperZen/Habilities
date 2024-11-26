@@ -182,46 +182,51 @@ class PatientController extends Controller
     }
     
     public function showAppointments(Request $request)
-    {
-        $patientId = Auth::id();
-        
-        // Base query for accepted appointments
-        $acceptedQuery = Appointment::with('therapist')
-            ->where('patient_id', $patientId)
-            ->where('status', 'accepted')
-            ->where('appointment_date', '>=', now());
+{
+    $patientId = Auth::id();
     
-        // Base query for pending appointments
-        $pendingQuery = Appointment::with('therapist')
-            ->where('patient_id', $patientId)
-            ->where('status', 'pending');
-    
-        // Apply date filters
-        switch ($request->input('accepted_filter', 'all_upcoming')) {
-            case 'pending_only':
-                // Only show pending appointments
-                $acceptedAppointments = collect([]);
-                $pendingAppointments = $pendingQuery->get();
-                break;
-                
-            case 'all_upcoming':
-                // Show both accepted and pending
-                $acceptedAppointments = $acceptedQuery
-                    ->orderBy('appointment_date', 'asc')
-                    ->orderBy('start_time', 'asc')
-                    ->get();
-                $pendingAppointments = $pendingQuery->get();
-                break;
-                
-            case 'today':
-                $acceptedAppointments = $acceptedQuery
-                    ->whereDate('appointment_date', Carbon::today())
-                    ->orderBy('appointment_date', 'asc')
-                    ->orderBy('start_time', 'asc')
-                    ->get();
-                $pendingAppointments = collect([]);
-                break;
-                
+    // Base query for accepted appointments with proper time casting
+    $acceptedQuery = Appointment::with('therapist')
+        ->where('patient_id', $patientId)
+        ->where('status', 'accepted')
+        ->where(function($query) {
+            $query->where('appointment_date', '>', now()->toDateString())
+                ->orWhere(function($q) {
+                    $q->where('appointment_date', '=', now()->toDateString())
+                        ->where('end_time', '>=', now()->format('H:i:s'));
+                });
+        });
+
+    // Base query for pending appointments
+    $pendingQuery = Appointment::with('therapist')
+        ->where('patient_id', $patientId)
+        ->where('status', 'pending');
+
+    // Add proper time casting
+    $acceptedQuery->orderByRaw('CAST(appointment_date AS DATE), CAST(start_time AS TIME)');
+
+    // Rest of your switch statement remains the same, but update the ordering in each case
+    switch ($request->input('accepted_filter', 'all_upcoming')) {
+        case 'pending_only':
+            $acceptedAppointments = collect([]);
+            $pendingAppointments = $pendingQuery->get();
+            break;
+            
+        case 'all_upcoming':
+            $acceptedAppointments = $acceptedQuery
+                ->orderByRaw('CAST(appointment_date AS DATE), CAST(start_time AS TIME)')
+                ->get();
+            $pendingAppointments = $pendingQuery->get();
+            break;
+            
+        case 'today':
+            $acceptedAppointments = $acceptedQuery
+                ->whereDate('appointment_date', Carbon::today())
+                ->orderByRaw('CAST(start_time AS TIME)')
+                ->get();
+            $pendingAppointments = collect([]);
+            break;
+            
             case 'tomorrow':
                 $acceptedAppointments = $acceptedQuery
                     ->whereDate('appointment_date', Carbon::tomorrow())
@@ -282,18 +287,30 @@ class PatientController extends Controller
                     ->orderBy('start_time', 'asc')
                     ->get();
                 $pendingAppointments = collect([]);
-        }
-    
-        // Combine collections, ensuring pending appointments are always at the bottom
-        $upcomingAppointments = $acceptedAppointments->concat($pendingAppointments);
-    
-        return view('patient.appntmnt', [
-            'upcomingAppointments' => $upcomingAppointments,
-            'acceptedFilter' => $request->input('accepted_filter', 'all_upcoming'),
-            'historyFilter' => $request->input('history_filter', 'all')
-        ]);
+
     }
-    
+
+    // Before combining collections, ensure time formats are consistent
+    $acceptedAppointments = $acceptedAppointments->map(function ($appointment) {
+        if ($appointment->start_time) {
+            $appointment->start_time = Carbon::parse($appointment->start_time)->format('H:i:s');
+        }
+        if ($appointment->end_time) {
+            $appointment->end_time = Carbon::parse($appointment->end_time)->format('H:i:s');
+        }
+        return $appointment;
+    });
+
+    // Combine collections
+    $upcomingAppointments = $acceptedAppointments->concat($pendingAppointments);
+
+    return view('patient.appntmnt', [
+        'upcomingAppointments' => $upcomingAppointments,
+        'acceptedFilter' => $request->input('accepted_filter', 'all_upcoming'),
+        'historyFilter' => $request->input('history_filter', 'all')
+    ]);
+}
+
     
     public function showAppointmentsDash()
     {

@@ -42,6 +42,38 @@
 .toastify-content i {
     margin-right: 8px;
 }
+.address-container {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.address-container p {
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.maps-link {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #e7f1ff;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.maps-link:hover {
+    background-color: #d0e3ff;
+    text-decoration: none;
+}
+
+#address-text {
+    color: #333;
+    font-size: 0.95em;
+}
+
 </style>
 
 </head>
@@ -159,22 +191,35 @@
                         <div class="top">
                             <h3>Appointment Details</h3>
                         </div>
-                        <div class="bot">
-                            <input type="hidden" id="appointmentId" name="appointmentId"> 
-                            <p><label>Therapist Name:</label> <span id="therapist-name"></span></p>
-                            <p><label>Date:</label> <span id="appointment-date"></span></p>
-                            <p><label>Time:</label> <span id="appointment-time"></span></p>
-                            <p><label>Status:</label> <span id="appointment-status"></span></p>
-                            <p><label>Mode of Appointment:</label> 
-                                <input type="radio" name="mode" value="on-site" disabled id="mode-onsite"> On-site
-                                <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
-                            </p>
-                            <p><label>Tele-therapy link:</label></p>
-                            <!-- Link container relative to the modal -->
-                            <div class="link-container">
-                                <a id="teletherapy-link" href="#" target="_blank">Join Video Call</a>
+                        <!-- In your appointmentModal div, update the bot div -->
+                            <div class="bot">
+                                <input type="hidden" id="appointmentId" name="appointmentId"> 
+                                <p><label>Therapist Name:</label> <span id="therapist-name"></span></p>
+                                <p><label>Date:</label> <span id="appointment-date"></span></p>
+                                <p><label>Time:</label> <span id="appointment-time"></span></p>
+                                <p><label>Status:</label> <span id="appointment-status"></span></p>
+                                <p><label>Mode of Appointment:</label> 
+                                    <input type="radio" name="mode" value="on-site" disabled id="mode-onsite"> On-site
+                                    <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
+                                </p>
+                                
+                                <!-- Static Address Section -->
+                                <div id="address-section" style="display: none;">
+                                    <p><label>Clinic Address:</label></p>
+                                    <div class="address-container">
+                                        <p id="address-text">2nd Floor, SM City San Jose Del Monte, Quirino Highway, San Jose del Monte City, Bulacan</p>
+                                        <a id="google-maps-link" href="https://maps.app.goo.gl/dK1WGDNKRu9gr9jA7" target="_blank" class="maps-link">View on Google Maps</a>
+                                    </div>
+                                </div>
+
+                                <!-- Teletherapy Section -->
+                                <div id="teletherapy-section">
+                                    <p><label>Tele-therapy link:</label></p>
+                                    <div class="link-container">
+                                        <a id="teletherapy-link" href="#" target="_blank">Join Video Call</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="back-btn">Back</button>
@@ -256,34 +301,90 @@
     function openModal(button) {
     const modal = document.getElementById('appointmentModal');
     const data = button.dataset;
-
+    
+    // Set basic appointment information
     document.getElementById('therapist-name').textContent = data.therapistName;
     document.getElementById('appointment-date').textContent = data.date;
     document.getElementById('appointment-time').textContent = data.startTime === 'Pending' ? 'Pending' : `${data.startTime} - ${data.endTime}`;
     document.getElementById('appointment-status').textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
     document.getElementById('appointmentId').value = data.appointmentId;
     
+    // Set mode radio buttons
     document.getElementById('mode-onsite').checked = (data.mode === 'on-site');
     document.getElementById('mode-teletherapy').checked = (data.mode === 'tele-therapy');
     
     const linkElement = document.getElementById('teletherapy-link');
-    console.log("Teletherapist Link:", data.teletherapistLink); // Debug line
-    console.log("Appointment Status:", data.status); // Debug line
-
-    if (data.status.toLowerCase() === 'accepted' && data.mode === 'tele-therapy' && data.teletherapistLink) {
-        linkElement.style.display = 'inline';
-        linkElement.href = data.teletherapistLink;
-        linkElement.textContent = data.teletherapistLink; // Display the actual link
-        linkElement.classList.remove('disabled');
-    } else {
-        linkElement.style.display = 'inline';
-        linkElement.href = '#';
-        linkElement.textContent = 'No link available';
-        linkElement.classList.add('disabled');
+    const addressSection = document.getElementById('address-section');
+    const teletherapySection = document.getElementById('teletherapy-section');
+    
+    // Handle display based on appointment mode and status
+    if (data.mode === 'on-site') {
+        // Show address section for on-site appointments
+        addressSection.style.display = 'block';
+        teletherapySection.style.display = 'none';
+    } else if (data.mode === 'tele-therapy') {
+        // Show teletherapy section for teletherapy appointments
+        addressSection.style.display = 'none';
+        teletherapySection.style.display = 'block';
+        
+        // Check if the appointment is pending
+        if (data.status.toLowerCase() === 'pending' || data.date === 'Pending') {
+            linkElement.style.display = 'inline';
+            linkElement.href = '#';
+            linkElement.textContent = 'Link will be available after appointment is confirmed';
+            linkElement.classList.add('disabled');
+        } else if (data.status.toLowerCase() === 'accepted') {
+            const now = new Date();
+            const [appointmentDate, appointmentTime] = [data.date, data.startTime];
+            const appointmentDateTime = new Date(`${appointmentDate}T${appointmentTime}`);
+            const appointmentEndTime = new Date(`${appointmentDate}T${data.endTime}`);
+            
+            // Calculate time difference in minutes
+            const timeDifferenceMinutes = (appointmentDateTime - now) / (1000 * 60);
+            
+            if (data.teletherapistLink && data.teletherapistLink.trim() !== '') {
+                if (timeDifferenceMinutes <= 10 && now < appointmentEndTime) {
+                    linkElement.style.display = 'inline';
+                    linkElement.href = data.teletherapistLink;
+                    linkElement.textContent = 'Join Video Call';
+                    linkElement.classList.remove('disabled');
+                } else if (now > appointmentEndTime) {
+                    linkElement.style.display = 'inline';
+                    linkElement.href = '#';
+                    linkElement.textContent = 'Session Ended';
+                    linkElement.classList.add('disabled');
+                } else {
+                    linkElement.style.display = 'inline';
+                    linkElement.href = '#';
+                    linkElement.textContent = 'Link will be available 10 minutes before the session';
+                    linkElement.classList.add('disabled');
+                }
+            } else {
+                linkElement.style.display = 'inline';
+                linkElement.href = '#';
+                linkElement.textContent = 'Link not yet provided by therapist';
+                linkElement.classList.add('disabled');
+            }
+        }
     }
     
     modal.style.display = 'block';
 }
+
+
+
+// Add this function to automatically update the link status
+function updateLinkStatus() {
+    if (document.getElementById('appointmentModal').style.display === 'block') {
+        const button = document.querySelector('[data-appointment-id="' + document.getElementById('appointmentId').value + '"]');
+        if (button) {
+            openModal(button);
+        }
+    }
+}
+
+// Update link status every minute
+setInterval(updateLinkStatus, 60000);
 
     // Close modal functions
     const closeModal = () => {
