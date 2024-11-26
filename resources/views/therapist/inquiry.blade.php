@@ -171,7 +171,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" style="
+                            <td colspan="6" style="
                                 text-align: center; 
                                 padding: 20px; 
                                 font-size: 16px; 
