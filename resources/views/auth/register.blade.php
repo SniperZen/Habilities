@@ -478,6 +478,7 @@
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf
+                <input type="hidden" name="account_type" value="{{ $accountType }}">
                 <p class="label">Parent/Guardian Details:</p>
                 <div class="input-container">
                     <input placeholder=" " 
