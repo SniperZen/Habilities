@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'account_status',
         'teletherapist_link' => 'nullable|url',
         'guardian_name',
+        'email_verified_at', // Add this if it's not already there
 
     ];
 
@@ -111,6 +112,11 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     return $this->hasMany(PatientFeedback::class);
 }
-
+public function hasVerifiedEmail()
+{
+    // If user is therapist, always return true
+    // Otherwise, check normal verification status
+    return $this->usertype === 'therapist' || $this->email_verified_at !== null;
+}
 
 }
