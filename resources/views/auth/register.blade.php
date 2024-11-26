@@ -207,27 +207,55 @@
     .modal {
         display: none;
         position: fixed;
-        z-index: 10;
+        z-index: 1000;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-        overflow-y: auto;
+        background-color: rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
+
+@keyframes popUpEffect {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
 
     .modal-content {
-        background-color: #fefefe;
-        margin: 4% auto;
+        background-color: white;
+        border-radius: 10px;
+        width: 550px;
         padding: 20px;
-        max-height: 90vh;
-        border: 1px solid #888;
-        width: 90%;
-        max-width: 600px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 4% auto;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transform: scale(0.5);
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out; 
+        animation-duration: 0.2s; 
     }
 
+    .modal.show {
+        display: block;
+        opacity: 1;
+    }
+
+    .modal.show .modal-content {
+        animation-name: popUpEffect; 
+    }
     .close {
         display: inline-block;
         background-color: #74A36B;
@@ -897,51 +925,52 @@
     }
 </script>
     <script>
-        // Get modals and buttons
-        const termsModal = document.getElementById("termsModal");
-        const privacyModal = document.getElementById("privacyModal");
-        const termsLink = document.querySelector(".open-terms");
-        const privacyLink = document.querySelector(".open-privacy");
-        const closeButtons = document.querySelectorAll(".close");
-        const privacyPolicyLinks = document.querySelectorAll(".privacy-policy");
-        const togglePassword = document.getElementById('togglePassword');
+       document.addEventListener('DOMContentLoaded', function() {
+    // Get modals and buttons
+    const termsModal = document.getElementById("termsModal");
+    const privacyModal = document.getElementById("privacyModal");
+    const termsLink = document.querySelector(".open-terms");
+    const privacyLink = document.querySelector(".open-privacy");
+    const closeButtons = document.querySelectorAll(".close");
+    const privacyPolicyLinks = document.querySelectorAll(".privacy-policy");
 
-        // Open Terms Modal
-        termsLink.onclick = function() {
-            termsModal.style.display = "block";
+    // Open Terms Modal
+    termsLink.onclick = function() {
+        termsModal.classList.add("show");
+    };
+
+    // Open Privacy Modal
+    privacyLink.onclick = function() {
+        privacyModal.classList.add("show");
+    };
+
+    // Open Privacy Modal from Privacy Policy links in Terms Modal
+    privacyPolicyLinks.forEach(link => {
+        link.onclick = function() {
+            privacyModal.classList.add("show");
+            termsModal.classList.remove("show");
         };
+    });
 
-        // Open Privacy Modal
-        privacyLink.onclick = function() {
-            privacyModal.style.display = "block";
+    // Close modals when clicking close buttons
+    closeButtons.forEach(button => {
+        button.onclick = function() {
+            termsModal.classList.remove("show");
+            privacyModal.classList.remove("show");
         };
+    });
 
-        // Open Privacy Modal from Privacy Policy links in Terms Modal
-        privacyPolicyLinks.forEach(link => {
-            link.onclick = function() {
-                privacyModal.style.display = "block";
-                termsModal.style.display = "none";
-            };
-        });
+    // Close modals when clicking outside (optional)
+    window.onclick = function(event) {
+        if (event.target === termsModal) {
+            termsModal.classList.remove("show");
+        }
+        if (event.target === privacyModal) {
+            privacyModal.classList.remove("show");
+        }
+    };
+});
 
-        // Close modals when clicking close buttons
-        closeButtons.forEach(button => {
-            button.onclick = function() {
-                termsModal.style.display = "none";
-                privacyModal.style.display = "none";
-            };
-        });
-
-
-        // Close modals when clicking outside
-        //window.onclick = function(event) {
-         //   if (event.target == termsModal) {
-          //      termsModal.style.display = "none";
-         //   }
-         //   if (event.target == privacyModal) {
-       //         privacyModal.style.display = "none";
-        //    }
-       // };
     </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

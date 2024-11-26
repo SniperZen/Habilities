@@ -147,7 +147,7 @@
                 font-size: 12px;
             }
         }
-        .modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -156,16 +156,46 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes popUpEffect {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 .modal-content {
-    display: block;
     background-color: white;
-    margin: 15% auto;
     border-radius: 10px;
     width: 450px;
+    margin: 15% auto;
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+    transform: scale(0.5);
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out; 
+    animation-duration: 0.2s; 
+}
+
+.modal.show {
+    display: block;
+    opacity: 1;
+}
+
+.modal.show .modal-content {
+    animation-name: popUpEffect; 
 }
 
 .heads{
@@ -216,7 +246,7 @@
 .modal h2 {
     margin-top: 0;
     color: #333;
-    /* font-size: 1.5rem; */
+
 }
 
 .modal p {
@@ -340,51 +370,51 @@
 
 
 <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get the self account button
-        const selfButton = document.querySelector('button[value="self"]');
-        
-        // Add click event listener to the self account button
-        selfButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent form submission
-            document.getElementById('ageVerificationModal').style.display = 'block';
-        });
-
-        // Close modals when clicking outside
-        window.addEventListener('click', function(event) {
-            const ageVerificationModal = document.getElementById('ageVerificationModal');
-            const ageRestrictionModal = document.getElementById('ageRestrictionModal');
-            if (event.target === ageVerificationModal) {
-                ageVerificationModal.style.display = 'none';
-            }
-            if (event.target === ageRestrictionModal) {
-                ageRestrictionModal.style.display = 'none';
-            }
-        });
+ document.addEventListener('DOMContentLoaded', function() {
+    // Get the self account button
+    const selfButton = document.querySelector('button[value="self"]');
+    
+    // Add click event listener to the self account button
+    selfButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent form submission
+        const ageVerificationModal = document.getElementById('ageVerificationModal');
+        ageVerificationModal.classList.add('show'); // Add show class to trigger animation
     });
 
-    // Function to handle age verification
-    function confirmAge(isOldEnough) {
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
         const ageVerificationModal = document.getElementById('ageVerificationModal');
         const ageRestrictionModal = document.getElementById('ageRestrictionModal');
-        const form = document.querySelector('form');
-        
-        if (isOldEnough) {
-            // If user is 13 or older, proceed with form submission
-            ageVerificationModal.style.display = 'none';
-            form.submit();
-        } else {
-            // If user is under 13, show restriction message
-            ageVerificationModal.style.display = 'none';
-            ageRestrictionModal.style.display = 'block';
+        if (event.target === ageVerificationModal) {
+            ageVerificationModal.classList.remove('show'); // Remove show class to hide
         }
-    }
+        if (event.target === ageRestrictionModal) {
+            ageRestrictionModal.classList.remove('show');
+        }
+    });
+});
 
-    // Function to close the age restriction modal
-    function closeAgeRestrictionModal() {
-        document.getElementById('ageRestrictionModal').style.display = 'none';
+// Function to handle age verification
+function confirmAge(isOldEnough) {
+    const ageVerificationModal = document.getElementById('ageVerificationModal');
+    const ageRestrictionModal = document.getElementById('ageRestrictionModal');
+    const form = document.querySelector('form');
+    
+    if (isOldEnough) {
+        // If user is 13 or older, proceed with form submission
+        ageVerificationModal.classList.remove('show'); // Remove show class to hide
+        form.submit();
+    } else {
+        // If user is under 13, show restriction message
+        ageVerificationModal.classList.remove('show');
+        ageRestrictionModal.classList.add('show'); // Add show class to trigger animation
     }
+}
+
+// Function to close the age restriction modal
+function closeAgeRestrictionModal() {
+    document.getElementById('ageRestrictionModal').classList.remove('show'); // Remove show class to hide
+}
 </script>
 
 

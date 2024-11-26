@@ -148,10 +148,12 @@
             // Show confirmation modal on submit button click
             submitButton.addEventListener('click', function() {
                 confirmModal.style.display = 'block';
+                confirmModal.classList.add('show');
             });
 
             // Handle no button click
             noButton.addEventListener('click', function() {
+                confirmModal.classList.remove('show');
                 confirmModal.style.display = 'none';
             });
 

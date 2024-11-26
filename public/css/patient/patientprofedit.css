@@ -269,12 +269,31 @@ body {
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    background-color: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes popUpEffect {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .no-btn{
@@ -306,14 +325,25 @@ body {
     transition: transform 0.3s ease;
 }
 .modal-content {
-    display: block;
     background-color: white;
-    margin: 15% auto;
     border-radius: 10px;
     width: 450px;
+    margin: 15% auto;
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+    transform: scale(0.5);
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out; 
+    animation-duration: 0.2s; 
+}
+
+.modal.show {
+    display: block;
+    opacity: 1;
+}
+
+.modal.show .modal-content {
+    animation-name: popUpEffect; 
 }
 
 .heads{

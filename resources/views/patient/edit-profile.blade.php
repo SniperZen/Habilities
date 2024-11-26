@@ -139,12 +139,14 @@
     const submitImageButton = document.getElementById('submit-image');
 
     function openConfirmModal() {
-        confirmModal.style.display = 'block';
-    }
+    confirmModal.style.display = 'block';
+        confirmModal.classList.add('show');
+}
 
-    function closeConfirmModal() {
+function closeConfirmModal() {
+    confirmModal.classList.remove('show');
         confirmModal.style.display = 'none';
-    }
+}
 
     function submitForm() {
         closeConfirmModal();
