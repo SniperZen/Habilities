@@ -56,6 +56,8 @@ class RegisteredUserController extends Controller
         // Add guardian name if account type is child
         if ($request->account_type === 'child') {
             $userData['guardian_name'] = $request->guardian_name;
+            $userData['guardian_role'] = $request->guardian_role;
+
         }
     
         // Create a new user instance
@@ -117,6 +119,8 @@ class RegisteredUserController extends Controller
         // Add guardian_name validation if account type is child
         if (request()->input('account_type') === 'child') {
             $rules['guardian_name'] = ['required', 'string', 'max:255'];
+            $rules['guardian_role'] = ['required', 'string', 'max:255'];
+
         }
     
         return $rules;

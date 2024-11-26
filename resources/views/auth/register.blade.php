@@ -488,6 +488,36 @@
                     <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('guardian_name') }}</div>
                 </div>
+                <div class="input-container">
+                    <select id="guardian_role_select" name="guardian_role" required>
+                        <option value="">Select Relationship</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Grandfather">Grandfather</option>
+                        <option value="Grandmother">Grandmother</option>
+                        <option value="Aunt">Aunt</option>
+                        <option value="Uncle">Uncle</option>
+                        <option value="Sibling">Sibling</option>
+                        <option value="Legal Guardian">Legal Guardian</option>
+                        <option value="Stepfather">Stepfather</option>
+                        <option value="Stepmother">Stepmother</option>
+                        <option value="Foster Parent">Foster Parent</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label for="guardian_role_select">Relationship to Child<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('guardian_role') }}</div>
+                </div>
+
+                <!-- Hidden by default, shows when "Other" is selected -->
+                <div id="other_role_container" class="input-container" style="display: none;">
+                    <input placeholder=" " 
+                        id="other_role_input" 
+                        type="text" 
+                        autocomplete="off">
+                    <label for="other_role_input">Specify Relationship<span style="color: red;">*</span></label>
+                </div>
+
+
 
                 <!-- Contact Number and Home Address Inputs -->
                 <div class="input-container">
@@ -556,6 +586,44 @@
                     <div class="error-message">{{ $errors->first('password') }}</div>
 
                     <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const guardianRoleSelect = document.getElementById('guardian_role_select');
+                                const otherRoleContainer = document.getElementById('other_role_container');
+                                const otherRoleInput = document.getElementById('other_role_input');
+
+                                guardianRoleSelect.addEventListener('change', function() {
+                                    if (this.value === 'other') {
+                                        otherRoleContainer.style.display = 'block';
+                                        otherRoleInput.required = true;
+                                        // Create a hidden input to store the actual value
+                                        let hiddenInput = document.createElement('input');
+                                        hiddenInput.type = 'hidden';
+                                        hiddenInput.name = 'guardian_role';
+                                        hiddenInput.id = 'actual_guardian_role';
+                                        guardianRoleSelect.parentNode.appendChild(hiddenInput);
+                                        
+                                        // Update the hidden input when the user types in the other role
+                                        otherRoleInput.addEventListener('input', function() {
+                                            document.getElementById('actual_guardian_role').value = this.value;
+                                        });
+                                        
+                                        // Remove the name attribute from the select to prevent it from being submitted
+                                        guardianRoleSelect.removeAttribute('name');
+                                    } else {
+                                        otherRoleContainer.style.display = 'none';
+                                        otherRoleInput.required = false;
+                                        // Restore the name attribute to the select
+                                        guardianRoleSelect.setAttribute('name', 'guardian_role');
+                                        // Remove the hidden input if it exists
+                                        const hiddenInput = document.getElementById('actual_guardian_role');
+                                        if (hiddenInput) {
+                                            hiddenInput.remove();
+                                        }
+                                    }
+                                });
+                            });
+
+
                         document.getElementById('password').addEventListener('input', function () {
                         const password = this.value;
                         const hasUpperCase = /[A-Z]/.test(password);
