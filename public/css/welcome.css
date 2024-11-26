@@ -750,11 +750,11 @@ section.hero button:hover {
 
   .fade-in-up, .fade-in-down {
     opacity: 0;
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    transition: opacity 1s ease-out, transform 1s ease-out;
   }
   
   .fade-in-up {
-    transform: translateY(100px); 
+    transform: translateY(80px); 
   }
   
   .fade-in-up.visible {
