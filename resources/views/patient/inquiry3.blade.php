@@ -135,19 +135,18 @@
         const submitButton = document.getElementById('submitButton');
         const confirmForm = document.getElementById('confirmForm');
 
-        // Show modal when confirm button is clicked
         confirmButton.addEventListener('click', function () {
-            console.log("Confirm button clicked");
+            // console.log("Confirm button clicked");
             modalOverlay.style.display = 'block';
+            modalOverlay.classList.add('show');
         });
 
-        // Hide modal when cancel button is clicked
         cancelButton.addEventListener('click', function () {
-            console.log("Cancel button clicked");
+            // console.log("Cancel button clicked");
             modalOverlay.style.display = 'none';
+            modalOverlay.classList.remove('show');
         });
 
-        // Submit the form when confirm button in the modal is clicked
         submitButton.addEventListener('click', function () {
             console.log("Submitting form");
             confirmForm.submit();

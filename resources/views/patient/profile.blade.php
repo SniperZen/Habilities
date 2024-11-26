@@ -234,10 +234,12 @@
                         <script>
                         function openModal(modalId) {
                             document.getElementById(modalId).style.display = "block";
+                            document.getElementById(modalId).classList.add('show');
                         }
 
                         function closeModal(modalId) {
                             document.getElementById(modalId).style.display = "none";
+                            document.getElementById(modalId).classList.remove('show');
                         }
 
                         // Close modal when clicking outside the modal-content
@@ -313,6 +315,7 @@
                                         document.getElementById('modalStartTime').textContent = 'Start: ' + startTime;
                                         document.getElementById('modalEndTime').textContent = 'End: ' + endTime;
                                         modal.style.display = "block";
+                                        modal.classList.add('show');
                                     }
                                 });
 
@@ -320,6 +323,7 @@
 
                                 span2.onclick = function() {
                                     modal.style.display = "none";
+                                    modal.classList.add('show');
                                 }
 
 
@@ -382,7 +386,7 @@
                                 height: 8px;
                                 border-radius: 50%;
                                 background-color: #3788d8;
-                                margin: 0 auto;
+                                margin: 5px auto;
                             }
                             .fc-daygrid-event {
                                 background: none !important;

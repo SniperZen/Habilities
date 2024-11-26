@@ -201,7 +201,27 @@ button:hover, .button-group a:hover {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
+
+@keyframes popUpEffect {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 .modals {
     display: block;
@@ -213,7 +233,21 @@ button:hover, .button-group a:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     max-width: 90vw;
+    transform: scale(0.5);
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out; 
+    animation-duration: 0.2s; 
 }
+
+.modal-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+.modal-overlay.show .modals {
+    animation-name: popUpEffect; 
+}
+
 
 .heads {
     width: 100%;

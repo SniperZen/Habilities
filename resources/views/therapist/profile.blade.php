@@ -121,7 +121,7 @@
                 </ul>
                 </div>
     
-            <div>
+            <div class="pl-sect">
 <!-- Patient List Section -->
 <section class="patient-list-section">
     <div class="search-container">
@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
         height: 8px;
         border-radius: 50%;
         background-color: #8e7cc3;
-        margin: 0 auto;
+        margin: 5px auto;
     }
     .fc-daygrid-event {
         background: none !important;

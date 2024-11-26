@@ -7,14 +7,6 @@
     <title>Complete Your Appointment</title>
     <link rel="stylesheet" href="{{ asset('css/patient/CompApp.css') }}">
 </head>
-<style>
-
-        /* Show modal when active */
-        .modal.show {
-            display: block;
-        }
-
-</style>
 <body>  
     <main class="main-content">
         <div class="inner">

@@ -437,6 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modalStartTime').textContent = 'Start: ' + startTime;
             document.getElementById('modalEndTime').textContent = 'End: ' + endTime;
             modal.style.display = "block";
+            modal.classList.add('show');
         }
     });
 
@@ -454,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
         height: 8px;
         border-radius: 50%;
         background-color: #3788d8;
-        margin: 0 auto;
+        margin: 5px auto;
     }
     .fc-daygrid-event {
         background: none !important;
