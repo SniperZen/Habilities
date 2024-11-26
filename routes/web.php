@@ -264,7 +264,7 @@ Route::middleware([ShareUserData::class])->group(function () {
 
         Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
             $request->fulfill();
-            return redirect('/dashboard');
+            return redirect('/patient/dash');
         })->middleware('signed')->name('verification.verify');
 
         Route::post('/email/verification-notification', function (Request $request) {

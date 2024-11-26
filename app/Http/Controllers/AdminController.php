@@ -794,25 +794,34 @@ public function getDashboardCounts()
     
         $defaultPassword = 'Welcome@123';
     
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($defaultPassword),
-            'specialization' => $request->specialization,
-            'contact_number' => $request->contact_number,
-            'usertype' => 'therapist',
-            'account_status' => 'active',
-            'email_verified_at' => now(), // Bypass email verification
-        ]);
+        try {
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($defaultPassword),
+                'specialization' => $request->specialization,
+                'contact_number' => $request->contact_number,
+                'usertype' => 'therapist',
+                'account_status' => 'active',
+                'email_verified_at' => now(), // This will mark the email as verified immediately
+            ]);
     
-        return response()->json([
-            'success' => true,
-            'message' => 'Therapist account created successfully',
-            'default_password' => $defaultPassword
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Therapist account created successfully.',
+                'default_password' => $defaultPassword
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating therapist account.'
+            ], 500);
+        }
     }
+    
+    
     
 }
 
