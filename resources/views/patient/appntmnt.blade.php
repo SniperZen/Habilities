@@ -73,7 +73,15 @@
     color: #333;
     font-size: 0.95em;
 }
+.cancel-appointment-btn2:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
 
+.cancel-appointment-btn2 {
+    transition: opacity 0.3s ease;
+}
 </style>
 
 </head>
@@ -252,13 +260,14 @@
                                 <option value="Other">Other</option>
                             </select>
 
-                            <p><label>Note to the therapist (optional):</label></p>
+                            <p><label>Note to the therapist:</label></p>
                             <textarea id="cancellationNote" name="cancellationNote" placeholder="Type here..." rows="4"></textarea>
                         </div>
                     </div>
                             <div class="modal-footer">
                                 <button type="button" class="back-btn">Back</button>
-                                <button type="submit" class="cancel-appointment-btn2">Cancel Appointment</button>
+                                <!-- In the cancellation form modal -->
+                                <button type="submit" class="cancel-appointment-btn2" disabled>Cancel Appointment</button>
                             </div>
                         </form>
                 </div>    
@@ -297,7 +306,37 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function validateCancellationForm() {
+    const reason = document.getElementById('cancellationReason').value;
+    const note = document.getElementById('cancellationNote').value.trim();
+    const submitButton = document.querySelector('.cancel-appointment-btn2');
     
+    // Enable button only if both fields are filled
+    if (reason && note) {
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
+        submitButton.style.cursor = 'pointer';
+    } else {
+        submitButton.disabled = true;
+        submitButton.style.opacity = '0.7';
+        submitButton.style.cursor = 'not-allowed';
+    }
+}
+
+// Add event listeners to form fields
+document.addEventListener('DOMContentLoaded', function() {
+    const reasonSelect = document.getElementById('cancellationReason');
+    const noteTextarea = document.getElementById('cancellationNote');
+    
+    // Initial validation
+    validateCancellationForm();
+    
+    // Validate on reason change
+    reasonSelect.addEventListener('change', validateCancellationForm);
+    
+    // Validate on note input
+    noteTextarea.addEventListener('input', validateCancellationForm);
+});
     function openModal(button) {
     const modal = document.getElementById('appointmentModal');
     const data = button.dataset;

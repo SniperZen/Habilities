@@ -260,42 +260,48 @@ document.addEventListener('DOMContentLoaded', function () {
     @endif
 
     <script>
-// Filter dropdown functionality
-document.addEventListener('DOMContentLoaded', function () {
-    const filterButton = document.querySelector('.dropdown-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    const dropdownItems = dropdownContent.querySelectorAll('a');
-    const filterForm = document.getElementById('filterForm');
-    const filterInput = document.getElementById('filterInput');
+(function() {
+    // Wait for DOM to be fully loaded
+    window.addEventListener('DOMContentLoaded', function() {
+        // Get dropdown elements
+        const filterButton = document.querySelector('.dropdown-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const filterForm = document.getElementById('filterForm');
+        const filterInput = document.getElementById('filterInput');
 
-    // Filter dropdown toggle
-    filterButton.addEventListener('click', function () {
-        dropdownContent.classList.toggle('open');
-        filterButton.classList.toggle('active');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function (event) {
-        if (!filterButton.contains(event.target) && !dropdownContent.contains(event.target)) {
-            dropdownContent.classList.remove('open');
-            filterButton.classList.remove('active');
+        if (!filterButton || !dropdownContent || !filterForm || !filterInput) {
+            console.error('Required dropdown elements not found');
+            return;
         }
-    });
 
-    // Handle filter selection
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-            const filter = this.getAttribute('data-filter');
-            filterButton.textContent = this.textContent;
-            filterInput.value = filter;
-            dropdownContent.classList.remove('open');
-            filterButton.classList.remove('active');
-            filterForm.submit();
+        // Toggle dropdown
+        filterButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Handle dropdown item clicks
+        dropdownContent.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                e.stopPropagation();
+                const filter = e.target.getAttribute('data-filter');
+                filterButton.textContent = e.target.textContent;
+                filterInput.value = filter;
+                dropdownContent.style.display = 'none';
+                filterForm.submit();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!filterButton.contains(e.target) && !dropdownContent.contains(e.target)) {
+                dropdownContent.style.display = 'none';
+            }
         });
     });
-});
-
+})();
 // Modal control
 document.getElementById('addAppointmentBtn').addEventListener('click', function () {
     document.getElementById('addAppointmentModal').style.display = 'flex';
