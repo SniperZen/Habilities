@@ -21,6 +21,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
+use App\Services\EmailVerificationNotificationService; // Add this import
+
 class AdminController extends Controller
 {
 
@@ -791,28 +793,48 @@ public function getDashboardCounts()
             'specialization' => ['required', 'string', 'max:255'],
             'contact_number' => ['required', 'string', 'max:20'],
         ]);
-    
+
         $defaultPassword = 'Welcome@123';
-    
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($defaultPassword),
-            'specialization' => $request->specialization,
-            'contact_number' => $request->contact_number,
-            'usertype' => 'therapist',
-            'account_status' => 'active',
-            'email_verified_at' => now(), // Bypass email verification
-        ]);
-    
-        return response()->json([
-            'success' => true,
-            'message' => 'Therapist account created successfully',
-            'default_password' => $defaultPassword
-        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($defaultPassword),
+                'specialization' => $request->specialization,
+                'contact_number' => $request->contact_number,
+                'usertype' => 'therapist',
+                'account_status' => 'active',
+                'email_verified_at' => now(),
+            ]);
+
+            // Use the new service
+            $verificationService = new EmailVerificationNotificationService();
+            $verificationService->markEmailAsVerified($user);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Therapist account created successfully.',
+                'default_password' => $defaultPassword
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating therapist account: ' . $e->getMessage()
+            ], 500);
+        }
     }
+    
+    
+    
     
 }
 

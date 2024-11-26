@@ -98,33 +98,39 @@ class AppointmentController extends Controller
         return response()->json($appointment);
     }
     
-public function getAppointments()
-{
-    $patientId = Auth::id();
-    $appointments = Appointment::where('patient_id', $patientId)
-                               ->where('status', 'accepted')
-                               ->with('therapist')
-                               ->get();
-
-    $events = $appointments->map(function ($appointment) {
-        $appointmentDate = Carbon::parse($appointment->appointment_date)->format('Y-m-d');
-        return [
-            'id' => $appointment->id,
-            'title' => $appointment->mode,
-            'start' => $appointmentDate,
-            'extendedProps' => [
-                'description' => $appointment->note ?: null,
-                'startTime' => $this->combineDateTime($appointmentDate, $appointment->start_time),
-                'endTime' => $this->combineDateTime($appointmentDate, $appointment->end_time),
-                'patientName' => $appointment->therapist ? 
-                    $appointment->therapist->first_name . ' ' . $appointment->therapist->last_name : 
-                    'No Therapist',
-            ]
-        ];
-    });
-
-    return response()->json($events);
-}
+    public function getAppointments()
+    {
+        try {
+            $patientId = Auth::id();
+            $appointments = Appointment::where('patient_id', $patientId)
+                                       ->where('status', 'accepted')
+                                       ->with('therapist')
+                                       ->get();
+    
+            $events = $appointments->map(function ($appointment) {
+                $appointmentDateTime = Carbon::parse($appointment->appointment_date);
+                
+                return [
+                    'id' => $appointment->id,
+                    'title' => $appointment->mode,
+                    'start' => $appointmentDateTime->format('Y-m-d'),
+                    'extendedProps' => [
+                        'description' => $appointment->note ?: null,
+                        'startTime' => $appointmentDateTime->format('Y-m-d H:i:s'),
+                        'endTime' => $appointmentDateTime->addMinutes($appointment->end_time ?? 60)->format('Y-m-d H:i:s'),
+                        'patientName' => $appointment->therapist ? 
+                            $appointment->therapist->first_name . ' ' . $appointment->therapist->last_name : 
+                            'No Therapist',
+                    ]
+                ];
+            });
+    
+            return response()->json($events);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch appointments'], 500);
+        }
+    }
+    
 
 
 private function combineDateTime($date, $time)
@@ -134,31 +140,41 @@ private function combineDateTime($date, $time)
 
 public function getTherapistAppointments()
 {
-    $therapistId = Auth::id();
-    $appointments = Appointment::where('therapist_id', $therapistId)
-                               ->where('status', 'accepted')
-                               ->with('patient')  // Eager loading patient relationship
-                               ->get();
+    try {
+        $therapistId = Auth::id();
+        $appointments = Appointment::where('therapist_id', $therapistId)
+                                   ->where('status', 'accepted')
+                                   ->with('patient')
+                                   ->get();
 
-    $events = $appointments->map(function ($appointment) {
-        $appointmentDate = Carbon::parse($appointment->appointment_date)->format('Y-m-d');
-        return [
-            'id' => $appointment->id,
-            'title' => $appointment->mode,
-            'start' => $appointmentDate,
-            'extendedProps' => [
-                'description' => $appointment->note ?: null,
-                'startTime' => $this->combineDateTime($appointmentDate, $appointment->start_time),
-                'endTime' => $this->combineDateTime($appointmentDate, $appointment->end_time),
-                'patientName' => $appointment->patient ? 
-                    $appointment->patient->first_name . ' ' . $appointment->patient->last_name : 
-                    'No Patient', // Assuming your patient model has first_name and last_name fields
-            ]
-        ];
-    });
+        $events = $appointments->map(function ($appointment) {
+            $appointmentDateTime = Carbon::parse($appointment->appointment_date);
+            
+            return [
+                'id' => $appointment->id,
+                'title' => $appointment->mode,
+                'start' => $appointmentDateTime->format('Y-m-d'),
+                'extendedProps' => [
+                    'description' => $appointment->note ?: null,
+                    'startTime' => $appointmentDateTime->format('Y-m-d H:i:s'),
+                    'endTime' => $appointmentDateTime->addMinutes($appointment->end_time ?? 60)->format('Y-m-d H:i:s'),
+                    'patientName' => $appointment->patient ? 
+                        $appointment->patient->first_name . ' ' . $appointment->patient->last_name : 
+                        'No Patient',
+                    // Additional useful information for therapists
+                    'mode' => $appointment->mode,
+                    'status' => $appointment->status,
+                    'patientId' => $appointment->patient_id
+                ]
+            ];
+        });
 
-    return response()->json($events);
+        return response()->json($events);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to fetch appointments'], 500);
+    }
 }
+
 
 public function addAppointment(Request $request)
 {
