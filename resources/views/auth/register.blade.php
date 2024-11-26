@@ -484,18 +484,6 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <input type="hidden" name="account_type" value="{{ $accountType }}">
-                <p class="label">Parent/Guardian Details:</p>
-                <div class="input-container">
-                    <input placeholder=" " 
-                        id="guardian_name" 
-                        type="text" 
-                        name="guardian_name" 
-                        required 
-                        autocomplete="name" 
-                        value="{{ old('guardian_name') }}">
-                    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
-                    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
-                </div>
                 <div class="input-container">
                     <select id="guardian_role_select" name="guardian_role" required>
                         <option value="">Select Relationship</option>
@@ -514,6 +502,18 @@
                     </select>
                     <label for="guardian_role_select" style="top: 0px;left: 8px;font-size: 12px;color: #74A36B;background-color: white;">Relationship to Child<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('guardian_role') }}</div>
+                </div>
+                <p class="label">Parent/Guardian Details:</p>
+                <div class="input-container">
+                    <input placeholder=" " 
+                        id="guardian_name" 
+                        type="text" 
+                        name="guardian_name" 
+                        required 
+                        autocomplete="name" 
+                        value="{{ old('guardian_name') }}">
+                    <label for="guardian_name">Guardian Name<span style="color: red;">*</span></label>
+                    <div class="error-message">{{ $errors->first('guardian_name') }}</div>
                 </div>
 
                 <!-- Hidden by default, shows when "Other" is selected -->
