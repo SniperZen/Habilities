@@ -1,6 +1,6 @@
 <x-guest-layout>
     <style>
-        body {
+    body {
         margin: 0;
         font-family: Arial, sans-serif;
     }
@@ -18,9 +18,6 @@
     }
 
     #gender, #date_of_birth{
-        appearance: none;      
-        -webkit-appearance: none; 
-        -moz-appearance: none; 
         height: 40px;
     }
 
