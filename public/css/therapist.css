@@ -22,6 +22,11 @@ thead th{
     border-bottom: 2px solid #ddd;
 }
 
+.modal, .modals, .modal2{
+    overflow: auto;
+    height: auto;
+}
+
 .header {
     background: linear-gradient(180deg, #AEADD6 0%, #E5BAFF 100%);
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.11);

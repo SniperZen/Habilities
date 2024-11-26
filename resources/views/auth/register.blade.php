@@ -181,6 +181,14 @@
             font-size: 12px;
             color: #74A36B;
             background-color: white;
+        }
+
+        #guardian_role_select label{
+            top: 0px;
+            left: 8px;
+            font-size: 12px;
+            color: #74A36B;
+            background-color: white;
             width: calc(auto + 10px);
         }
 
@@ -504,7 +512,7 @@
                         <option value="Foster Parent">Foster Parent</option>
                         <option value="other">Other</option>
                     </select>
-                    <label for="guardian_role_select">Relationship to Child<span style="color: red;">*</span></label>
+                    <label for="guardian_role_select" style="top: 0px;left: 8px;font-size: 12px;color: #74A36B;background-color: white;">Relationship to Child<span style="color: red;">*</span></label>
                     <div class="error-message">{{ $errors->first('guardian_role') }}</div>
                 </div>
 

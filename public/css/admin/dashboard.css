@@ -17,6 +17,11 @@ body {
     flex-wrap: wrap;
 }
 
+.modal, .modals, .modal2{
+    overflow: auto;
+    height: auto;
+}
+
 .header-left {
     display: flex;
     align-items: center;

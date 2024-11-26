@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" style="
+                        <td colspan="5" style="
                             text-align: center; 
                             padding: 20px; 
                             font-size: 16px; 

@@ -112,6 +112,11 @@ thead th{
     padding: 15px 20px;
 }
 
+.modal, .modals, .modal2{
+    overflow: auto;
+    height: auto;
+}
+
 .footer-links a{
     text-decoration: none;
     color: #000000;
@@ -356,6 +361,14 @@ table{
         width: 21px;
         stroke: #fff;
     }
+  }
+
+  .supervised-account{
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #8AAEE0;
+    position: relative;
+    top: 15px;
   }
 
 
