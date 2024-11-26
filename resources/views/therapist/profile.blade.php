@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modalStartTime').textContent = 'Start: ' + startTime;
             document.getElementById('modalEndTime').textContent = 'End: ' + endTime;
             eventModal.style.display = "block";
+            eventModal.classList.add('show');
         }
     });
 
@@ -294,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event Modal Controls
     eventModalSpan.onclick = function() {
         eventModal.style.display = "none";
+        eventModal.classList.remove('show');
     }
 
     // Search functionality
@@ -339,6 +341,7 @@ patientList.addEventListener('click', function(e) {
         modalPatientGender.textContent = patientData.gender || 'Not specified';
         
         patientModal.style.display = 'block';
+        patientModal.classList.add('show');
         console.log('Modal should be visible now');
     }
 });
@@ -348,6 +351,7 @@ patientList.addEventListener('click', function(e) {
     // Patient Modal Controls
     patientModalCloseBtn.addEventListener('click', function() {
         patientModal.style.display = 'none';
+        patientModal.classList.remove('show');
     });
 
     // Global Modal Close on Outside Click

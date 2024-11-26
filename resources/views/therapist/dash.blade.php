@@ -347,6 +347,7 @@
             document.getElementById('modalStartTime').textContent = 'Start: ' + startTime;
             document.getElementById('modalEndTime').textContent = 'End: ' + endTime;
             modal.style.display = "block";
+            modal.classList.add('show');
         }
     });
 
@@ -355,17 +356,12 @@
     // Close the modal when clicking on <span> (x)
     span.onclick = function() {
         modal.style.display = "none";
+        modal.classList.remove('show');
     }
 
     span2.onclick = function() {
         modal.style.display = "none";
-    }
-
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+        modal.classList.remove('show');
     }
 });
 

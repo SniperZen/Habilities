@@ -237,10 +237,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <script>
         document.getElementById('addAppointmentBtn').addEventListener('click', function () {
             document.getElementById('addAppointmentModal').style.display = 'flex';
+            document.getElementById('addAppointmentModal').classList.add('show');
+
         });
 
         document.getElementById('closeModalBtn').addEventListener('click', function () {
             document.getElementById('addAppointmentModal').style.display = 'none';
+            document.getElementById('addAppointmentModal').classList.remove('show');
         });
     </script>
 

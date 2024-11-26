@@ -26,6 +26,44 @@
             z-index: 900;
         }
 
+        .modals {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes popUpEffect {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            80% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .modal-contents {
+            transform: scale(0.5);
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-out; 
+            animation-duration: 0.2s; 
+        }
+        .modals.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modals.show .modal-contents {
+            animation-name: popUpEffect; 
+        }
+
+
         
         /* .modal {
     display: none;
@@ -81,7 +119,7 @@
     <div x-show="!showDetails">
     <h2>Manage Users &gt; Therapist</h2>
     <div class="search_area">
-        <button class="addtherap" type="button" onclick="document.getElementById('addTherapistModal').style.display='block'"><i class="fas fa-plus"></i>Add Therapist</button>
+        <button class="addtherap" type="button" onclick="document.getElementById('addTherapistModal').style.display='block'; document.getElementById('addTherapistModal').classList.add('show');"><i class="fas fa-plus"></i>Add Therapist</button>
             <input class="search" 
                    type="text" 
                    id="searchInput"
@@ -175,40 +213,40 @@
                 <input type="hidden" name="user_id" x-bind:value="therapist ? therapist.id : ''">
 
                 <div class="form-group">
-                    <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" x-model="therapist.first_name" required>
+                    <label for="first_name">First Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="middle_name">Middle Name</label>
                     <input type="text" id="middle_name" name="middle_name" x-model="therapist.middle_name">
+                    <label for="middle_name">Middle Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="last_name">Last Name</label>
                     <input type="text" id="last_name" name="last_name" x-model="therapist.last_name" required>
+                    <label for="last_name">Last Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="date_of_birth">Birthday</label>
                     <input type="date" id="date_of_birth" name="date_of_birth" x-model="therapist.date_of_birth">
+                    <label for="date_of_birth">Birthday</label>
                 </div>
                 <div class="form-group">
-                    <label for="gender">Gender</label>
                     <select id="gender" name="gender" x-model="therapist.gender">
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
+                    <label for="gender">Gender</label>
                 </div>
                 <div class="form-group">
-                    <label for="contact_number">Contact Number</label>
                     <input type="text" id="contact_number" name="contact_number" x-model="therapist.contact_number">
+                    <label for="contact_number">Contact Number</label>
                 </div>
                 <div class="form-group">
-                    <label for="specialization">Specialization</label>
                     <input type="text" id="specialization" name="specialization" x-model="therapist.specialization">
+                    <label for="specialization">Specialization</label>
                 </div>
                 <div class="form-group">
-                    <label for="home_address">Address</label>
                     <input type="text" id="home_address" name="home_address" x-model="therapist.home_address">
+                    <label for="home_address">Address</label>
                 </div>
                 <!--<div class="form-group">
                     <label for="availability">Availability</label><br>
@@ -421,10 +459,19 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Success Modal -->
 <div x-show="showSuccessModal" class="modal modal-success" x-cloak>
     <div class="modal-content">
-        <h2>Success!</h2>
-        <p>User type has been updated successfully.</p>
-        <div class="modal-actions">
-            <button class="save-btn" @click="showSuccessModal = false">OK</button>
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Success!</h2>
+                </div>
+                <div class="bot">
+                    <p>User type has been updated successfully.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="save-btn" @click="showSuccessModal = false">OK</button>
+            </div>
         </div>
     </div>
 </div>
@@ -458,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 <!-- Add Therapist Modal -->
-<div id="addTherapistModal" class="modal" style="display: none;">
+<div id="addTherapistModal" class="modal modals" style="display: none;">
     <div class="modal-contents">
         <div class="heads"></div>
         <div class="mod-cont">
@@ -512,12 +559,20 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Success Modal -->
 <div id="successModal" class="modal" style="display: none;">
     <div class="modal-content">
-        
-        <h2>Account Created Successfully!</h2>
-        <p>Default password for the therapist: <strong id="defaultPassword"></strong></p>
-        <p>Please share this password with the therapist securely.</p>
-        <div class="modal-actions">
-            <button class="save-btn" onclick="closeSuccessModal()">OK</button>
+        <div class="heads"></div>
+        <div class="mod-cont">
+            <div class="inner">
+                <div class="top">
+                    <h2>Account Created Successfully!</h2>
+                </div>
+                <div class="bot">
+                    <p>Default password for the therapist: <strong id="defaultPassword"></strong></p>
+                    <p>Please share this password with the therapist securely.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="save-btn" onclick="closeSuccessModal()">OK</button>
+            </div>
         </div>
     </div>
 </div>
@@ -547,8 +602,10 @@ document.getElementById('addTherapistForm').addEventListener('submit', function(
     .then(data => {
         if (data.success) {
             document.getElementById('addTherapistModal').style.display = 'none';
+            document.getElementById('addTherapistModal').classList.remove('show');
             document.getElementById('defaultPassword').textContent = data.default_password;
             document.getElementById('successModal').style.display = 'block';
+            document.getElementById('successModal').classList.add('show');
             this.reset();
         } else {
             alert('Error creating therapist account');
@@ -562,6 +619,7 @@ document.getElementById('addTherapistForm').addEventListener('submit', function(
 
 function closeSuccessModal() {
     document.getElementById('successModal').style.display = 'none';
+    document.getElementById('successModal').classList.remove('show');
     window.location.reload();
 }
 </script>

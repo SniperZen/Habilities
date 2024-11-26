@@ -387,18 +387,22 @@ document.getElementById('appointmentForm').addEventListener('submit', async func
 // Modal functions
 function openAddModal() {
     document.getElementById("addAppointmentModal").style.display = "block";
+    document.getElementById("addAppointmentModal").classList.add('show');
 }
 
 function closeAddModal() {
     document.getElementById("addAppointmentModal").style.display = "none";
+    document.getElementById("addAppointmentModal").classList.remove('show');
 }
 
 function openDeclineModal() {
     document.getElementById("declineModal").style.display = "block";
+    document.getElementById("declineModal").classList.add('show');
 }
 
 function closeDeclineModal() {
     document.getElementById("declineModal").style.display = "none";
+    document.getElementById("declineModal").classList.remove('show');
 }
 
 // Session storage handling

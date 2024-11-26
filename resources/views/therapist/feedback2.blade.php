@@ -126,10 +126,12 @@
                 }
 
                 document.getElementById('confirmModal').style.display = 'block';
+                document.getElementById('confirmModal').classList.add('show');
             }
 
             function hideConfirmModal() {
                 document.getElementById('confirmModal').style.display = 'none';
+                document.getElementById('confirmModal').classList.remove('show');
             }
 
             function submitForm() {

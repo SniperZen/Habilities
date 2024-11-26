@@ -60,23 +60,18 @@
                   return;
               }
               document.getElementById('confirmationModal').style.display = 'block';
+              document.getElementById('confirmationModal').classList.add('show');
           }
 
           function closeModal() {
               document.getElementById('confirmationModal').style.display = 'none';
+              document.getElementById('confirmationModal').classList.remove('show');
           }
 
           function submitFeedback() {
               document.getElementById('feedbackForm').submit();
           }
 
-          // Close the modal if the user clicks outside of it
-          window.onclick = function(event) {
-              var modal = document.getElementById('confirmationModal');
-              if (event.target == modal) {
-                  closeModal();
-              }
-          }
       </script>
   </body>
   </html>

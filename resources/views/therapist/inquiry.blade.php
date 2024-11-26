@@ -21,7 +21,7 @@
 
     <!-- Main Content -->
     <main class="content">
-        <div class="inner">
+        <div class="inners">
         <header class="content-header">
             <h1>Inquiries</h1>
         </header>
@@ -89,7 +89,7 @@
                                         @csrf
                                         <button type="submit" class="complete-btn">Complete</button>
                                     </form>
-                                    <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">Expand</button></a>
+                                    <a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a>
                                 </td>
                             </tr>
                         @endif
@@ -167,7 +167,7 @@
                             <td>{{ Str::limit($inquiry->elaboration, 80) }}</td>
                             <td>{{ $inquiry->completed_at ? Carbon::parse($inquiry->completed_at)->format('m/d/Y') : 'N/A' }}</td>
                             <td>Completed</td>
-                            <td><a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">Expand</button></a></td>
+                            <td><a href="{{ route('inquiry.message', ['id' => $inquiry->id]) }}"><button class="view">View</button></a></td>
                         </tr>
                     @empty
                         <tr>
@@ -301,6 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
             currentForm = this.closest('form');
             currentRow = this.closest('tr');
             confirmationModal.style.display = 'block';
+            confirmationModal.classList.add('show');
         });
     });
 
@@ -320,6 +321,7 @@ confirmBtn.addEventListener('click', function() {
         .then(response => response.json())
         .then(data => {
             confirmationModal.style.display = 'none';
+            confirmationModal.classList.remove('show');
             
             if (data.success) {
                 // Store the success message in sessionStorage before reload
@@ -342,6 +344,7 @@ confirmBtn.addEventListener('click', function() {
     // Cancel button handler
     cancelBtn.addEventListener('click', function() {
         confirmationModal.style.display = 'none';
+        confirmationModal.classList.remove('show');
         currentForm = null;
         currentRow = null;
     });
@@ -350,6 +353,7 @@ confirmBtn.addEventListener('click', function() {
     window.addEventListener('click', function(event) {
         if (event.target === confirmationModal) {
             confirmationModal.style.display = 'none';
+            confirmationModal.classList.remove('show');
             currentForm = null;
             currentRow = null;
         }
@@ -359,6 +363,7 @@ confirmBtn.addEventListener('click', function() {
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && confirmationModal.style.display === 'block') {
             confirmationModal.style.display = 'none';
+            confirmationModal.classList.remove('show');
             currentForm = null;
             currentRow = null;
         }

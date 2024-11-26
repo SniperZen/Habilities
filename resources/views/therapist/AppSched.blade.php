@@ -286,6 +286,7 @@ svg.link[fill="#cccccc"] {
 
                 var modal = document.getElementById("myModal");
                 modal.style.display = "block";
+                modal.classList.add('show');
 
                 // Update the form action
                 var form = document.getElementById("appointmentForm");
@@ -301,6 +302,7 @@ svg.link[fill="#cccccc"] {
             function closeModal() {
                 var modal = document.getElementById("myModal");
                 modal.style.display = "none";
+                modal.classList.remove('show');
             }
 
             // Get the <span> element that closes the modal
@@ -476,23 +478,27 @@ function openCancelModal(appointmentId) {
     form.action = `/therapist/cancel-appointment/${appointmentId}`;
     document.getElementById('cancelAppointmentId').value = appointmentId;
     modal.style.display = 'block';
+    modal.classList.add('show');
 }
 
 // Close cancel modal and reload page
 function closeCancelModal() {
     document.getElementById('cancelAppointmentModal').style.display = 'none';
     window.location.reload();
+    document.getElementById('cancelAppointmentModal').classList.remove('show');
 }
 
 
 // Handle back button in cancel modal and reload
 document.querySelector('.back-btn').addEventListener('click', function() {
     document.getElementById('cancelAppointmentModal').style.display = 'none';
+    document.getElementById('cancelAppointmentModal').classList.remove('show');
 });
 
 // Handle back button in cancel modal
 document.querySelector('.back-btn').addEventListener('click', function() {
     document.getElementById('cancelAppointmentModal').style.display = 'none';
+    document.getElementById('cancelAppointmentModal').classList.remove('show');
 });
 
 
@@ -504,11 +510,13 @@ function openFinishModal(appointmentId) {
 
     // Show the modal
     document.getElementById('finishModal').style.display = 'block';
+    document.getElementById('finishModal').classList.add('show');
 }
 
 function closeFinishModal() {
     // Hide the modal
     document.getElementById('finishModal').style.display = 'none';
+    document.getElementById('finishModal').classList.remove('show');
 }
 
     const today = new Date().toISOString().split('T')[0];

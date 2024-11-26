@@ -31,7 +31,7 @@
             <img src="{{ asset('images/icons/message.png') }}" alt="Edit">
         </div>-->
         <div class="icon-container">
-            <img src="{{ asset('images/icons/delete.png') }}" alt="Delete" id="delete-icon">
+            <!-- <img src="{{ asset('images/icons/delete.png') }}" alt="Delete" id="delete-icon"> -->
         </div>
     </div>
     <header class="inquiry-header">

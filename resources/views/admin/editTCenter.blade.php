@@ -186,11 +186,13 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     // Show confirmation modal when Save Changes is clicked
     document.getElementById('saveBusinessHours').addEventListener('click', function() {
         confirmationModal.style.display = 'flex';
+        confirmationModal.classList.add('show');
     });
 
     // Handle cancel button in confirmation modal
     document.getElementById('cancelSave').addEventListener('click', function() {
         confirmationModal.style.display = 'none';
+        confirmationModal.classList.remove('show');
     });
 
     // Handle confirm save in confirmation modal

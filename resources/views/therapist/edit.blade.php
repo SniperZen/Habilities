@@ -190,10 +190,12 @@
 
     function openConfirmModal() {
         confirmModal.style.display = 'flex';
+        confirmModal.classList.add('show');
     }
 
     function closeConfirmModal() {
         confirmModal.style.display = 'none';
+        confirmModal.classList.remove('show');
     }
 
     function showToast(message, type = 'success') {
