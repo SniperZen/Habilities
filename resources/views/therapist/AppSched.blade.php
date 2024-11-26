@@ -16,7 +16,11 @@
    
 </head>
 <style>
-
+.cancel-appointment-btn2:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
 .AppSched td[colspan="8"] {
     font-size: 16px;
     color: #666;
@@ -210,13 +214,14 @@ svg.link[fill="#cccccc"] {
                                     <option value="Other">Other</option>
                                 </select>
 
-                                <p><label>Note to the Patient (optional):</label></p>
-                                <textarea id="cancellationNote" name="cancellationNote" placeholder="Type here..." rows="4"></textarea>
+                                <p><label>Note to the Patient:</label></p>
+                                <textarea id="cancellationNote" name="cancellationNote" placeholder="Type here..." rows="4" required></textarea>
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="back-btn">Back</button>
-                        <button type="submit" class="cancel-appointment-btn2">Cancel Appointment</button>
+                        <!-- Change the submit button in the cancellation form -->
+                        <button type="submit" class="cancel-appointment-btn2" disabled>Cancel Appointment</button>
                     </div>
                     </form>
                 </div>
@@ -274,6 +279,29 @@ svg.link[fill="#cccccc"] {
         </div>
 
         <script>
+            function validateCancellationForm() {
+                const reason = document.getElementById('cancellationReason').value;
+                const note = document.getElementById('cancellationNote').value.trim();
+                const submitButton = document.querySelector('.cancel-appointment-btn2');
+                
+                // Enable button only if both fields are filled
+                submitButton.disabled = !(reason && note);
+            }
+
+            // Add event listeners to form fields
+            document.addEventListener('DOMContentLoaded', function() {
+                const reasonSelect = document.getElementById('cancellationReason');
+                const noteTextarea = document.getElementById('cancellationNote');
+                
+                // Initial validation
+                validateCancellationForm();
+                
+                // Validate on reason change
+                reasonSelect.addEventListener('change', validateCancellationForm);
+                
+                // Validate on note input
+                noteTextarea.addEventListener('input', validateCancellationForm);
+            });
             // Function to open the modal and set patient details
             function openModal(patientName, patientId, date, startTime, endTime, appointmentId) {
                 document.getElementById("patientName").value = patientName;
