@@ -209,7 +209,7 @@ h2{
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
-.account-info form input{
+.account-info form input, select{
     width: 100%;
     padding: 8px;
     border-radius: 5px;
@@ -516,7 +516,7 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
     position: relative;
 }
 
-.form-group input {
+.form-group input, select {
     width: 100%;
     max-width: 400px;
     padding: 12px;
@@ -546,8 +546,17 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
 /* Move the label to the top when input is focused or has value */
 .form-group input:focus + label,
 .form-group input:not(:placeholder-shown) + label {
-    top: 0;
-    left: 10px;
+    top: 9px;
+    left: 8px;
+    font-size: 12px;
+    color: #74A36B;
+    background-color: white;
+    padding: 0 5px;
+}
+
+.gender label{
+    top: 9px;
+    left: 8px;
     font-size: 12px;
     color: #74A36B;
     background-color: white;

@@ -228,7 +228,7 @@
                     <input type="date" id="date_of_birth" name="date_of_birth" x-model="therapist.date_of_birth">
                     <label for="date_of_birth">Birthday</label>
                 </div>
-                <div class="form-group">
+                <div class="form-group gender">
                     <select id="gender" name="gender" x-model="therapist.gender">
                         <option value="male">Male</option>
                         <option value="female">Female</option>

@@ -33,6 +33,15 @@
         margin-bottom: 1rem;
         color: #333;
     }
+
+    #gender label{
+        top: 9px;
+        left: 8px;
+        font-size: 12px;
+        color: #74A36B;
+        background-color: white;
+        padding: 0 5px;
+    }
     
 </style>
     <meta charset="UTF-8">
@@ -151,36 +160,36 @@
                 <input type="hidden" name="user_id" x-bind:value="patient ? patient.id : ''">
 
                 <div class="form-group">
-                    <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" x-bind:value="patient ? patient.first_name : ''" required>
+                    <label for="first_name">First Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="middle_name">Middle Name</label>
                     <input type="text" id="middle_name" name="middle_name" x-bind:value="patient ? patient.middle_name : ''">
+                    <label for="middle_name">Middle Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="last_name">Last Name</label>
                     <input type="text" id="last_name" name="last_name" x-bind:value="patient ? patient.last_name : ''" required>
+                    <label for="last_name">Last Name</label>
                 </div>
                 <div class="form-group">
-                    <label for="date_of_birth">Birthday</label>
                     <input type="date" id="date_of_birth" name="date_of_birth" x-bind:value="patient ? formatDate(patient.date_of_birth) : ''">
+                    <label for="date_of_birth">Birthday</label>
                 </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
+                <div class="form-group gender">
                     <select id="gender" name="gender">
                         <option value="male" x-bind:selected="patient && patient.gender === 'male'">Male</option>
                         <option value="female" x-bind:selected="patient && patient.gender === 'female'">Female</option>
                         <option value="other" x-bind:selected="patient && patient.gender === 'other'">Other</option>
                     </select>
+                    <label for="gender">Gender</label>
                 </div>
                 <div class="form-group">
-                    <label for="contact_number">Contact Number</label>
                     <input type="text" id="contact_number" name="contact_number" x-bind:value="patient ? patient.contact_number : ''">
+                    <label for="contact_number">Contact Number</label>
                 </div>
                 <div class="form-group">
-                    <label for="home_address">Address</label>
                     <input type="text" id="home_address" name="home_address" x-bind:value="patient ? patient.home_address : ''">
+                    <label for="home_address">Address</label>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="cancel-btn" @click="editMode = false; showDetails = false;">Cancel</button>
