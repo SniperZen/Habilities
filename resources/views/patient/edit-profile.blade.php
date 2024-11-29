@@ -83,9 +83,13 @@
         <input type="text" id="last_name" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}" required>
     </div>
     <div class="form-group">
-        <label for="date_of_birth">Birthday</label>
-        <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth ? auth()->user()->date_of_birth->format('Y-m-d') : '') }}">
-    </div>
+    <label for="date_of_birth">Birthday</label>
+    <input type="date" 
+           id="date_of_birth" 
+           name="date_of_birth" 
+           value="{{ old('date_of_birth', auth()->user()->date_of_birth ? auth()->user()->date_of_birth->format('Y-m-d') : '') }}"
+           max="{{ date('Y-m-d') }}">
+</div>
     <div class="form-group">
         <label for="gender">Gender</label>
         <select id="gender" name="gender">
@@ -164,6 +168,40 @@ function toggleOtherGuardianRole() {
 // Run on page load to handle initial state
 document.addEventListener('DOMContentLoaded', function() {
     toggleOtherGuardianRole();
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date_of_birth');
+    const accountType = "{{ auth()->user()->account_type }}"; // Get the account type from your auth
+
+    function updateDateRestriction() {
+        if (accountType === 'self') {
+            // Calculate date for 13 years ago
+            const today = new Date();
+            const minDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+            
+            // Format the date to YYYY-MM-DD
+            const minDateString = minDate.toISOString().split('T')[0];
+            
+            // Set the maximum date to 13 years ago
+            dateInput.setAttribute('max', minDateString);
+        }
+    }
+
+    // Initial setup
+    updateDateRestriction();
+
+    // Add event listener to validate on change
+    dateInput.addEventListener('change', function() {
+        if (accountType === 'self') {
+            const selectedDate = new Date(this.value);
+            const maxAllowedDate = new Date(dateInput.getAttribute('max'));
+
+            if (selectedDate > maxAllowedDate) {
+                alert('For child accounts, age must be above 13 years old');
+                this.value = ''; // Clear the invalid date
+            }
+        }
+    });
 });
 </script>
     <!-- Confirmation Modal -->
