@@ -42,7 +42,7 @@ class TherapistFeedbackNotification extends Notification
         return [
             'feedback_id' => $this->feedback->id,  // Changed this line
             'therapist_id' => $this->feedback->id,  // Changed this if therapist_id is the same as id
-            'message' => 'Your therapist has provided feedback.',
+            'message' => 'OTF sent by therapist.',
             'title' => $this->feedback->title,
             // other relevant data
         ];

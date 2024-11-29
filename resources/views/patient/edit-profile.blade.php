@@ -58,49 +58,114 @@
             @endif
 
             <form id="profileForm" class="profile-form" method="POST" action="{{ route('edit-profile.update') }}" onsubmit="event.preventDefault(); openConfirmModal()">
-                @csrf
-                @method('patch')
+    @csrf
+    @method('patch')
 
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" value="{{ old('first_name', auth()->user()->first_name) }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="middle_name">Middle Name</label>
-                    <input type="text" id="middle_name" name="middle_name" value="{{ old('middle_name', auth()->user()->middle_name) }}">
-                </div>
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="date_of_birth">Birthday</label>
-                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth ? auth()->user()->date_of_birth->format('Y-m-d') : '') }}">
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <select id="gender" name="gender">
-                        <option value="male" {{ old('gender', auth()->user()->gender) === 'male' ? 'selected' : '' }}>Male</option>
-                        <option value="female" {{ old('gender', auth()->user()->gender) === 'female' ? 'selected' : '' }}>Female</option>
-                        <option value="other" {{ old('gender', auth()->user()->gender) === 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="contact_number">Contact Number</label>
-                    <input type="text" id="contact_number" name="contact_number" value="{{ old('contact_number', auth()->user()->contact_number) }}">
-                </div>
-                <div class="form-group">
-                    <label for="home_address">Address</label>
-                    <input type="text" id="home_address" name="home_address" value="{{ old('home_address', auth()->user()->home_address) }}">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
-                    <button type="submit" class="save-btn">Save Changes</button>
-                </div>
-            </form>
+    <!-- For debugging purposes -->
+    @if(auth()->check())
+        <div style="display: none;">
+            Debug Info:
+            User Type: {{ auth()->user()->usertype }}
+            Account Type: {{ auth()->user()->account_type }}
+        </div>
+    @endif
+
+    <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', auth()->user()->first_name) }}" required>
+    </div>
+    <div class="form-group">
+        <label for="middle_name">Middle Name</label>
+        <input type="text" id="middle_name" name="middle_name" value="{{ old('middle_name', auth()->user()->middle_name) }}">
+    </div>
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}" required>
+    </div>
+    <div class="form-group">
+        <label for="date_of_birth">Birthday</label>
+        <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth ? auth()->user()->date_of_birth->format('Y-m-d') : '') }}">
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+            <option value="male" {{ old('gender', auth()->user()->gender) === 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ old('gender', auth()->user()->gender) === 'female' ? 'selected' : '' }}>Female</option>
+            <option value="other" {{ old('gender', auth()->user()->gender) === 'other' ? 'selected' : '' }}>Other</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="contact_number">Contact Number</label>
+        <input type="text" id="contact_number" name="contact_number" value="{{ old('contact_number', auth()->user()->contact_number) }}">
+    </div>
+    <div class="form-group">
+        <label for="home_address">Address</label>
+        <input type="text" id="home_address" name="home_address" value="{{ old('home_address', auth()->user()->home_address) }}">
+    </div>
+
+    {{-- Try different condition variations --}}
+    @if(auth()->user()->account_type == 'child')
+    <div class="form-group">
+    <label for="guardian_role">Guardian Role</label>
+    <select id="guardian_role" name="guardian_role" required onchange="toggleOtherGuardianRole()">
+        <option value="">Select Relationship</option>
+        <option value="Father" {{ $user->guardian_role == 'Father' ? 'selected' : '' }}>Father</option>
+        <option value="Mother" {{ $user->guardian_role == 'Mother' ? 'selected' : '' }}>Mother</option>
+        <option value="Grandfather" {{ $user->guardian_role == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
+        <option value="Grandmother" {{ $user->guardian_role == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
+        <option value="Aunt" {{ $user->guardian_role == 'Aunt' ? 'selected' : '' }}>Aunt</option>
+        <option value="Uncle" {{ $user->guardian_role == 'Uncle' ? 'selected' : '' }}>Uncle</option>
+        <option value="Sibling" {{ $user->guardian_role == 'Sibling' ? 'selected' : '' }}>Sibling</option>
+        <option value="Legal Guardian" {{ $user->guardian_role == 'Legal Guardian' ? 'selected' : '' }}>Legal Guardian</option>
+        <option value="Stepfather" {{ $user->guardian_role == 'Stepfather' ? 'selected' : '' }}>Stepfather</option>
+        <option value="Stepmother" {{ $user->guardian_role == 'Stepmother' ? 'selected' : '' }}>Stepmother</option>
+        <option value="Foster Parent" {{ $user->guardian_role == 'Foster Parent' ? 'selected' : '' }}>Foster Parent</option>
+        <option value="other" {{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? 'selected' : '' }}>Other</option>
+    </select>
+</div>
+
+<div class="form-group" id="otherGuardianRoleField" style="display: none;">
+    <label for="other_guardian_role">Specify Guardian Role</label>
+    <input type="text" id="other_guardian_role" name="other_guardian_role" class="form-control" 
+           value="{{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? $user->guardian_role : '' }}"
+           placeholder="Please specify the guardian role">
+</div>
+
+
+        <div class="form-group">
+            <label for="guardian_name">Guardian Name</label>
+            <input type="text" id="guardian_name" name="guardian_name" value="{{ old('guardian_name', auth()->user()->guardian_name) }}" required>
+        </div>
+    @endif
+
+    <div class="form-actions">
+        <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
+        <button type="submit" class="save-btn">Save Changes</button>
+    </div>
+</form>
+
         </section>
     </main>
+    <script>
+function toggleOtherGuardianRole() {
+    const guardianRoleSelect = document.getElementById('guardian_role');
+    const otherGuardianRoleField = document.getElementById('otherGuardianRoleField');
+    const otherGuardianRoleInput = document.getElementById('other_guardian_role');
+    
+    if (guardianRoleSelect.value === 'other') {
+        otherGuardianRoleField.style.display = 'block';
+        otherGuardianRoleInput.required = true;
+    } else {
+        otherGuardianRoleField.style.display = 'none';
+        otherGuardianRoleInput.required = false;
+    }
+}
 
+// Run on page load to handle initial state
+document.addEventListener('DOMContentLoaded', function() {
+    toggleOtherGuardianRole();
+});
+</script>
     <!-- Confirmation Modal -->
     <div id="confirmModal" class="modal" style="display: none;">
         <div class="modal-content">
