@@ -105,7 +105,7 @@
             </header>
             <div class="actions">
                 <div class="action">
-                    <a href="{{ route('therapist.AppSched')}}">
+                    <a href="{{ route('therapist.inquiry')}}">
                         <button>
                             <img src="{{ asset('images/icons/tinquiry.png') }}" alt="">
                             <p class="p">No. of Inquiries</p>
@@ -114,7 +114,7 @@
                     </a>
                 </div>
                 <div class="action">
-                    <a href="{{ route('therapist.AppReq')}}">
+                    <a href="{{ route('therapist.AppSched')}}">
                         <button>
                             <img src="{{ asset('images/icons/tappoint.png') }}" alt="">
                             <p class="p">No. of Appointments</p>
