@@ -18,6 +18,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Controllers\NotificationController;
 use App\Models\Appointment;
+use App\Models\BusinessSetting;
+use App\Http\Controllers\WelcomeController;
 
 
 
@@ -28,7 +30,11 @@ Route::post('/mark-notification-as-read/{id}', [NotificationController::class, '
             ->name('notifications.more');
     });
     
-
+    Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/settings-json', function() {
+        return App\Models\BusinessSetting::first();
+    });
+    
 // Apply ShareUserData middleware to all routes
 Route::middleware([ShareUserData::class])->group(function () {
     // Public routes

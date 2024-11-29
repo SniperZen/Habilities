@@ -336,54 +336,80 @@
                         <div class="contacts1">
                             <div class="contacts2">
                             <div class="contact-info fade-in-up">
-                                <h3>Habilities Center For Intervention</h3>
-                                <p>
-                                    <strong>Address</strong><br>
-                                    112 Sampaguita Street, Phase 1<br>
-                                    Brgy. Bulihan, City Of Malolos<br>
-                                    3000 Bulacan, Philippines
-                                </p>
-                                <p>
-                                    <strong>Hours</strong><br>
-                                    @php
-                                        $days = [
-                                            'sunday' => 'Sun',
-                                            'monday' => 'Mon',
-                                            'tuesday' => 'Tue',
-                                            'wednesday' => 'Wed',
-                                            'thursday' => 'Thurs',
-                                            'friday' => 'Fri',
-                                            'saturday' => 'Sat'
-                                        ];
-                                    @endphp
+    <h3>Habilities Center For Intervention</h3>
+    <p>
+        <strong>Address</strong><br>
+        112 Sampaguita Street, Phase 1<br>
+        Brgy. Bulihan, City Of Malolos<br>
+        3000 Bulacan, Philippines
+    </p>
+    <p>
+        <strong>Hours</strong><br>
+        <div id="business-hours">
+            <!-- Hours will be populated here -->
+        </div>
+    </p>
+    <p>
+        <strong>Contact</strong><br>
+        <span id="phone"></span><br>
+        <span id="email"></span>
+    </p>
+</div>
 
-                                    @foreach($days as $dayKey => $dayLabel)
-                                        @php
-                                            $hours = $settings->business_hours[$dayKey] ?? null;
-                                            $isClosed = $hours['is_closed'] ?? true;
-                                            $isTeletherapy = $hours['is_teletherapy'] ?? false;
-                                            $startTime = $hours['start_time'] ?? '';
-                                            $endTime = $hours['end_time'] ?? '';
-                                        @endphp
+<script>
+    // Define day abbreviations
+    const dayAbbreviations = {
+        'sunday': 'Sun',
+        'monday': 'Mon',
+        'tuesday': 'Tue',
+        'wednesday': 'Wed',
+        'thursday': 'Thurs',
+        'friday': 'Fri',
+        'saturday': 'Sat'
+    };
 
-                                        {{ $dayLabel }}: 
-                                        @if($isClosed)
-                                            Closed
-                                        @elseif($isTeletherapy)
-                                            <span class="teletherapy-badge">Tele-therapy Only</span>
-                                        @else
-                                            {{ \Carbon\Carbon::parse($startTime)->format('h:i A') }} - {{ \Carbon\Carbon::parse($endTime)->format('h:i A') }}
-                                        @endif
-                                        <br>
-                                    @endforeach
+    // Function to format time
+    function formatTime(timeString) {
+        if (!timeString) return '';
+        const date = new Date(`2000-01-01T${timeString}`);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
 
-                                </p>
-                                <p>
-                                    <strong>Contact</strong><br>
-                                    Phone: {{ $settings->phone ?? 'Not Available' }}<br>
-                                    Email: {{ $settings->email ?? 'Not Available' }}
-                                </p>
-                            </div>
+    // Fetch the settings data
+    fetch('/settings-json')
+        .then(response => response.json())
+        .then(settings => {
+            // Populate business hours
+            const hoursHtml = Object.entries(dayAbbreviations).map(([dayKey, dayLabel]) => {
+                const hours = settings.business_hours[dayKey] || {};
+                let scheduleText = '';
+                
+                if (hours.is_closed) {
+                    scheduleText = 'Closed';
+                } else if (hours.is_teletherapy) {
+                    scheduleText = '<span class="teletherapy-badge">Tele-therapy Only</span>';
+                } else {
+                    scheduleText = `${formatTime(hours.start_time)} - ${formatTime(hours.end_time)}`;
+                }
+                
+                return `${dayLabel}: ${scheduleText}<br>`;
+            }).join('');
+            
+            document.getElementById('business-hours').innerHTML = hoursHtml;
+
+            // Populate contact information
+            document.getElementById('phone').textContent = `Phone: ${settings.phone || 'Not Available'}`;
+            document.getElementById('email').textContent = `Email: ${settings.email || 'Not Available'}`;
+        })
+        .catch(error => {
+            console.error('Error fetching settings:', error);
+            document.getElementById('business-hours').innerHTML = 'Hours information unavailable';
+            document.getElementById('phone').textContent = 'Phone: Not Available';
+            document.getElementById('email').textContent = 'Email: Not Available';
+        });
+</script>
+
+
                             <div class="map fade-in-up">
                                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3856.3603880628225!2d120.80403717587748!3d14.861113170643938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x339653df18a2d6a5%3A0xac6ca8ce5b8e66fb!2sHabilities%20Center%20For%20Intervention!5e0!3m2!1sen!2sus!4v1725507566462!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
