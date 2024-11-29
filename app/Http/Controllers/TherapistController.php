@@ -295,7 +295,8 @@ class TherapistController extends Controller
         return redirect()->back()->with('error', 'Cannot decline this appointment.');
     }
 
-    $appointment->status = 'declined';
+    $appointment->status = 'therapist_declined';
+    $appointment->completion_date = now(); // Add this line to set the completion timestamp
     $appointment->save();
 
     $patient = $appointment->user; // Get the patient
@@ -315,9 +316,10 @@ public function cancelAppointment(Request $request, $id)
         $appointment = Appointment::findOrFail($id);
         
         // Update appointment with cancellation details
-        $appointment->status = 'declined';
+        $appointment->status = 'therapist_canceled';
         $appointment->cancellation_reason = $request->cancellationReason;
         $appointment->cancellation_note = $request->cancellationNote;
+        $appointment->completion_date = now(); // Add this line to set the completion timestamp
         $appointment->save();
 
         $patient = $appointment->user; // Get the patient
@@ -341,8 +343,9 @@ public function finishAppointment(Request $request, $id)
     try {
         $appointment = Appointment::findOrFail($id);
         
-        // Update the status of the appointment
+        // Update the status and completion_date of the appointment
         $appointment->status = 'finished';
+        $appointment->completion_date = now(); // Add this line to set the completion timestamp
         $appointment->save();
 
         $patient = $appointment->user; // Get the patient
@@ -351,11 +354,16 @@ public function finishAppointment(Request $request, $id)
         $patient->notify(new AppointmentFinishedNotification($appointment));
 
         // Return a JSON response
-        return response()->json(['success' => true, 'message' => 'Appointment finished successfully.']);
+        return response()->json([
+            'success' => true, 
+            'message' => 'Appointment finished successfully.',
+            'completion_date' => $appointment->completion_date // Optional: return the completion date in response
+        ]);
     } catch (\Exception $e) {
         return response()->json(['success' => false, 'error' => 'An error occurred while finishing the appointment.']);
     }
 }
+
 
 
 
@@ -447,50 +455,86 @@ public function feedback2(Request $request)
 
 
 public function myHistory(Request $request)
-    {
-        $therapist = Auth::user();
-        $historyFilter = $request->input('history_filter', 'all');
+{
+    $therapist = Auth::user();
+    $historyFilter = $request->input('history_filter', 'all');
 
-        $query = DB::table('appointments')
-            ->join('users', 'appointments.patient_id', '=', 'users.id')
-            ->select(
-                'appointments.*',
-                'users.first_name',
-                'users.middle_name',
-                'users.last_name'
-            )
-            ->where('appointments.therapist_id', $therapist->id)
-            ->whereIn('appointments.status', ['finished', 'declined', 'missed'])
-            ->orderBy('appointments.appointment_date', 'desc')
-            ->orderBy('appointments.start_time', 'desc');
+    $query = DB::table('appointments')
+        ->join('users', 'appointments.patient_id', '=', 'users.id')
+        ->select(
+            'appointments.*',
+            'users.first_name',
+            'users.middle_name',
+            'users.last_name'
+        )
+        ->where('appointments.therapist_id', $therapist->id)
+        ->whereIn('appointments.status', [
+            'finished', 
+            'missed', 
+            'therapist_declined',
+            'patient_declined',
+            'therapist_canceled',
+            'patient_canceled'
+        ]);
 
-        // Apply date filters
-        switch ($historyFilter) {
-            case 'today':
-                $query->whereDate('appointments.appointment_date', Carbon::today());
-                break;
-            case 'yesterday':
-                $query->whereDate('appointments.appointment_date', Carbon::yesterday());
-                break;
-            case 'last_7_days':
-                $query->where('appointments.appointment_date', '>=', Carbon::now()->subDays(7));
-                break;
-            case 'last_14_days':
-                $query->where('appointments.appointment_date', '>=', Carbon::now()->subDays(14));
-                break;
-            case 'last_21_days':
-                $query->where('appointments.appointment_date', '>=', Carbon::now()->subDays(21));
-                break;
-            case 'last_28_days':
-                $query->where('appointments.appointment_date', '>=', Carbon::now()->subDays(28));
-                break;
-        }
-
-        $historyAppointments = $query->get();
-        // Update missed appointments
-        $this->updateAppointmentStatuses();
-        return view('therapist.myHistory', compact('historyAppointments', 'historyFilter'));
+    // Apply date filters
+    switch ($historyFilter) {
+        case 'today':
+            $query->whereDate('appointments.completion_date', Carbon::today());
+            break;
+        case 'yesterday':
+            $query->whereDate('appointments.completion_date', Carbon::yesterday());
+            break;
+        case 'last_7_days':
+            $query->where('appointments.completion_date', '>=', Carbon::now()->subDays(7));
+            break;
+        case 'last_14_days':
+            $query->where('appointments.completion_date', '>=', Carbon::now()->subDays(14));
+            break;
+        case 'last_21_days':
+            $query->where('appointments.completion_date', '>=', Carbon::now()->subDays(21));
+            break;
+        case 'last_28_days':
+            $query->where('appointments.completion_date', '>=', Carbon::now()->subDays(28));
+            break;
     }
+
+    // Order by completion date first, then appointment date
+    $query->orderBy('appointments.completion_date', 'desc')
+          ->orderBy('appointments.appointment_date', 'desc')
+          ->orderBy('appointments.start_time', 'desc');
+
+    $historyAppointments = $query->get();
+    
+    // Update missed appointments
+    $this->updateAppointmentStatuses();
+
+    // Format patient names
+    $historyAppointments = $historyAppointments->map(function($appointment) {
+        $appointment->patient_full_name = trim(
+            $appointment->first_name . ' ' . 
+            ($appointment->middle_name ? $appointment->middle_name . ' ' : '') . 
+            $appointment->last_name
+        );
+        
+        // Format dates using Carbon
+        $appointment->formatted_appointment_date = $appointment->appointment_date ? 
+            Carbon::parse($appointment->appointment_date)->format('F j, Y') : '-';
+            
+        $appointment->formatted_completion_date = $appointment->completion_date ? 
+            Carbon::parse($appointment->completion_date)->format('F j, Y g:i A') : '-';
+            
+        $appointment->formatted_time = $appointment->start_time ? 
+            Carbon::parse($appointment->start_time)->format('g:i A') . ' - ' . 
+            Carbon::parse($appointment->end_time)->format('g:i A') : '-';
+
+        return $appointment;
+    });
+
+    return view('therapist.myHistory', compact('historyAppointments', 'historyFilter'));
+}
+
+
 public function feedback3(){
     return view('therapist.feedback3');
 }

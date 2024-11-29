@@ -103,9 +103,16 @@ class PatientController extends Controller
          
          // Start with base query for logged-in patient's appointments
          $query = Appointment::where('patient_id', Auth::id())
-             ->whereIn('status', ['finished', 'declined', 'missed'])
+             ->whereIn('status', [
+                 'finished',
+                 'therapist_declined',
+                 'patient_declined',
+                 'missed',
+                 'therapist_canceled',
+                 'patient_canceled'
+             ])
              ->with('therapist');  // Eager load therapist relationship
- 
+     
          // Apply date filters
          switch ($filter) {
              case 'today':
@@ -115,33 +122,46 @@ class PatientController extends Controller
                  $query->whereDate('appointment_date', Carbon::yesterday());
                  break;
              case 'last_7_days':
-                 $query->whereDate('appointment_date', '>=', Carbon::now()->subDays(7));
+                 $query->whereBetween('appointment_date', [
+                     Carbon::now()->subDays(7)->startOfDay(),
+                     Carbon::now()->endOfDay()
+                 ]);
                  break;
              case 'last_14_days':
-                 $query->whereDate('appointment_date', '>=', Carbon::now()->subDays(14));
+                 $query->whereBetween('appointment_date', [
+                     Carbon::now()->subDays(14)->startOfDay(),
+                     Carbon::now()->endOfDay()
+                 ]);
                  break;
              case 'last_21_days':
-                 $query->whereDate('appointment_date', '>=', Carbon::now()->subDays(21));
+                 $query->whereBetween('appointment_date', [
+                     Carbon::now()->subDays(21)->startOfDay(),
+                     Carbon::now()->endOfDay()
+                 ]);
                  break;
              case 'last_28_days':
-                 $query->whereDate('appointment_date', '>=', Carbon::now()->subDays(28));
+                 $query->whereBetween('appointment_date', [
+                     Carbon::now()->subDays(28)->startOfDay(),
+                     Carbon::now()->endOfDay()
+                 ]);
                  break;
-
              case 'all':
              default:
                  // No additional filtering needed
                  break;
          }
+     
          // Update missed appointments
          $this->updateAppointmentStatuses();
-         // Order by status (pending first), then by appointment date and time
+     
+         // Order by appointment date and time in descending order
          $pastAppointments = $query->orderBy('appointment_date', 'desc')
-                                    ->orderBy('start_time', 'desc')
-                                    ->get();
-                                   
- 
-         return view('patient.myHistory', compact('pastAppointments'));
+                                  ->orderBy('start_time', 'desc')
+                                  ->get();
+     
+         return view('patient.myHistory', compact('pastAppointments', 'filter'));
      }
+     
     public function CompApp($id)
     {
         $therapist = User::find($id);
@@ -316,17 +336,28 @@ class PatientController extends Controller
 }
 
     
-    public function showAppointmentsDash()
-    {
-        $appointments = Appointment::where('patient_id', Auth::id())
-            ->whereIn('status', ['finished', 'declined', 'missed'])
-            ->orderBy('appointment_date', 'desc')
-            ->take(5)
-            ->get();
-            // Update missed appointments
-            $this->updateAppointmentStatuses();
-        return view('patient.dash', compact('appointments'));
-    }
+public function showAppointmentsDash()
+{
+    // First update the statuses
+    $this->updateAppointmentStatuses();
+
+    // Then get the appointments
+    $appointments = Appointment::where('patient_id', Auth::id())
+        ->whereIn('status', [
+            'finished',
+            'therapist_declined',
+            'therapist_canceled',
+            'patient_declined',
+            'missed',
+        ])
+        ->orderBy('appointment_date', 'desc')
+        ->take(5)
+        ->get();
+
+    return view('patient.dash', compact('appointments'));
+}
+
+
     
     private function updateAppointmentStatuses()
     {
@@ -399,9 +430,10 @@ class PatientController extends Controller
             ]);
 
             // Update appointment with cancellation details
-            $appointment->status = 'declined';
+            $appointment->status = 'patient_declined';
             $appointment->patient_reason = $request->cancellationReason;
             $appointment->patient_note = $request->cancellationNote;
+            $appointment->completion_date = now(); // Add this line to set the completion timestamp
             $appointment->save();
 
             // Get the therapist

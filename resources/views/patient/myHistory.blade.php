@@ -44,54 +44,79 @@
                 </div>
             </div>
             <div class="table">
-                <table class="history">
-                    <thead>
-                        <tr>
-                            <th>Therapist Name</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Mode</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @if($pastAppointments->isEmpty())
-                        <tr>
-                            <td colspan="5" class="empty-table-message">
-                                No appointments found.
-                            </td>
-                        </tr>
+            <table class="history">
+    <thead>
+        <tr>
+            <th>Therapist Name</th>
+            <th>Appointment Date</th>
+            <th>Time</th>
+            <th>Completion Date</th>
+            <th>Mode</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if($pastAppointments->isEmpty())
+        <tr>
+            <td colspan="6" class="empty-table-message">
+                No appointments found.
+            </td>
+        </tr>
+    @else
+        @foreach($pastAppointments as $appointment)
+            <tr>
+                <td>{{ $appointment->therapist->name ?? 'N/A' }}</td>
+                <td>
+                    @if($appointment->status == 'pending')
+                        -
                     @else
-                        @foreach($pastAppointments as $appointment)
-                            <tr>
-                                <td>{{ $appointment->therapist->name ?? '' }}</td>
-                                <td>
-                                    @if($appointment->status == 'pending')
-                                        -
-                                    @else
-                                        {{ $appointment->appointment_date ? \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') : '-' }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($appointment->status == 'pending')
-                                        -
-                                    @else
-                                        {{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}
-                                    @endif
-                                </td>
-                                <td>{{ ucfirst($appointment->mode) }}</td>
-                                <td>
-                                    @if($appointment->status == 'missed')
-                                        <span>Missed</span>
-                                    @else
-                                        {{ ucfirst($appointment->status) }}
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                        {{ $appointment->appointment_date ? \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') : '-' }}
                     @endif
-                    </tbody>
-                </table>
+                </td>
+                <td>
+                    @if($appointment->status == 'pending')
+                        -
+                    @else
+                        {{ \Carbon\Carbon::parse($appointment->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($appointment->end_time)->format('g:i A') }}
+                    @endif
+                </td>
+                <td>
+                    @if($appointment->completion_date)
+                        {{ \Carbon\Carbon::parse($appointment->completion_date)->format('F j, Y g:i A') }}
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>{{ ucfirst($appointment->mode) }}</td>
+                <td>
+                    <span class="badge 
+                        @switch(strtolower(str_replace('_', ' ', $appointment->status)))
+                            @case('finished')
+                                bg-success
+                                @break
+                            @case('missed')
+                                bg-warning
+                                @break
+                            @case('therapist declined')
+                            @case('therapist canceled')
+                            @case('patient declined')
+                            @case('patient canceled')
+                                bg-danger
+                                @break
+                            @default
+                                bg-secondary
+                        @endswitch
+                    ">
+                        {{ ucwords(str_replace('_', ' ', $appointment->status)) }}
+                    </span>
+                </td>
+            </tr>
+        @endforeach
+    @endif
+    </tbody>
+</table>
+
+
             </div>
         </main>
     </div>

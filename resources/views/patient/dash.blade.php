@@ -181,41 +181,63 @@
                     </div>
                 </div>
             </section>-->
-
-           
             <section class="appointments">
-                <h3>Recent Therapy Sessions</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Therapist Name</th>
-                            <th>Date</th>
-                            <th>Mode</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if($appointments->count() > 0)
-                            @foreach($appointments as $appointment)
+                    <h3>Recent Therapy Sessions</h3>
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>{{ $appointment->therapist->name ?? '' }}</td>
-                                <td>{{ $appointment->appointment_date ? \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') : '-' }}</td>
-                                <td>{{ ucfirst($appointment->mode) }}</td>
-                                <td>{{ ucfirst($appointment->status) }}</td>
+                                <th>Therapist Name</th>
+                                <th>Date</th>
+                                <th>Mode</th>
+                                <th>Status</th>
                             </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="4" class="text-center" style="text-align: center; padding: 20px;">
-                                    <div class="alert alert-info" role="alert">
-                                        No appointments found.
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </section>
+                        </thead>
+                        <tbody>
+                            @if($appointments->count() > 0)
+                                @foreach($appointments as $appointment)
+                                <tr>
+                                    <td>{{ $appointment->therapist->name ?? 'N/A' }}</td>
+                                    <td>{{ $appointment->appointment_date ? \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') : '-' }}</td>
+                                    <td>{{ ucfirst($appointment->mode) }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            @switch(strtolower(str_replace('_', ' ', $appointment->status)))
+                                                @case('finished')
+                                                    bg-success
+                                                    @break
+                                                @case('missed')
+                                                    bg-warning
+                                                    @break
+                                                @case('therapist declined')
+                                                @case('therapist canceled')
+                                                @case('patient declined')
+                                                @case('patient canceled')
+                                                    bg-danger
+                                                    @break
+                                                @default
+                                                    bg-secondary
+                                            @endswitch
+                                        ">
+                                            {{ ucwords(str_replace('_', ' ', $appointment->status)) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <div class="alert alert-info" role="alert">
+                                            No appointments found.
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </section>
+
+
+
         </main>
 
         <aside class="sidebarr" style="border-right:none;">

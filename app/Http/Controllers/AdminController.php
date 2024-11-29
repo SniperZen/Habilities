@@ -44,9 +44,19 @@ class AdminController extends Controller
     }
     public function usersTherapist()
     {
-        $therapists = User::where('usertype', 'therapist')->get();
+        $therapists = User::where('usertype', 'therapist')
+            ->get()
+            ->map(function($therapist) {
+                // Format the date_of_birth if it exists
+                if ($therapist->date_of_birth) {
+                    $therapist->date_of_birth = date('Y-m-d', strtotime($therapist->date_of_birth));
+                }
+                return $therapist;
+            });
+    
         return view('admin.usersTherapist', compact('therapists'));
     }
+    
     public function usersPatient()
     {
         $patients = User::where('usertype', 'user')->get();
@@ -792,6 +802,9 @@ public function getDashboardCounts()
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'specialization' => ['required', 'string', 'max:255'],
             'contact_number' => ['required', 'string', 'max:20'],
+            'date_of_birth' => ['required', 'date'],
+            'gender' => ['required', 'string', 'in:male,female,other'],
+            'home_address' => ['required', 'string', 'max:255'],
         ]);
 
         $defaultPassword = 'Welcome@123';
@@ -807,6 +820,9 @@ public function getDashboardCounts()
                 'password' => Hash::make($defaultPassword),
                 'specialization' => $request->specialization,
                 'contact_number' => $request->contact_number,
+                'date_of_birth' => $request->date_of_birth,
+                'gender' => $request->gender,
+                'home_address' => $request->home_address,
                 'usertype' => 'therapist',
                 'account_status' => 'active',
                 'email_verified_at' => now(),

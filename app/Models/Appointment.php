@@ -22,6 +22,7 @@ class Appointment extends Model
         'cancellation_note',
         'patient_reason',
         'patient_note',
+        'completion_date',
     ];
 
     protected $casts = [
@@ -30,6 +31,7 @@ class Appointment extends Model
         'updated_at' => 'datetime',
         'start_time' => 'datetime',
         'end_time' => 'datetime',
+        'completion_date' => 'datetime',
     ];
 
 

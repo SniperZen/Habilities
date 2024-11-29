@@ -44,48 +44,65 @@
             </div>
         </div>
         <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Mode</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if($historyAppointments->isEmpty())
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 20px; font-size: 16px; color: #666; background-color: #f9f9f9;">No appointment history found.</td>
-                        </tr>
-                    @else
-                        @foreach($historyAppointments as $appointment)
-                            <tr>
-                                <td>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</td>
-                                <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') }}</td>
-                                <td>
-                                    @if($appointment->status == 'declined')
-                                        -
-                                    @else
-                                        {{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}
-                                    @endif
-                                </td>
-                                <td>{{ $appointment->mode }}</td>
-                                <td>
-                                    @if($appointment->status == 'finished')
-                                        <span>Finished</span>
-                                    @elseif($appointment->status == 'missed')
-                                        <span>Missed</span>
-                                    @else
-                                        <span>Cancelled</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
-            </table>
+        <table>
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Completion Date</th>
+            <th>Mode</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if($historyAppointments->isEmpty())
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px; font-size: 16px; color: #666; background-color: #f9f9f9;">No appointment history found.</td>
+            </tr>
+        @else
+            @foreach($historyAppointments as $appointment)
+                <tr>
+                    <td>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</td>
+                    <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') }}</td>
+                    <td>
+                        @if(in_array($appointment->status, ['therapist_declined', 'patient_declined']))
+                            -
+                        @else
+                            {{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}
+                        @endif
+                    </td>
+                    <td>
+                        @if($appointment->completion_date)
+                            {{ \Carbon\Carbon::parse($appointment->completion_date)->format('F j, Y H:i') }}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>{{ $appointment->mode }}</td>
+                    <td>
+                        @if($appointment->status == 'finished')
+                            <span>Finished</span>
+                        @elseif($appointment->status == 'missed')
+                            <span>Missed</span>
+                        @elseif($appointment->status == 'therapist_canceled')
+                            <span>Therapist Canceled</span>
+                        @elseif($appointment->status == 'patient_canceled')
+                            <span>Patient Canceled</span>
+                        @elseif($appointment->status == 'therapist_declined')
+                            <span>Therapist Declined</span>
+                        @elseif($appointment->status == 'patient_declined')
+                            <span>Patient Declined</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        @endif
+    </tbody>
+</table>
+
+
+
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
