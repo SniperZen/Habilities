@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends HttpKernel
 {
@@ -24,5 +25,13 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\EnsureUserIsAuthenticated::class,
 
     ];
-    
+    protected $commands = [
+        \App\Console\Commands\UpdateMissedAppointments::class,
+    ];
+    protected function schedule(Schedule $schedule)
+{
+    $schedule->command('appointments:update-missed')
+              ->daily();
+}
+
 }

@@ -1,17 +1,17 @@
 <x-patient-layout>
     <div class="container">
         <main class="main-content">
-        <link rel="stylesheet" href="{{ asset('css/patient/appntmnt.css')}}">
+            <link rel="stylesheet" href="{{ asset('css/patient/appntmnt.css')}}">
 
-        <style>    
-        .empty-table-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1em;
-            color: #666;
-            background-color: #f9f9f9;
-        }
-    </style>
+            <style>    
+                .empty-table-message {
+                    text-align: center;
+                    padding: 20px;
+                    font-size: 1.1em;
+                    color: #666;
+                    background-color: #f9f9f9;
+                }
+            </style>
             <!-- Appointment History -->
             <div class="top-bar">
                 <div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="table">
-            <table class="history">
+                <table class="history">
                     <thead>
                         <tr>
                             <th>Therapist Name</th>
@@ -57,7 +57,7 @@
                     <tbody>
                     @if($pastAppointments->isEmpty())
                         <tr>
-                            <td colspan="5" class="empty-table-message" style="text-align: center; padding: 20px;">
+                            <td colspan="5" class="empty-table-message">
                                 No appointments found.
                             </td>
                         </tr>
@@ -80,7 +80,13 @@
                                     @endif
                                 </td>
                                 <td>{{ ucfirst($appointment->mode) }}</td>
-                                <td>{{ ucfirst($appointment->status) }}</td>
+                                <td>
+                                    @if($appointment->status == 'missed')
+                                        <span>Missed</span>
+                                    @else
+                                        {{ ucfirst($appointment->status) }}
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     @endif

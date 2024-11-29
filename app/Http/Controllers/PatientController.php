@@ -72,6 +72,8 @@ class PatientController extends Controller
     public function AppReq()
     {
         $therapists = User::where('usertype', 'therapist')->get();
+                // Update missed appointments
+                $this->updateAppointmentStatuses();
         return view('patient.ReqApp', compact('therapists'));
     }
 
@@ -101,7 +103,7 @@ class PatientController extends Controller
          
          // Start with base query for logged-in patient's appointments
          $query = Appointment::where('patient_id', Auth::id())
-             ->whereIn('status', ['finished', 'declined'])
+             ->whereIn('status', ['finished', 'declined', 'missed'])
              ->with('therapist');  // Eager load therapist relationship
  
          // Apply date filters
@@ -130,7 +132,8 @@ class PatientController extends Controller
                  // No additional filtering needed
                  break;
          }
- 
+         // Update missed appointments
+         $this->updateAppointmentStatuses();
          // Order by status (pending first), then by appointment date and time
          $pastAppointments = $query->orderBy('appointment_date', 'desc')
                                     ->orderBy('start_time', 'desc')
@@ -303,7 +306,8 @@ class PatientController extends Controller
 
     // Combine collections
     $upcomingAppointments = $acceptedAppointments->concat($pendingAppointments);
-
+        // Update missed appointments
+        $this->updateAppointmentStatuses();
     return view('patient.appntmnt', [
         'upcomingAppointments' => $upcomingAppointments,
         'acceptedFilter' => $request->input('accepted_filter', 'all_upcoming'),
@@ -315,14 +319,49 @@ class PatientController extends Controller
     public function showAppointmentsDash()
     {
         $appointments = Appointment::where('patient_id', Auth::id())
-            ->whereIn('status', ['finished', 'declined'])
+            ->whereIn('status', ['finished', 'declined', 'missed'])
             ->orderBy('appointment_date', 'desc')
             ->take(5)
             ->get();
-    
+            // Update missed appointments
+            $this->updateAppointmentStatuses();
         return view('patient.dash', compact('appointments'));
     }
     
+    private function updateAppointmentStatuses()
+    {
+        $today = Carbon::today();
+        
+        $appointments = Appointment::where('status', 'accepted')
+            ->whereDate('appointment_date', $today)
+            ->get();
+        
+        foreach ($appointments as $appointment) {
+            try {
+                $appointmentDate = $appointment->appointment_date;
+                $endTime = Carbon::parse($appointment->end_time); // Assuming end_time is stored as a valid datetime string
+                
+                logger()->info("Processing appointment ID: {$appointment->id}");
+                logger()->info("Appointment date: {$appointmentDate}");
+                logger()->info("End time: {$endTime}");
+    
+                // Create a new instance for comparison
+                $twoHoursPastEndTime = $endTime->copy()->addHours(2);
+                
+                // Check if the current time is more than 2 hours past the end_time
+                if (now()->isAfter($twoHoursPastEndTime)) {
+                    // Update the status to 'missed'
+                    $appointment->status = 'missed';
+                    $appointment->save();
+                    logger()->info("Updated appointment ID: {$appointment->id} to 'missed'");
+                } else {
+                    logger()->info("Appointment ID: {$appointment->id} is not missed yet.");
+                }
+            } catch (\Exception $e) {
+                logger()->error("Failed to update appointment status for appointment ID: {$appointment->id}. Error: " . $e->getMessage());
+            }
+        }
+    }
         public function notification(){
             return view('patient.notification');
         }

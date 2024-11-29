@@ -109,15 +109,21 @@ class AppointmentController extends Controller
     
             $events = $appointments->map(function ($appointment) {
                 $appointmentDateTime = Carbon::parse($appointment->appointment_date);
-                
+                $startTime = Carbon::parse($appointment->start_time);
+                $endTime = Carbon::parse($appointment->end_time);
+    
+                // Combine appointment date with start and end times
+                $startDateTime = $appointmentDateTime->copy()->setTime($startTime->hour, $startTime->minute, $startTime->second);
+                $endDateTime = $appointmentDateTime->copy()->setTime($endTime->hour, $endTime->minute, $endTime->second);
+    
                 return [
                     'id' => $appointment->id,
                     'title' => $appointment->mode,
-                    'start' => $appointmentDateTime->format('Y-m-d'),
+                    'start' => $startDateTime->format('Y-m-d'), // This remains the same
                     'extendedProps' => [
                         'description' => $appointment->note ?: null,
-                        'startTime' => $appointmentDateTime->format('Y-m-d H:i:s'),
-                        'endTime' => $appointmentDateTime->addMinutes($appointment->end_time ?? 60)->format('Y-m-d H:i:s'),
+                        'startTime' => $startDateTime->format('Y-m-d H:i:s'),
+                        'endTime' => $endDateTime->format('Y-m-d H:i:s'),
                         'patientName' => $appointment->therapist ? 
                             $appointment->therapist->first_name . ' ' . $appointment->therapist->last_name : 
                             'No Therapist',
@@ -130,6 +136,7 @@ class AppointmentController extends Controller
             return response()->json(['error' => 'Failed to fetch appointments'], 500);
         }
     }
+    
     
 
 
@@ -149,15 +156,21 @@ public function getTherapistAppointments()
 
         $events = $appointments->map(function ($appointment) {
             $appointmentDateTime = Carbon::parse($appointment->appointment_date);
-            
+            $startTime = Carbon::parse($appointment->start_time);
+            $endTime = Carbon::parse($appointment->end_time);
+
+            // Combine appointment date with start and end times
+            $startDateTime = $appointmentDateTime->copy()->setTime($startTime->hour, $startTime->minute, $startTime->second);
+            $endDateTime = $appointmentDateTime->copy()->setTime($endTime->hour, $endTime->minute, $endTime->second);
+
             return [
                 'id' => $appointment->id,
                 'title' => $appointment->mode,
-                'start' => $appointmentDateTime->format('Y-m-d'),
+                'start' => $startDateTime->format('Y-m-d'), // This remains the same
                 'extendedProps' => [
                     'description' => $appointment->note ?: null,
-                    'startTime' => $appointmentDateTime->format('Y-m-d H:i:s'),
-                    'endTime' => $appointmentDateTime->addMinutes($appointment->end_time ?? 60)->format('Y-m-d H:i:s'),
+                    'startTime' => $startDateTime->format('Y-m-d H:i:s'),
+                    'endTime' => $endDateTime->format('Y-m-d H:i:s'),
                     'patientName' => $appointment->patient ? 
                         $appointment->patient->first_name . ' ' . $appointment->patient->last_name : 
                         'No Patient',
@@ -174,6 +187,7 @@ public function getTherapistAppointments()
         return response()->json(['error' => 'Failed to fetch appointments'], 500);
     }
 }
+
 
 
 public function addAppointment(Request $request)

@@ -41,7 +41,8 @@ class TherapistController extends Controller
             ->where('appointments.status', 'accepted')
             ->limit(5)
             ->get();
-    
+        // Update missed appointments
+        $this->updateAppointmentStatuses();
         return view('therapist.dash', compact('notifications', 'acceptedAppointments'));
     }
     
@@ -78,7 +79,7 @@ class TherapistController extends Controller
         // Query for accepted appointments
         $acceptedQuery = DB::table('appointments')
             ->join('users', 'appointments.patient_id', '=', 'users.id')
-            ->join('users as therapists', 'appointments.therapist_id', '=', 'therapists.id') 
+            ->join('users as therapists', 'appointments.therapist_id', '=', 'therapists.id')
             ->select('appointments.*', 'users.first_name', 'users.middle_name', 'users.last_name', 'therapists.teletherapist_link')
             ->where('appointments.therapist_id', Auth::id())
             ->where('appointments.status', 'accepted');
@@ -104,8 +105,48 @@ class TherapistController extends Controller
                                             ->orderBy('appointments.start_time', 'desc')
                                             ->get();
     
+        // Update missed appointments
+        $this->updateAppointmentStatuses();
+    
         return view('therapist.AppSched', compact('acceptedAppointments', 'historyAppointments', 'acceptedFilter', 'historyFilter'));
     }
+    
+    private function updateAppointmentStatuses()
+    {
+        $today = Carbon::today();
+        
+        $appointments = Appointment::where('status', 'accepted')
+            ->whereDate('appointment_date', $today)
+            ->get();
+        
+        foreach ($appointments as $appointment) {
+            try {
+                $appointmentDate = $appointment->appointment_date;
+                $endTime = Carbon::parse($appointment->end_time); // Assuming end_time is stored as a valid datetime string
+                
+                logger()->info("Processing appointment ID: {$appointment->id}");
+                logger()->info("Appointment date: {$appointmentDate}");
+                logger()->info("End time: {$endTime}");
+    
+                // Create a new instance for comparison
+                $twoHoursPastEndTime = $endTime->copy()->addHours(2);
+                
+                // Check if the current time is more than 2 hours past the end_time
+                if (now()->isAfter($twoHoursPastEndTime)) {
+                    // Update the status to 'missed'
+                    $appointment->status = 'missed';
+                    $appointment->save();
+                    logger()->info("Updated appointment ID: {$appointment->id} to 'missed'");
+                } else {
+                    logger()->info("Appointment ID: {$appointment->id} is not missed yet.");
+                }
+            } catch (\Exception $e) {
+                logger()->error("Failed to update appointment status for appointment ID: {$appointment->id}. Error: " . $e->getMessage());
+            }
+        }
+    }
+    
+    
     
     private function applyAcceptedFilter($query, $filter)
     {
@@ -419,7 +460,7 @@ public function myHistory(Request $request)
                 'users.last_name'
             )
             ->where('appointments.therapist_id', $therapist->id)
-            ->whereIn('appointments.status', ['finished', 'declined'])
+            ->whereIn('appointments.status', ['finished', 'declined', 'missed'])
             ->orderBy('appointments.appointment_date', 'desc')
             ->orderBy('appointments.start_time', 'desc');
 
@@ -446,7 +487,8 @@ public function myHistory(Request $request)
         }
 
         $historyAppointments = $query->get();
-
+        // Update missed appointments
+        $this->updateAppointmentStatuses();
         return view('therapist.myHistory', compact('historyAppointments', 'historyFilter'));
     }
 public function feedback3(){
