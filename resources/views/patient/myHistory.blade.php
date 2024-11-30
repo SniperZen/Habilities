@@ -11,6 +11,7 @@
                     color: #666;
                     background-color: #f9f9f9;
                 }
+                
             </style>
             <!-- Appointment History -->
             <div class="top-bar">

@@ -62,6 +62,32 @@
             display: inline-flex;
             gap: 9px;
         }
+
+        .custom-event-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #3788d8;
+        margin: 5px auto;
+        }
+        .fc-daygrid-event {
+            background: none !important;
+            border: none !important;
+        }
+        .custom-event-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #3788d8;
+            margin: 0 auto;
+        }
+        .fc-daygrid-event {
+            background: none !important;
+            border: none !important;
+        }
+        .fc-daygrid-event-harness {
+            margin-top: 4px !important;
+        }
         .notification-timestamp {
             font-size: 0.75rem;
             color: #666;
@@ -84,13 +110,13 @@
             display: block;
         }
         .notifications-container {
-        max-height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-        transition: max-height 0.3s ease;
-    }
+            max-height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: max-height 0.3s ease;
+        }
 
-    .fc-button-primary{
+        .fc-button-primary{
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
             transition: box-shadow 0.3s ease;
             transition: transform 0.3s ease;
@@ -102,17 +128,34 @@
             background-color: #395886;
         }
 
-    .notifications-container.expanded {
-        max-height: 600px; 
-    }
+        .notifications-container.expanded {
+            max-height: 600px; 
+        }
 
-    .notifications-list {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        max-height: 357px;
-    }
-
+        .notifications-list {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            max-height: 357px;
+        }
+        .hiddens {
+            display: none;
+        }
+        .unread-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #007bff;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .notification-item.unread {
+            background-color: #d6e9f9;
+            font-weight: bold;
+        }
+        .notification-item.unread:hover{
+            background-color: #c5dcfc;
+        }
 
     </style>
 </head>
@@ -130,59 +173,7 @@
                 <a href="{{ route('patient.AppReq')}}"><button> <div class="circle"><svg width="65" height="65" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="22.5" cy="22.5" r="22.5" fill="#395886"/><path d="M26.6665 11.667C28.5391 11.667 29.4754 11.667 30.148 12.1164C30.4392 12.311 30.6892 12.561 30.8838 12.8521C31.3332 13.5247 31.3332 14.461 31.3332 16.3337V29.0003C31.3332 31.5145 31.3332 32.7716 30.5521 33.5526C29.7711 34.3337 28.514 34.3337 25.9998 34.3337H17.9998C15.4857 34.3337 14.2286 34.3337 13.4476 33.5526C12.6665 32.7716 12.6665 31.5145 12.6665 29.0003V16.3337C12.6665 14.461 12.6665 13.5247 13.1159 12.8521C13.3105 12.561 13.5605 12.311 13.8516 12.1164C14.5242 11.667 15.4606 11.667 17.3332 11.667" stroke="#F0F3FA" stroke-width="2"/><path d="M18 11.6667C18 10.1939 19.1939 9 20.6667 9H23.3333C24.8061 9 26 10.1939 26 11.6667C26 13.1394 24.8061 14.3333 23.3333 14.3333H20.6667C19.1939 14.3333 18 13.1394 18 11.6667Z" stroke="#F0F3FA" stroke-width="2"/><path d="M18 21L26 21" stroke="#F0F3FA" stroke-width="2" stroke-linecap="round"/><path d="M18 26.333L23.3333 26.333" stroke="#F0F3FA" stroke-width="2" stroke-linecap="round"/></svg></div><p class="p">Reserve an <br> Appointment</p></button></a>
                 <a href="{{ route('patient.profile') }}"><button> <div class="circle"><svg width="65" height="65" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="23.4998" cy="23.5004" r="22.5" transform="rotate(1.59243 23.4998 23.5004)" fill="#395886"/><rect width="27" height="27" transform="translate(10.3804 9.63086) rotate(1.59243)" fill="#395886"/><path d="M12.4381 32.7739C12.5562 28.528 16.1991 25.1847 23.4477 25.3862C30.6963 25.5877 34.1478 29.1283 34.0298 33.3741C34.011 34.0496 33.503 34.5835 32.895 34.5666L13.5049 34.0275C12.897 34.0106 12.4194 33.4493 12.4381 32.7739Z" stroke="#F0F3FA" stroke-width="2"/><path d="M27.7361 16.8664C27.674 19.1023 25.811 20.8644 23.5751 20.8023C21.3392 20.7401 19.5771 18.8772 19.6392 16.6413C19.7014 14.4054 21.5643 12.6432 23.8002 12.7054C26.0361 12.7676 27.7983 14.6305 27.7361 16.8664Z" stroke="#F0F3FA" stroke-width="2"/></svg></div><p class="p">Go to <br> My Profile</p></button></a>
             </div>
-            <!-- Habilities' Therapists and Monthly Progress Section -->
-            <section class="therapists-progress">
-                <!--<div class="therapists">
-                    <h3>Habilities' Therapists</h3>
-                    <ul>
-                        <li>
-                            <img src="{{ asset('images/therapist1.png') }}" alt="Maria Lourdes Solita G. Cruz" class="therapist-pic">
-                            <div>
-                                <strong>Maria Lourdes Solita G. Cruz</strong><br>
-                                Occupational Therapist, SpEd Tutorials <span style="color: green;">● Online</span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="{{ asset('images/therapist2.png') }}" alt="Harold B. De Guzman" class="therapist-pic">
-                            <div>
-                                <strong>Harold B. De Guzman</strong><br>
-                                Speech Pathologist <span style="color: red;">● Offline</span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="{{ asset('images/therapist3.png') }}" alt="Angela Reigne Cyril B. Francisco" class="therapist-pic">
-                            <div>
-                                <strong>Angela Reigne Cyril B. Francisco</strong><br>
-                                Occupational Therapist <span style="color: red;">● Offline</span>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="{{ asset('images/therapist4.png') }}" alt="Mary Grace G. Sovanaco" class="therapist-pic">
-                            <div>
-                                <strong>Mary Grace G. Sovanaco</strong><br>
-                                Occupational Therapist <span style="color: red;">● Offline</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>-->
-
-                <!--<div class="monthly-progress">
-                    <h3>Monthly Progress</h3>
-                    <div class="progress-info">
-                        <div>
-                            <strong>1</strong><br>Upcoming Session
-                        </div>
-                        <div>
-                            <strong>4</strong><br>Sessions Attended
-                        </div>
-                        <div>
-                            <strong>12h</strong><br>Time Spent
-                        </div>
-                    </div>
-                </div>
-            </section>-->
-
-           
+ 
             <section class="appointments">
                 <h3>Recent Therapy Sessions</h3>
                 <table>
@@ -356,28 +347,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
-<style>
-.hiddens {
-    display: none;
-}
-.unread-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: #007bff;
-    border-radius: 50%;
-    display: inline-block;
-    margin-left: 5px;
-}
-.notification-item.unread {
-    background-color: #d6e9f9;
-    font-weight: bold;
-}
-.notification-item.unread:hover{
-    background-color: #c5dcfc;
-}
-</style>
-
             <div class="calendar">
                 <div id="calendar"></div>
             </div>
@@ -449,51 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-<style>
-    .custom-event-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #3788d8;
-        margin: 5px auto;
-    }
-    .fc-daygrid-event {
-        background: none !important;
-        border: none !important;
-    }
-    /* Existing styles */
-    .custom-event-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #3788d8;
-        margin: 0 auto;
-    }
-    .fc-daygrid-event {
-        background: none !important;
-        border: none !important;
-    }
-    .fc-daygrid-event-harness {
-        margin-top: 4px !important;
-    }
-
-    /* Modal styles */
-
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-</style>
 
 <div id="eventModal" class="modal">
     <div class="modal-content">

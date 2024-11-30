@@ -16,13 +16,18 @@ h3, h2, h1, th, p{
     color: #395886;
 }
 
-thead th{
+/* thead th{
     position: sticky;
     top: 0;
     z-index: 1; 
     padding: 10px;
     border-bottom: 2px solid #ddd;
 }
+
+.table {
+    border-collapse: collapse;
+} */
+
 .header {
     background: linear-gradient(180deg, #8AAEE0 0%, #89E6FF 100%);
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.11);
