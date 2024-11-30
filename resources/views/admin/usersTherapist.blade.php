@@ -63,7 +63,10 @@
             animation-name: popUpEffect; 
         }
 
-
+        .form-group select:not(:placeholder-shown) + label,
+.form-group select:focus + label {
+    transform: translateY(-20px);
+}
         
         /* .modal {
     display: none;
@@ -108,6 +111,14 @@
     showSaveChangesModal: false,
     tempUserType: '',
     selectedTherapistId: null,
+    formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    },
     expandTherapist(therapistData) {
         this.therapist = therapistData;
         this.showDetails = true;
@@ -225,9 +236,13 @@
                     <label for="last_name">Last Name</label>
                 </div>
                 <div class="form-group">
-                    <input type="date" id="date_of_birth" name="date_of_birth" x-model="therapist.date_of_birth">
-                    <label for="date_of_birth">Birthday</label>
-                </div>
+    <input type="date" 
+           id="date_of_birth" 
+           name="date_of_birth" 
+           x-bind:value="therapist ? formatDate(therapist.date_of_birth) : ''">
+    <label for="date_of_birth">Birthday</label>
+</div>
+
                 <div class="form-group gender">
                     <select id="gender" name="gender" x-model="therapist.gender">
                         <option value="male">Male</option>
@@ -535,6 +550,30 @@ document.addEventListener('DOMContentLoaded', function() {
                         <label for="email">Email<span style="color: red;">*</span></label>
                     </div>
 
+                    <!-- Added Date of Birth field -->
+                    <div class="form-group">
+                        <input type="date" id="date_of_birth" name="date_of_birth" placeholder=" " required>
+                        <label for="date_of_birth">Date of Birth<span style="color: red;">*</span></label>
+                    </div>
+
+                    <!-- Modified Gender field -->
+                    <div class="form-group">
+                        <select id="gender" name="gender" placeholder=" " required>
+                            <option value="" disabled selected hidden></option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="gender">Gender<span style="color: red;">*</span></label>
+                    </div>
+
+
+                    <!-- Added Home Address field -->
+                    <div class="form-group">
+                        <input type="text" id="home_address" name="home_address" placeholder=" " required>
+                        <label for="home_address">Home Address<span style="color: red;">*</span></label>
+                    </div>
+
                     <div class="form-group">
                         <input type="text" id="specialization" name="specialization" placeholder=" " required>
                         <label for="specialization">Specialization<span style="color: red;">*</span></label>
@@ -550,6 +589,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button type="submit" class="save-btn">Create Account</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -584,7 +624,6 @@ window.onclick = function(event) {
     }
 }
 
-// Handle form submission
 document.getElementById('addTherapistForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -598,7 +637,14 @@ document.getElementById('addTherapistForm').addEventListener('submit', function(
         },
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(JSON.stringify(errorData));
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             document.getElementById('addTherapistModal').style.display = 'none';
@@ -608,14 +654,26 @@ document.getElementById('addTherapistForm').addEventListener('submit', function(
             document.getElementById('successModal').classList.add('show');
             this.reset();
         } else {
-            alert('Error creating therapist account');
+            alert(data.message || 'Error creating therapist account');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error creating therapist account');
+        try {
+            const errorData = JSON.parse(error.message);
+            if (errorData.errors) {
+                // Handle validation errors
+                const errorMessages = Object.values(errorData.errors).flat().join('\n');
+                alert('Validation errors:\n' + errorMessages);
+            } else {
+                alert(errorData.message || 'Error creating therapist account');
+            }
+        } catch (e) {
+            alert('Error creating therapist account: ' + error.message);
+        }
     });
 });
+
 
 function closeSuccessModal() {
     document.getElementById('successModal').style.display = 'none';

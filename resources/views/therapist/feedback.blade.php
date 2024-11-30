@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>{{ $feedback->recipient->name }}</td>
                         <td>{{ $feedback->title }}</td>
                         <td>{{ $feedback->diagnosis }}</td>
-                        <td>{{ $feedback->created_at->format('m/d/Y') }}</td>
+                        <td>{{ $feedback->created_at->format('F j, Y g:iA') }}</td>
                         <td><a class="create-button views" href="{{ route('therapist.feedback3', ['id' => $feedback->id]) }}"><button class="view">View</button></a></td>
                     </tr>
                 @empty

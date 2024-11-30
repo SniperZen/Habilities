@@ -188,8 +188,13 @@
                         <p><strong>Patient ID:</strong> <span id="modalPatientId"></span></p>
                         <p><strong>Email:</strong> <span id="modalPatientEmail"></span></p>
                         <p><strong>Phone:</strong> <span id="modalPatientPhone"></span></p>
-                        <p><strong>Address:</strong> <span id="modalPatientAddress">
-                        <p><strong>Gender:</strong> <span id="modalPatientGender">
+                        <p><strong>Address:</strong> <span id="modalPatientAddress"></span></p>
+                        <p><strong>Gender:</strong> <span id="modalPatientGender"></span></p>
+                        <!-- Add guardian info section -->
+                        <div id="guardianInfo" style="display: none;">
+                            <p><strong>Guardian:</strong> <span id="modalGuardianName"></span></p>
+                            <p><strong>Guardian Role:</strong> <span id="modalGuardianRole"></span></p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-buttons">
@@ -338,13 +343,23 @@ patientList.addEventListener('click', function(e) {
         modalPatientEmail.textContent = patientData.email || 'Not provided';
         modalPatientPhone.textContent = patientData.contact_number || 'Not provided';
         modalPatientAddress.textContent = patientData.home_address || 'Not provided';
-        modalPatientGender.textContent = patientData.gender || 'Not specified';
+        modalPatientGender.textContent = patientData.gender ? (patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1).toLowerCase()) : 'Not specified';
+        
+        // Handle guardian information
+        const guardianInfoDiv = document.getElementById('guardianInfo');
+        if (patientData.account_type === 'child' && patientData.guardian_name) {
+            document.getElementById('modalGuardianName').textContent = patientData.guardian_name;
+            document.getElementById('modalGuardianRole').textContent = patientData.guardian_role || 'Not specified';
+            guardianInfoDiv.style.display = 'block';
+        } else {
+            guardianInfoDiv.style.display = 'none';
+        }
         
         patientModal.style.display = 'block';
         patientModal.classList.add('show');
-        console.log('Modal should be visible now');
     }
 });
+
 
 
 
