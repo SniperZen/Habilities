@@ -189,6 +189,7 @@
 
                             <p><label>Note to the therapist:</label></p>
                             <textarea id="cancellationNote" name="cancellationNote" placeholder="Type here..." rows="4"></textarea>
+                            <small><strong>Note:</strong> If you cancel your appointment within 2 hours before the scheduled time, you will be charged a cancellation fee.</small>
                         </div>
                     </div>
                             <div class="modal-footer">

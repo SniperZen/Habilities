@@ -137,6 +137,8 @@
             <p x-show="patient && patient.account_type === 'child'" class="supervised-badge">
                 Supervised Account
             </p>
+            <p x-show="patient && patient.account_type === 'child'"><strong>Supervised by:</strong></p>
+            <p x-show="patient && patient.account_type === 'child'" x-text="patient.email"></p>
             <button class="button" 
                 :class="patient && patient.account_status === 'active' ? 'button-danger' : 'button-primary'" 
                 @click="patient && patient.account_status === 'active' ? showDeactivateModal = true : showActivateModal = true">

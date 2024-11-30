@@ -48,6 +48,17 @@ thead th{
     height: calc(100vh - 120px);   
 }
 
+.supervised-badge{
+    background-color: #B2AED9;
+    padding: 10px;
+    margin-top: 5px;
+    max-width: 200px;
+    color: #3C3B52;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 50px;
+}
+
 td{
     height: 51px;
 }

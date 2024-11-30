@@ -65,7 +65,7 @@
                     <tr>
                         <th>Sender</th>
                         <th>Clinical / Working Diagnosis</th>
-                        <th>Description</th>
+                        <th>Concerns</th>
                         <th>Received</th>
                         <th>Action</th>
                     </tr>
@@ -147,7 +147,7 @@
                     <tr>
                         <th>Sender</th>
                         <th>Clinical / Working Diagnosis</th>
-                        <th>Description</th>
+                        <th>Concerns</th>
                         <th>Completed</th>
                         <th>Status</th>
                         <th>Action</th>

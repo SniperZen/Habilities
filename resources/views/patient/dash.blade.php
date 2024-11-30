@@ -515,5 +515,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </body>
 </html>
-
 </x-patient-layout>

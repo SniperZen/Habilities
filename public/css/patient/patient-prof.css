@@ -24,7 +24,8 @@ body {
 .right-sidebar {
     flex-grow: 0.5;
     min-width: 25%;
-    height: 100%;
+    overflow: hidden auto;
+    height: calc(100vh - 300px);
     padding: 20px 10px;
     border-left: 1px solid black;
 }
@@ -556,7 +557,7 @@ body {
 }
 
 .modal-content .content-wrapper {
-    white-space: pre-wrap;
+    /* white-space: pre-wrap; */
     word-wrap: break-word;
 }
 .close {

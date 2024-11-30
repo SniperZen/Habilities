@@ -41,7 +41,7 @@
                 <h3>{{ $inquiry->user->first_name }} {{ $inquiry->user->middle_name }} {{ $inquiry->user->last_name }}</h3>
                 <p>Patient ID: <strong>{{ sprintf('P-%04d', $inquiry->user->id) }}</strong></p>
                 @if($inquiry->user->account_type === 'child')
-                    <span class="supervised-badge">Supervised Account</span>
+                    <p class="supervised-badge">Supervised Account</p>
                 @endif
             </div>
         </div>
@@ -83,7 +83,7 @@
             <div><strong>Gender:</strong> {{ ucfirst($inquiry->user->gender) }}</div>
             <div><strong>Clinical/Working Diagnosis:</strong> {{ ucfirst($inquiry->concerns) }}</div>
             <div><strong>Address:</strong> {{ ucfirst($inquiry->user->home_address) }}</div>
-            <div><strong>Elaboration:</strong> <br> {{ $inquiry->elaboration }}</div>
+            <div><strong>Concerns:</strong> <br> {{ $inquiry->elaboration }}</div>
         </div>
         
         <h4 class="h4">Attached Documents:</h4>

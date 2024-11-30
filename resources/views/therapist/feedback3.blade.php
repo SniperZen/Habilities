@@ -65,7 +65,7 @@
                 <h3>{{ $feedback->recipient->name }}</h3>
                 <p>Patient ID: <strong>{{ sprintf('P-%04d', $feedback->recipient->id) }}</strong></p>
                 @if($feedback->recipient->account_type === 'child')
-                    <span class="supervised-badge">Supervised Account</span>
+                    <p class="supervised-badge">Supervised Account</p>
                 @endif
             </div>
         </div>

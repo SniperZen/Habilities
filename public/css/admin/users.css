@@ -569,3 +569,12 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
     outline: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.supervised-badge{
+    background-color: #74A36B;
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+}

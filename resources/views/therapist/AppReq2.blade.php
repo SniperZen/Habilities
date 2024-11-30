@@ -30,7 +30,7 @@
                 <p><strong>{{ $appointment->first_name }} {{ $appointment->middle_name }} {{ $appointment->last_name }}</strong></p>
                 <p>Patient ID: P-{{ str_pad($appointment->patient_id, 4, '0', STR_PAD_LEFT) }}</p>
                 @if($appointment->account_type === 'child')
-                    <span class="supervised-badge">Supervised Account</span>
+                    <p class="supervised-badge">Supervised Account</p>
                 @endif
             </div>
         </div>

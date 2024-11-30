@@ -484,6 +484,11 @@ tr:hover{
     transition: opacity 0.3s ease;
 }
 
+small{
+    margin-top: 3px;
+    font-weight: 100;
+}
+
 
 /* Responsive Styles */
 

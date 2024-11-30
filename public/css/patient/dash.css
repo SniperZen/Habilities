@@ -12,8 +12,8 @@ body {
     overflow: hidden;
 }
 
-h3, h2, h1, th, p{
-    color: #395886;
+h3, h2, h1, th, p, strong{
+    color: #243959;
 }
 
 /* thead th{
@@ -39,7 +39,14 @@ h3, h2, h1, th, p{
     flex-wrap: wrap;
     z-index: 100000000;
 }
-
+.supervised-account{
+    background-color: #8AAEE0;
+    padding: 15px;
+    color: #3C3B52;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 50px;
+}
 .header-left {
     display: flex;
     align-items: center;

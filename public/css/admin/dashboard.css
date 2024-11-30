@@ -42,6 +42,15 @@ body {
     margin-top: 10px;
 }
 
+.supervised-badge{
+    background-color: #74A36B;
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+}
+
 .arrowd{
     width: 28px;
     stroke: #fff;
