@@ -52,11 +52,16 @@
                         <label for="statusFilterSelect">Status: </label>
                         <select id="statusFilterSelect" name="status">
                             <option value="all">All</option>
-                            <option value="finished" {{ request('status') == 'finished' ? 'selected' : '' }}>Finished</option>
-                            <option value="declined" {{ request('status') == 'declined' ? 'selected' : '' }}>Declined</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted</option>
+                            <option value="finished" {{ request('status') == 'finished' ? 'selected' : '' }}>Finished</option>
+                            <option value="therapist_canceled" {{ request('status') == 'therapist_canceled' ? 'selected' : '' }}>Therapist Canceled</option>
+                            <option value="therapist_declined" {{ request('status') == 'therapist_declined' ? 'selected' : '' }}>Therapist Declined</option>
+                            <option value="patient_declined" {{ request('status') == 'patient_declined' ? 'selected' : '' }}>Patient Declined</option>
+                            <option value="missed" {{ request('status') == 'missed' ? 'selected' : '' }}>Missed</option>
                         </select>
                     </div>
+
 
                     <div class="date-filter">
                         <label for="startDate">Start Date:</label>
@@ -116,8 +121,17 @@
                                             @case('finished')
                                                 <span class="badge bg-info">Finished</span>
                                                 @break
-                                            @case('declined')
-                                                <span class="badge bg-danger">Declined</span>
+                                            @case('therapist_canceled')
+                                                <span class="badge bg-danger">Therapist Canceled</span>
+                                                @break
+                                            @case('therapist_declined')
+                                                <span class="badge bg-danger">Therapist Declined</span>
+                                                @break
+                                            @case('patient_declined')
+                                                <span class="badge bg-danger">Patient Declined</span>
+                                                @break
+                                            @case('missed')
+                                                <span class="badge bg-secondary">Missed</span>
                                                 @break
                                             @default
                                                 <span class="badge bg-secondary">{{ $appointment->status }}</span>
@@ -218,49 +232,57 @@ $(document).ready(function() {
         });
     });
 
-    // Function to update table content
     function updateTableContent(appointments) {
-        let tableBody = '';
-        appointments.forEach(function(appointment) {
-            const appointmentDate = appointment.appointment_date ? new Date(appointment.appointment_date).toLocaleDateString('en-US') : '-';
-            const startTime = appointment.start_time ? formatTime(appointment.start_time) : '-';
-            const endTime = appointment.end_time ? formatTime(appointment.end_time) : '-';
+    let tableBody = '';
+    appointments.forEach(function(appointment) {
+        const appointmentDate = appointment.appointment_date ? new Date(appointment.appointment_date).toLocaleDateString('en-US') : '-';
+        const startTime = appointment.start_time ? formatTime(appointment.start_time) : '-';
+        const endTime = appointment.end_time ? formatTime(appointment.end_time) : '-';
 
-            let statusBadge = '';
-            switch(appointment.status) {
-                case 'pending':
-                    statusBadge = '<span class="badge bg-warning">Pending</span>';
-                    break;
-                case 'accepted':
-                    statusBadge = '<span class="badge bg-success">Accepted</span>';
-                    break;
-                case 'finished':
-                    statusBadge = '<span class="badge bg-info">Finished</span>';
-                    break;
-                case 'declined':
-                    statusBadge = '<span class="badge bg-danger">Declined</span>';
-                    break;
-                default:
-                    statusBadge = `<span class="badge bg-secondary">${appointment.status}</span>`;
-            }
+        let statusBadge = '';
+        switch(appointment.status) {
+            case 'pending':
+                statusBadge = '<span class="badge bg-warning">Pending</span>';
+                break;
+            case 'accepted':
+                statusBadge = '<span class="badge bg-success">Accepted</span>';
+                break;
+            case 'finished':
+                statusBadge = '<span class="badge bg-info">Finished</span>';
+                break;
+            case 'therapist_canceled':
+                statusBadge = '<span class="badge bg-danger">Therapist Canceled</span>';
+                break;
+            case 'therapist_declined':
+                statusBadge = '<span class="badge bg-danger">Therapist Declined</span>';
+                break;
+            case 'patient_declined':
+                statusBadge = '<span class="badge bg-danger">Patient Declined</span>';
+                break;
+            case 'missed':
+                statusBadge = '<span class="badge bg-secondary">Missed</span>';
+                break;
+            default:
+                statusBadge = `<span class="badge bg-secondary">${appointment.status}</span>`;
+        }
 
-            let mode = appointment.mode === 'on-site' ? 'On-site' : 
-                      appointment.mode === 'tele-therapy' ? 'Tele-therapy' : 
-                      appointment.mode;
+        let mode = appointment.mode === 'on-site' ? 'On-site' : 
+                  appointment.mode === 'tele-therapy' ? 'Tele-therapy' : 
+                  appointment.mode;
 
-            tableBody += `
-                <tr>
-                    <td>${appointment.therapist.name}</td>
-                    <td>${appointment.patient.name}</td>
-                    <td>${appointmentDate}</td>
-                    <td>${startTime} - ${endTime}</td>
-                    <td>${mode}</td>
-                    <td>${statusBadge}</td>
-                </tr>
-            `;
-        });
-        $('.report-table tbody').html(tableBody);
-    }
+        tableBody += `
+            <tr>
+                <td>${appointment.therapist.name}</td>
+                <td>${appointment.patient.name}</td>
+                <td>${appointmentDate}</td>
+                <td>${startTime} - ${endTime}</td>
+                <td>${mode}</td>
+                <td>${statusBadge}</td>
+            </tr>
+        `;
+    });
+    $('.report-table tbody').html(tableBody);
+}
 
     function formatTime(timeString) {
         return new Date('1970-01-01T' + timeString).toLocaleTimeString('en-US', {

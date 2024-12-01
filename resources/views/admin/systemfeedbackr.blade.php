@@ -10,69 +10,82 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <title>System Feedback Reports</title>
         <style>
+            .table-container {
+                max-height: 500px;
+                overflow-y: auto;
+            }
+
             @media print {
                 body * {
                     visibility: hidden;
                 }
-                #reports-section, #reports-section * {
+                #printableTable, #printableTable * {
                     visibility: visible;
                 }
-                #reports-section {
+                #printableTable {
                     position: absolute;
                     left: 0;
                     top: 0;
                 }
-                .report-dropdown, .export-btn {
+                .export-btn, .print-btn, .report-dropdown {
                     display: none;
+                }
+                .table-container {
+                    max-height: none !important;
+                    overflow: visible !important;
                 }
             }
         </style>
     </head>
     <body>
-        <div class="reports-container" id="reports-section">
+        <div class="reports-container">
             <div class="int">
-            <h1>System Feedback Reports</h1>
-            <div class="report-dropdown">
-                <label for="specificNameInput">Search: </label>
-                <input type="text" id="specificNameInput" placeholder="Enter user name">
-                <div class="date-filter">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" name="start_date" max="<?php echo date('Y-m-d'); ?>">
-                    
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" name="end_date" max="<?php echo date('Y-m-d'); ?>">
+                <h1>System Feedback Reports</h1>
+                <div class="report-dropdown">
+                    <label for="specificNameInput">Search: </label>
+                    <input type="text" id="specificNameInput" placeholder="Enter user name">
+                    <div class="date-filter">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="start_date" max="<?php echo date('Y-m-d'); ?>">
+                        
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="end_date" max="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                    <button id="applyFilter" class="filt">Apply Filter</button>
+                    <button id="clearButton">Clear</button>
                 </div>
-                <button id="applyFilter" class="filt">Apply Filter</button>
-                <button id="clearButton">Clear</button>
-            </div>
-            <div class="table-container">
-            <table class="report-table" id="reportTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Feedback Description</th>
-                        <th>Date Submitted</th>
-                    </tr>
-                </thead>
-                <tbody id="feedbackTableBody">
-                    @foreach($feedbacks as $feedback)
-                        <tr>
-                            <td>{{ $feedback->user->name ?? 'N/A' }}</td>
-                            <td>{{ $feedback->feedback }}</td>
-                            <td>{{ $feedback->created_at->format('m/d/Y') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            </div>
-            
-            <div style="margin-top: 20px;">
-                <button class="export-btn" onclick="window.print()">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
+
+                <div class="table-container">
+                    <div id="printableTable">
+                        <table class="report-table" id="reportTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Feedback Description</th>
+                                    <th>Date Submitted</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbackTableBody">
+                                @foreach($feedbacks as $feedback)
+                                    <tr>
+                                        <td>{{ $feedback->user->name ?? 'N/A' }}</td>
+                                        <td>{{ $feedback->feedback }}</td>
+                                        <td>{{ $feedback->created_at->format('m/d/Y') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="export-btn" onclick="printTable()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+
         <script>
             $.ajaxSetup({
                 headers: {
@@ -96,11 +109,16 @@
                     success: function(response) {
                         let tableBody = '';
                         response.data.forEach(function(feedback) {
+                            const createdAt = new Date(feedback.created_at);
+                            const formattedDate = (createdAt.getMonth() + 1).toString().padStart(2, '0') + 
+                                                '/' + createdAt.getDate().toString().padStart(2, '0') + 
+                                                '/' + createdAt.getFullYear();
+                            
                             tableBody += `
                                 <tr>
                                     <td>${feedback.user ? feedback.user.name : 'N/A'}</td>
                                     <td>${feedback.feedback}</td>
-                                    <td>${new Date(feedback.created_at).toLocaleDateString()}</td>
+                                    <td>${formattedDate}</td>
                                 </tr>
                             `;
                         });
@@ -125,6 +143,10 @@
                 $('#startDate, #endDate, #specificNameInput').val('');
                 updateTable();
             });
+
+            function printTable() {
+                window.print();
+            }
         </script>
     </body>
     </html>

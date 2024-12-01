@@ -20,28 +20,37 @@
                 text-decoration: underline;
             }
 
-            @media print {
-                body * {
-                    visibility: hidden;
-                }
-                #printableTable, #printableTable * {
-                    visibility: visible;
-                }
-                #printableTable {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                }
-                .export-btn, .print-btn, .report-dropdown {
-                    display: none;
-                }
-                .document-link {
-                    text-decoration: none !important;
-                }
-                a[href]::after {
-                    content: none !important;
-                }
-            }
+            .table-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #printableTable, #printableTable * {
+        visibility: visible;
+    }
+    #printableTable {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .export-btn, .print-btn, .report-dropdown {
+        display: none;
+    }
+    .table-container {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    .document-link {
+        text-decoration: none !important;
+    }
+    a[href]::after {
+        content: none !important;
+    }
+}
 
             .button-container {
                 display: flex;
@@ -90,8 +99,8 @@
                 </form>
             </div>
 
+        <div class="table-container">
             <div id="printableTable">
-            <div class="table-container">
                 <table class="report-table">
                     <!-- Your existing table content -->
                     <thead>
