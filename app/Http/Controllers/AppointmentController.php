@@ -238,14 +238,6 @@ public function addAppointment(Request $request)
             ], 422);
         }
 
-        // Calculate duration in hours
-        $duration = Carbon::parse($startTime)->diffInHours(Carbon::parse($endTime));
-        if ($duration < 1 || $duration > 2) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Appointment duration must be between 1 and 2 hours.'
-            ], 422);
-        }
 
         // Create new appointment
         $appointment = new Appointment();

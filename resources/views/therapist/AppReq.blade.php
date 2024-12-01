@@ -410,15 +410,24 @@ $(document).ready(function() {
     }
 });
 
-    // Start time change handler
-    startTimeSelect.on('change', function() {
+startTimeSelect.on('change', function() {
         const selectedStartTime = $(this).val();
         if (selectedStartTime) {
             formattedStartTime.val(selectedStartTime);
+            
+            // Calculate and set default end time (+1 hour)
+            const autoEndTime = moment(selectedStartTime, 'HH:mm')
+                .add(1, 'hour')
+                .format('HH:mm');
+            
             updateEndTimeOptions(selectedStartTime);
+            endTimeSelect.val(autoEndTime);
+            formattedEndTime.val(autoEndTime);
+            
+            // Validate the auto-selected time slot
+            validateTimeSlot(selectedStartTime, autoEndTime);
         }
     });
-
     // End time change handler
     endTimeSelect.on('change', function() {
         formattedEndTime.val($(this).val());
@@ -507,6 +516,7 @@ $(document).ready(function() {
 
     function generateAvailableTimeSlots(selectedDate, existingAppointments) {
     const timeSlots = [
+        { value: '08:00', display: '08:00 AM' },  // Added 8 AM slot
         { value: '09:00', display: '09:00 AM' },
         { value: '10:00', display: '10:00 AM' },
         { value: '11:00', display: '11:00 AM' },
@@ -524,35 +534,36 @@ $(document).ready(function() {
     const selectedPatientId = patientIdInput.val();
     
     return timeSlots.filter(slot => {
+        const slotStartTime = moment(slot.value, 'HH:mm');
+        const slotEndTime = slotStartTime.clone().add(1, 'hour');
+        
         const isSlotAvailable = !existingAppointments.some(apt => {
             // Parse the appointment date consistently
             const aptDate = moment(apt.appointment_details.schedule.date, 'MMMM D, YYYY');
             
-            // Compare dates using isSame
+            // Only check conflicts for the same day
             if (selectedMoment.isSame(aptDate, 'day')) {
                 if (apt.participants.therapist.id == currentTherapistId || 
                     apt.participants.patient.id == selectedPatientId) {
                     
                     const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
                     const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
-                    const slotTime = moment(slot.value, 'HH:mm');
                     
-                    // Check for time conflicts
+                    // Check if there's any overlap between the slot and the appointment
                     return (
-                        slotTime.isBetween(aptStart, aptEnd, null, '[]') ||
-                        slotTime.clone().add(1, 'hour').isBetween(aptStart, aptEnd, null, '[]') ||
-                        slotTime.clone().add(2, 'hours').isBetween(aptStart, aptEnd, null, '[]')
+                        (slotStartTime.isSameOrAfter(aptStart) && slotStartTime.isBefore(aptEnd)) ||
+                        (slotEndTime.isAfter(aptStart) && slotEndTime.isSameOrBefore(aptEnd)) ||
+                        (slotStartTime.isSameOrBefore(aptStart) && slotEndTime.isSameOrAfter(aptEnd))
                     );
                 }
             }
             return false;
         });
 
-        // If we're checking today's date, also filter out past times
+        // If we're checking today's date, filter out past times
         if (selectedMoment.isSame(moment(), 'day')) {
             const currentTime = moment();
-            const slotTime = moment(slot.value, 'HH:mm');
-            if (slotTime.isBefore(currentTime)) {
+            if (slotStartTime.isBefore(currentTime)) {
                 return false;
             }
         }
@@ -560,6 +571,7 @@ $(document).ready(function() {
         return isSlotAvailable;
     });
 }
+
 
 
 
@@ -577,21 +589,32 @@ $(document).ready(function() {
     }
 
     function updateEndTimeOptions(startTime) {
-        const selectedStartMoment = moment(startTime, 'HH:mm');
-        endTimeSelect.html('<option value="">Select end time</option>');
+    const selectedStartMoment = moment(startTime, 'HH:mm');
+    endTimeSelect.html('<option value="">Select end time</option>');
 
-        // Generate end time options (1-2 hours after start time)
-        for (let i = 1; i <= 2; i++) {
-            const endTime = selectedStartMoment.clone().add(i, 'hours');
-            const value = endTime.format('HH:mm');
-            const display = endTime.format('hh:mm A');
+    // Get all possible end times after the start time
+    const possibleEndTimes = [
+        '09:00', '10:00', '11:00', '12:00', '13:00',
+        '14:00', '15:00', '16:00', '17:00', '18:00'
+    ];
+
+    possibleEndTimes.forEach(time => {
+        const endTimeMoment = moment(time, 'HH:mm');
+        
+        // Only show times that are after the start time
+        if (endTimeMoment.isAfter(selectedStartMoment)) {
+            const value = endTimeMoment.format('HH:mm');
+            const display = endTimeMoment.format('hh:mm A');
+            
             endTimeSelect.append(`
                 <option value="${value}">${display}</option>
             `);
         }
+    });
 
-        endTimeSelect.prop('disabled', false);
-    }
+    endTimeSelect.prop('disabled', false);
+}
+
 
     function resetTimeSelections() {
         startTimeSelect.html('<option value="">Select a date first</option>');
@@ -601,33 +624,61 @@ $(document).ready(function() {
     }
 
     function validateForm() {
-        const patientId = patientIdInput.val();
-        const date = dateInput.val();
-        const startTime = formattedStartTime.val();
-        const endTime = formattedEndTime.val();
+    const patientId = patientIdInput.val();
+    const date = dateInput.val();
+    const startTime = formattedStartTime.val();
+    const endTime = formattedEndTime.val();
 
-        if (!patientId) {
-            showToast('Please select a patient', 'error');
-            return false;
-        }
-
-        if (!date) {
-            showToast('Please select a date', 'error');
-            return false;
-        }
-
-        if (!startTime || !endTime) {
-            showToast('Please select both start and end times', 'error');
-            return false;
-        }
-
-        if (endTime <= startTime) {
-            showToast('End time must be after start time', 'error');
-            return false;
-        }
-
-        return true;
+    if (!patientId) {
+        showToast('Please select a patient', 'error');
+        return false;
     }
+
+    if (!date) {
+        showToast('Please select a date', 'error');
+        return false;
+    }
+
+    if (!startTime || !endTime) {
+        showToast('Please select both start and end times', 'error');
+        return false;
+    }
+
+    // Convert times to moments for comparison
+    const startMoment = moment(startTime, 'HH:mm');
+    const endMoment = moment(endTime, 'HH:mm');
+    
+    // Check if end time is after start time
+    if (!endMoment.isAfter(startMoment)) {
+        showToast('End time must be after start time', 'error');
+        return false;
+    }
+
+    return true;
+}
+
+// Add this function to check if a time slot is available
+function isTimeSlotAvailable(startTime, endTime, existingAppointments, selectedDate) {
+    const startMoment = moment(startTime, 'HH:mm');
+    const endMoment = moment(endTime, 'HH:mm');
+    const selectedMoment = moment(selectedDate);
+    
+    return !existingAppointments.some(apt => {
+        const aptDate = moment(apt.appointment_details.schedule.date, 'MMMM D, YYYY');
+        
+        if (selectedMoment.isSame(aptDate, 'day')) {
+            const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
+            const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
+            
+            return (
+                (startMoment.isBetween(aptStart, aptEnd, undefined, '[]')) ||
+                (endMoment.isBetween(aptStart, aptEnd, undefined, '[]')) ||
+                (startMoment.isSameOrBefore(aptStart) && endMoment.isSameOrAfter(aptEnd))
+            );
+        }
+        return false;
+    });
+}
 });
 
 // Toast notification function
