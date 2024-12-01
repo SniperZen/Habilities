@@ -462,21 +462,22 @@ startTimeSelect.on('change', function() {
 
         const hasConflict = response.appointments.some(apt => {
             if (apt.appointment_details.schedule.date === formattedSelectedDate) {
-                // Check for both therapist and patient conflicts
                 if (apt.participants.therapist.id == currentTherapistId || 
                     apt.participants.patient.id == patientId) {
                     
                     const aptStart = moment(apt.appointment_details.schedule.start, 'hh:mm A');
                     const aptEnd = moment(apt.appointment_details.schedule.end, 'hh:mm A');
                     
-                    const hasTimeConflict = (
-                        selectedStartMoment.isBetween(aptStart, aptEnd, null, '[]') ||
-                        selectedEndMoment.isBetween(aptStart, aptEnd, null, '[]') ||
-                        (selectedStartMoment.isSameOrBefore(aptStart) && selectedEndMoment.isSameOrAfter(aptEnd))
-                    );
-
-                    if (hasTimeConflict) {
-                        // Provide specific message about the conflict
+                    // Check for exact back-to-back appointments
+                    if (selectedEndMoment.isSame(aptStart) || selectedStartMoment.isSame(aptEnd)) {
+                        return false; // Allow back-to-back appointments
+                    }
+                    
+                    // Check for overlapping appointments
+                    const hasOverlap = selectedStartMoment.isBefore(aptEnd) && 
+                                     selectedEndMoment.isAfter(aptStart);
+                    
+                    if (hasOverlap) {
                         if (apt.participants.therapist.id == currentTherapistId) {
                             showToast('You already have an appointment at this time', 'error');
                         } else {
@@ -499,6 +500,7 @@ startTimeSelect.on('change', function() {
         showToast('Error validating appointment time', 'error');
     }
 });
+
 
 
     // Helper Functions
@@ -616,6 +618,7 @@ startTimeSelect.on('change', function() {
 }
 
 
+
     function resetTimeSelections() {
         startTimeSelect.html('<option value="">Select a date first</option>');
         endTimeSelect.html('<option value="">Select start time first</option>');
@@ -657,14 +660,15 @@ startTimeSelect.on('change', function() {
     // Calculate duration in hours
     const duration = endMoment.diff(startMoment, 'hours', true);
     
-    // Check if duration is between 1 and 3 hours
-    if (duration < 1 || duration > 3) {
-        showToast('Appointment duration must be between 1 and 3 hours', 'error');
+    // Only check if duration is at least 1 hour
+    if (duration < 1) {
+        showToast('Appointment duration must be at least 1 hour', 'error');
         return false;
     }
 
     return true;
 }
+
 // Add this function to check if a time slot is available
 function isTimeSlotAvailable(startTime, endTime, existingAppointments, selectedDate) {
     const startMoment = moment(startTime, 'HH:mm');
