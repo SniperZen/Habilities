@@ -375,38 +375,53 @@
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     }
 
-    // Fetch the settings data
-    fetch('/settings-json')
-        .then(response => response.json())
-        .then(settings => {
-            // Populate business hours
-            const hoursHtml = Object.entries(dayAbbreviations).map(([dayKey, dayLabel]) => {
-                const hours = settings.business_hours[dayKey] || {};
-                let scheduleText = '';
-                
-                if (hours.is_closed) {
-                    scheduleText = 'Closed';
-                } else if (hours.is_teletherapy) {
-                    scheduleText = '<span class="teletherapy-badge">Tele-therapy Only</span>';
-                } else {
-                    scheduleText = `${formatTime(hours.start_time)} - ${formatTime(hours.end_time)}`;
-                }
-                
-                return `${dayLabel}: ${scheduleText}<br>`;
-            }).join('');
+// Fetch the settings data
+fetch('/settings-json')
+    .then(response => response.json())
+    .then(settings => {
+        // Populate business hours
+        const hoursHtml = Object.entries(dayAbbreviations).map(([dayKey, dayLabel]) => {
+            const hours = settings.business_hours[dayKey] || {};
+            let scheduleText = '';
             
-            document.getElementById('business-hours').innerHTML = hoursHtml;
+            if (hours.is_closed) {
+                scheduleText = 'Closed';
+            } else if (hours.is_teletherapy) {
+                scheduleText = '<span class="teletherapy-badge">Tele-therapy Only</span>';
+            } else {
+                scheduleText = `${formatTime(hours.start_time)} - ${formatTime(hours.end_time)}`;
+            }
+            
+            return `${dayLabel}: ${scheduleText}<br>`;
+        }).join('');
+        
+        document.getElementById('business-hours').innerHTML = hoursHtml;
 
-            // Populate contact information
-            document.getElementById('phone').textContent = `Phone: ${settings.phone || 'Not Available'}`;
-            document.getElementById('email').textContent = `Email: ${settings.email || 'Not Available'}`;
-        })
-        .catch(error => {
-            console.error('Error fetching settings:', error);
-            document.getElementById('business-hours').innerHTML = 'Hours information unavailable';
-            document.getElementById('phone').textContent = 'Phone: Not Available';
-            document.getElementById('email').textContent = 'Email: Not Available';
-        });
+        // Populate contact information in both locations
+        const phoneText = `Phone: ${settings.phone || 'Not Available'}`;
+        const emailText = `Email: ${settings.email || 'Not Available'}`;
+        
+        // Contact section
+        document.getElementById('phone').textContent = phoneText;
+        document.getElementById('email').textContent = emailText;
+        
+        // Footer section
+        document.getElementById('footer-phone').textContent = phoneText;
+        document.getElementById('footer-email').textContent = emailText;
+    })
+    .catch(error => {
+        console.error('Error fetching settings:', error);
+        document.getElementById('business-hours').innerHTML = 'Hours information unavailable';
+        
+        // Contact section
+        document.getElementById('phone').textContent = 'Phone: Not Available';
+        document.getElementById('email').textContent = 'Email: Not Available';
+        
+        // Footer section
+        document.getElementById('footer-phone').textContent = 'Phone: Not Available';
+        document.getElementById('footer-email').textContent = 'Email: Not Available';
+    });
+
 </script>
 
 
@@ -428,8 +443,11 @@
                         Brgy. Bulihan, City Of Malolos,<br>
                         3000 Bulacan, Philippines
                     </p>
-                    <p><strong>Phone:</strong> {{ $settings->phone ?? 'Not Available' }}</p>
-                    <p><strong>Email:</strong> {{ $settings->email ?? 'Not Available' }}</p>
+                    <p>
+                        <strong>Contact</strong><br>
+                        <p id="footer-phone"></p>
+                        <p id="footer-email"></p>
+                    </p>
                 </div>
 
                 <div class="footer-section links">

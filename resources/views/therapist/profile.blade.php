@@ -184,17 +184,17 @@
                         <h2>Patient Details</h2>
                     </div>
                     <div class="bot">
+                        <div id="guardianInfo" style="display: none;">
+                            <p class="supervised-badge">Supervised</p>
+                            <p><strong>Guardian:</strong> <span id="modalGuardianName"></span></p>
+                            <p><strong>Guardian Role:</strong> <span id="modalGuardianRole"></span></p>
+                        </div>
                         <p><strong>Name:</strong> <span id="modalPatientName"></span></p>
                         <p><strong>Patient ID:</strong> <span id="modalPatientId"></span></p>
                         <p><strong>Email:</strong> <span id="modalPatientEmail"></span></p>
                         <p><strong>Phone:</strong> <span id="modalPatientPhone"></span></p>
                         <p><strong>Address:</strong> <span id="modalPatientAddress"></span></p>
                         <p><strong>Gender:</strong> <span id="modalPatientGender"></span></p>
-                        <!-- Add guardian info section -->
-                        <div id="guardianInfo" style="display: none;">
-                            <p><strong>Guardian:</strong> <span id="modalGuardianName"></span></p>
-                            <p><strong>Guardian Role:</strong> <span id="modalGuardianRole"></span></p>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-buttons">
