@@ -654,9 +654,17 @@ startTimeSelect.on('change', function() {
         return false;
     }
 
+    // Calculate duration in hours
+    const duration = endMoment.diff(startMoment, 'hours', true);
+    
+    // Check if duration is between 1 and 3 hours
+    if (duration < 1 || duration > 3) {
+        showToast('Appointment duration must be between 1 and 3 hours', 'error');
+        return false;
+    }
+
     return true;
 }
-
 // Add this function to check if a time slot is available
 function isTimeSlotAvailable(startTime, endTime, existingAppointments, selectedDate) {
     const startMoment = moment(startTime, 'HH:mm');
