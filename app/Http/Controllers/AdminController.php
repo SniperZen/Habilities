@@ -406,6 +406,9 @@ public function updateUser(Request $request)
         'specialization' => 'nullable|string|max:255',
         'home_address' => 'nullable|string|max:255',
         'availability' => 'nullable|array',
+        'guardian_name' => 'nullable|string|max:255',
+        'guardian_role' => 'nullable|string|max:255',
+        'other_guardian_role' => 'nullable|string|max:255', // Add this line
     ]);
 
     // Use the hidden field to find the user by ID
@@ -426,6 +429,16 @@ public function updateUser(Request $request)
     $user->specialization = $request->input('specialization');
     $user->home_address = $request->input('home_address');
     $user->availability = implode(',', $request->input('availability', []));
+    
+    // Handle guardian information
+    $user->guardian_name = $request->input('guardian_name');
+    
+    // Handle guardian role - if "other" is selected, use the specified role
+    if ($request->input('guardian_role') === 'other') {
+        $user->guardian_role = $request->input('other_guardian_role');
+    } else {
+        $user->guardian_role = $request->input('guardian_role');
+    }
 
     // Save the changes
     if ($user->save()) {
@@ -434,6 +447,8 @@ public function updateUser(Request $request)
         return redirect()->back()->with('error', 'Failed to update user information.');
     }
 }
+
+
 public function getDashboardCounts()
 {
     // Existing counts

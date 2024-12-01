@@ -42,7 +42,68 @@
         background-color: white;
         padding: 0 5px;
     }
-    
+    .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#otherGuardianRoleField {
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+#otherGuardianRoleField input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    color: #74A36B;
+    background-color: white;
+    padding: 0 0.25rem;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+}
+
+.form-group input:not(:placeholder-shown) + label,
+.form-group select:not(:placeholder-shown) + label,
+.form-group input:focus + label,
+.form-group select:focus + label {
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    background-color: white;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #74A36B;
+    box-shadow: 0 0 0 2px rgba(116, 163, 107, 0.2);
+}
+
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,13 +122,31 @@
     showDeactivateModal: false,
     showUserTypeModal: false,
     showSuccessModal: false,
-    showActivateModal: false,      // Add this
-    showSaveChangesModal: false,   // Add this
+    showActivateModal: false,
+    showSaveChangesModal: false,
     tempUserType: '',
     selectedPatientId: null,
+    
+    // Add these new methods
+    toggleOtherGuardianRole(event) {
+        if (event.target.value === 'other') {
+            this.patient.other_guardian_role = this.patient.guardian_role;
+            this.patient.guardian_role = 'other';
+        } else {
+            this.patient.other_guardian_role = '';
+        }
+    },
+    
     expandPatient(patientData) {
         this.patient = patientData;
         this.showDetails = true;
+        
+        // Initialize other_guardian_role if guardian_role is not in predefined list
+        const predefinedRoles = ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent'];
+        if (!predefinedRoles.includes(this.patient.guardian_role) && this.patient.guardian_role) {
+            this.patient.other_guardian_role = this.patient.guardian_role;
+            this.patient.guardian_role = 'other';
+        }
     }
 }">
 
@@ -138,7 +217,7 @@
                 Supervised Account
             </p>
             <p x-show="patient && patient.account_type === 'child'"><strong>Supervised by:</strong></p>
-            <p x-show="patient && patient.account_type === 'child'" x-text="patient.email"></p>
+            <p x-show="patient && patient.account_type === 'child'" x-text="patient.guardian_name"></p>
             <button class="button" 
                 :class="patient && patient.account_status === 'active' ? 'button-danger' : 'button-primary'" 
                 @click="patient && patient.account_status === 'active' ? showDeactivateModal = true : showActivateModal = true">
@@ -193,6 +272,56 @@
                     <input type="text" id="home_address" name="home_address" x-bind:value="patient ? patient.home_address : ''">
                     <label for="home_address">Address</label>
                 </div>
+                <!-- Guardian Information Section - Only shown for supervised accounts -->
+            <template x-if="patient && patient.account_type === 'child'">
+            <div class="guardian-info">
+    <h3 class="section-subtitle">Guardian Information</h3>
+    
+    <div class="form-group">
+    <select id="guardian_role" 
+            name="guardian_role" 
+            x-model="patient.guardian_role"
+            @change="toggleOtherGuardianRole($event)"
+            placeholder=" ">
+        <option value="">Select Relationship</option>
+        <option value="Father">Father</option>
+        <option value="Mother">Mother</option>
+        <option value="Grandfather">Grandfather</option>
+        <option value="Grandmother">Grandmother</option>
+        <option value="Aunt">Aunt</option>
+        <option value="Uncle">Uncle</option>
+        <option value="Sibling">Sibling</option>
+        <option value="Legal Guardian">Legal Guardian</option>
+        <option value="Stepfather">Stepfather</option>
+        <option value="Stepmother">Stepmother</option>
+        <option value="Foster Parent">Foster Parent</option>
+        <option value="other">Other</option>
+    </select>
+    <label for="guardian_role">Guardian Role</label>
+</div>
+
+<div class="form-group" 
+     x-show="patient && patient.guardian_role === 'other'"
+     id="otherGuardianRoleField">
+    <input type="text" 
+           id="other_guardian_role" 
+           name="other_guardian_role" 
+           x-model="patient.other_guardian_role"
+           placeholder=" ">
+    <label for="other_guardian_role">Specify Guardian Role</label>
+</div>
+
+
+    <div class="form-group">
+        <input type="text" 
+               id="guardian_name" 
+               name="guardian_name" 
+               x-model="patient.guardian_name"
+               placeholder=" ">
+        <label for="guardian_name">Guardian Name</label>
+    </div>
+</div>
+            </template>
                 <div class="form-actions">
                     <button type="button" class="cancel-btn" @click="editMode = false; showDetails = false;">Cancel</button>
                     <button type="submit" class="save-btn">Save Changes</button>
@@ -205,6 +334,50 @@
 
 
 <script>
+    function toggleOtherGuardianRole() {
+    const guardianRoleSelect = document.getElementById('guardian_role');
+    const otherGuardianRoleField = document.getElementById('otherGuardianRoleField');
+    const otherGuardianRoleInput = document.getElementById('other_guardian_role');
+    
+    if (guardianRoleSelect.value === 'other') {
+        otherGuardianRoleField.style.display = 'block';
+        otherGuardianRoleInput.required = true;
+    } else {
+        otherGuardianRoleField.style.display = 'none';
+        otherGuardianRoleInput.required = false;
+        otherGuardianRoleInput.value = ''; // Clear the other role input
+    }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleOtherGuardianRole();
+});
+// Add this function to your existing JavaScript
+function handleGuardianRoleSubmission(form) {
+    const guardianRoleSelect = form.querySelector('#guardian_role');
+    const otherGuardianRoleInput = form.querySelector('#other_guardian_role');
+    
+    if (guardianRoleSelect.value === 'other' && otherGuardianRoleInput.value) {
+        // Create a hidden input to store the actual guardian role value
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'actual_guardian_role';
+        hiddenInput.value = otherGuardianRoleInput.value;
+        form.appendChild(hiddenInput);
+    }
+}
+
+// Modify your form submission event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const userForm = document.querySelector('[x-ref="userForm"]');
+    if (userForm) {
+        userForm.addEventListener('submit', function(e) {
+            handleGuardianRoleSubmission(this);
+        });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
