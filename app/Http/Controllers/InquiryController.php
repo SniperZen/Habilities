@@ -96,7 +96,7 @@ class InquiryController extends Controller
         }
     
         // Using flash session data
-        return redirect()->route('patient.inquiry')->with('success', 'Inquiry confirmed successfully!');
+        return redirect()->route('patient.inquiry01')->with('success', 'Inquiry confirmed successfully!');
     }
     
     

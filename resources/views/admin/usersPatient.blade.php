@@ -5,9 +5,8 @@
 <style>
     [x-cloak] { display: none !important; }
     
-    /* Add these new classes */
     .modal-deactivate {
-        z-index: 1200; /* Highest z-index */
+        z-index: 1200; 
     }
     .modal-usertype {
         z-index: 1100;
@@ -16,7 +15,6 @@
         z-index: 1150;
     }
     
-    /* Make sure the details section has a lower z-index */
     .showDetails {
         position: relative;
         z-index: 900;
@@ -63,7 +61,6 @@
 }
 .form-group {
     position: relative;
-    margin-bottom: 1rem;
 }
 
 .form-group label {
@@ -79,7 +76,6 @@
 }
 
 .form-group input:not(:placeholder-shown) + label,
-.form-group select:not(:placeholder-shown) + label,
 .form-group input:focus + label,
 .form-group select:focus + label {
     top: -0.5rem;
@@ -228,6 +224,62 @@
             <button class="back" @click="showDetails = false">Back to List</button>
         </div>
 
+            <template x-if="patient && patient.account_type === 'self'">
+                <div class="account-info">
+                    <div class="inf">
+                    <h2>Account Information</h2>
+                    <form 
+                        x-ref="userForm"
+                        method="POST" 
+                        x-bind:action="'/admin/updateUser/' + (patient ? patient.id : '')"
+                        @submit.prevent="showSaveChangesModal = true">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="user_id" x-bind:value="patient ? patient.id : ''">
+                        <div class="s1">
+                        <div class="form-group">
+                            <input type="text" id="first_name" name="first_name" x-bind:value="patient ? patient.first_name : ''" required>
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="middle_name" name="middle_name" x-bind:value="patient ? patient.middle_name : ''">
+                            <label for="middle_name">Middle Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="last_name" name="last_name" x-bind:value="patient ? patient.last_name : ''" required>
+                            <label for="last_name">Last Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" id="date_of_birth" name="date_of_birth" x-bind:value="patient ? formatDate(patient.date_of_birth) : ''">
+                            <label for="date_of_birth">Birthday</label>
+                        </div>
+                        <div class="form-group gender">
+                            <select id="gender" name="gender">
+                                <option value="male" x-bind:selected="patient && patient.gender === 'male'">Male</option>
+                                <option value="female" x-bind:selected="patient && patient.gender === 'female'">Female</option>
+                                <option value="other" x-bind:selected="patient && patient.gender === 'other'">Other</option>
+                            </select>
+                            <label for="gender">Gender</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="contact_number" name="contact_number" x-bind:value="patient ? patient.contact_number : ''">
+                            <label for="contact_number">Contact Number</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="home_address" name="home_address" x-bind:value="patient ? patient.home_address : ''">
+                            <label for="home_address">Address</label>
+                        </div>
+                    </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn" @click="editMode = false; showDetails = false;">Cancel</button>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+        </template>
+
+        <template x-if="patient && patient.account_type === 'child'">
         <div class="account-info">
             <div class="inf">
             <h2>Account Information</h2>
@@ -235,9 +287,11 @@
                 x-ref="userForm"
                 method="POST" 
                 x-bind:action="'/admin/updateUser/' + (patient ? patient.id : '')"
-                @submit.prevent="showSaveChangesModal = true">
+                @submit.prevent="showSaveChangesModal = true" class="s2">
                 @csrf
                 @method('PATCH')
+
+                <div class="patient">
                 <input type="hidden" name="user_id" x-bind:value="patient ? patient.id : ''">
 
                 <div class="form-group">
@@ -264,64 +318,65 @@
                     </select>
                     <label for="gender">Gender</label>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="contact_number" name="contact_number" x-bind:value="patient ? patient.contact_number : ''">
-                    <label for="contact_number">Contact Number</label>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="home_address" name="home_address" x-bind:value="patient ? patient.home_address : ''">
-                    <label for="home_address">Address</label>
-                </div>
+
                 <!-- Guardian Information Section - Only shown for supervised accounts -->
-            <template x-if="patient && patient.account_type === 'child'">
-            <div class="guardian-info">
-    <h3 class="section-subtitle">Guardian Information</h3>
-    
-    <div class="form-group">
-    <select id="guardian_role" 
-            name="guardian_role" 
-            x-model="patient.guardian_role"
-            @change="toggleOtherGuardianRole($event)"
-            placeholder=" ">
-        <option value="">Select Relationship</option>
-        <option value="Father">Father</option>
-        <option value="Mother">Mother</option>
-        <option value="Grandfather">Grandfather</option>
-        <option value="Grandmother">Grandmother</option>
-        <option value="Aunt">Aunt</option>
-        <option value="Uncle">Uncle</option>
-        <option value="Sibling">Sibling</option>
-        <option value="Legal Guardian">Legal Guardian</option>
-        <option value="Stepfather">Stepfather</option>
-        <option value="Stepmother">Stepmother</option>
-        <option value="Foster Parent">Foster Parent</option>
-        <option value="other">Other</option>
-    </select>
-    <label for="guardian_role">Guardian Role</label>
-</div>
+                    <div class="guardian-info">
+                        <h3 class="section-subtitle">Guardian Information:</h3>
+                        <div class="form-group">
+                            <input type="text" 
+                                id="guardian_name" 
+                                name="guardian_name" 
+                                x-model="patient.guardian_name"
+                                placeholder=" ">
+                            <label for="guardian_name">Guardian Name</label>
+                        </div>
+                        <div class="parent">
+                        <div class="form-group guard">
+                        <select id="guardian_role" 
+                                name="guardian_role" 
+                                x-model="patient.guardian_role"
+                                @change="toggleOtherGuardianRole($event)"
+                                placeholder=" ">
+                            <option value="">Select Relationship</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Grandfather">Grandfather</option>
+                            <option value="Grandmother">Grandmother</option>
+                            <option value="Aunt">Aunt</option>
+                            <option value="Uncle">Uncle</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Legal Guardian">Legal Guardian</option>
+                            <option value="Stepfather">Stepfather</option>
+                            <option value="Stepmother">Stepmother</option>
+                            <option value="Foster Parent">Foster Parent</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="guardian_role">Guardian Role</label>
+                    </div>
 
-<div class="form-group" 
-     x-show="patient && patient.guardian_role === 'other'"
-     id="otherGuardianRoleField">
-    <input type="text" 
-           id="other_guardian_role" 
-           name="other_guardian_role" 
-           x-model="patient.other_guardian_role"
-           placeholder=" ">
-    <label for="other_guardian_role">Specify Guardian Role</label>
-</div>
+                    <div class="form-group" 
+                        x-show="patient && patient.guardian_role === 'other'"
+                        id="otherGuardianRoleField">
+                        <input type="text" 
+                            id="other_guardian_role" 
+                            name="other_guardian_role" 
+                            x-model="patient.other_guardian_role"
+                            placeholder=" ">
+                        <label for="other_guardian_role">Specify Guardian Role</label>
+                    </div>
 
+                    <div class="form-group">
+                        <input type="text" id="contact_number" name="contact_number" x-bind:value="patient ? patient.contact_number : ''">
+                        <label for="contact_number">Contact Number</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="home_address" name="home_address" x-bind:value="patient ? patient.home_address : ''">
+                        <label for="home_address">Address</label>
+                    </div>
 
-    <div class="form-group">
-        <input type="text" 
-               id="guardian_name" 
-               name="guardian_name" 
-               x-model="patient.guardian_name"
-               placeholder=" ">
-        <label for="guardian_name">Guardian Name</label>
-    </div>
-</div>
-            </template>
+                    </div>
+                </div>
                 <div class="form-actions">
                     <button type="button" class="cancel-btn" @click="editMode = false; showDetails = false;">Cancel</button>
                     <button type="submit" class="save-btn">Save Changes</button>
@@ -329,6 +384,7 @@
             </form>
             </div>
         </div>
+</template>
     </div>
 
 

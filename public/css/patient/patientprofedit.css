@@ -53,7 +53,7 @@ body {
     margin: 50px 0 20px;
 }
 
-.patient, .parent{
+.patient, .parent, .s1{
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -182,14 +182,101 @@ body {
     font-size: 16px;
 }
 
-#gender, #guardian_role, #other_guardian_role {
-    width: 100%; 
-    /* max-width: 200px; */
-    padding: 5px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+.modal-deactivate {
+    z-index: 1200; 
+}
+.modal-usertype {
+    z-index: 1100;
+}
+.modal-success {
+    z-index: 1150;
+}
+
+.showDetails {
+    position: relative;
+    z-index: 900;
+}
+.modal-activate {
+    z-index: 1200;
+}
+
+.modal-save {
+    z-index: 1200;
+}
+
+.modal-content h2 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+#gender label{
+    top: 9px;
+    left: 8px;
+    font-size: 12px;
+    color: #74A36B;
+    background-color: white;
+    padding: 0 5px;
+}
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#otherGuardianRoleField {
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+#otherGuardianRoleField input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    color: #74A36B;
+    background-color: white;
+    padding: 0 0.25rem;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+}
+
+.form-group input:not(:placeholder-shown) + label,
+.form-group select:not(:placeholder-shown) + label,
+.form-group input:focus + label,
+.form-group select:focus + label {
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    background-color: white;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #74A36B;
+    box-shadow: 0 0 0 2px rgba(116, 163, 107, 0.2);
 }
 
 .profile-image-container {
