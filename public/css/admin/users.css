@@ -205,8 +205,8 @@ h2{
 
 }
 .account-info form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* display: grid;
+    grid-template-columns: repeat(3, 1fr); */
     gap: 10px;
 }
 .account-info form input, select{
@@ -372,12 +372,9 @@ input[type="radio"] {
 .form-actions{
     display: flex;
     justify-content: flex-end;
+    margin-top: 10px;
 }
 
-.form-actions{
-    display: flex;
-    justify-content: flex-end;
-}
 
 .account-info form > *:last-child {
     grid-column: span 3;
@@ -512,13 +509,13 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
 
 /* General Input and Label Styles */
 .form-group {
-    margin-bottom: 20px;
-    position: relative;
+    flex: 1 1 30%;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group input, select {
     width: 100%;
-    max-width: 400px;
     padding: 12px;
     height: 45px;
     margin: 8px 0;
@@ -554,7 +551,7 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
     padding: 0 5px;
 }
 
-.gender label{
+.gender label, .guard label{
     top: 9px;
     left: 8px;
     font-size: 12px;
@@ -577,4 +574,14 @@ input[type="email"]:-webkit-autofill, input[type="text"]:-webkit-autofill, input
     font-weight: bold;
     text-align: center;
     border-radius: 50px;
+}
+
+.section-subtitle{
+    margin: 15px;
+}
+
+.parent, .patient, .s1{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }

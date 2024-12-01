@@ -100,8 +100,36 @@
     </div>
     </div>
     <p class="label">Parent/Guardian Details:</p>
-
+    <div class="form-group">
+            <label for="guardian_name">Guardian Name</label>
+            <input type="text" id="guardian_name" name="guardian_name" value="{{ old('guardian_name', auth()->user()->guardian_name) }}" required>
+        </div>
     <div class="parent">
+    <div class="form-group">
+        <label for="guardian_role">Guardian Role</label>
+        <select id="guardian_role" name="guardian_role" required onchange="toggleOtherGuardianRole()">
+            <option value="">Select Relationship</option>
+            <option value="Father" {{ $user->guardian_role == 'Father' ? 'selected' : '' }}>Father</option>
+            <option value="Mother" {{ $user->guardian_role == 'Mother' ? 'selected' : '' }}>Mother</option>
+            <option value="Grandfather" {{ $user->guardian_role == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
+            <option value="Grandmother" {{ $user->guardian_role == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
+            <option value="Aunt" {{ $user->guardian_role == 'Aunt' ? 'selected' : '' }}>Aunt</option>
+            <option value="Uncle" {{ $user->guardian_role == 'Uncle' ? 'selected' : '' }}>Uncle</option>
+            <option value="Sibling" {{ $user->guardian_role == 'Sibling' ? 'selected' : '' }}>Sibling</option>
+            <option value="Legal Guardian" {{ $user->guardian_role == 'Legal Guardian' ? 'selected' : '' }}>Legal Guardian</option>
+            <option value="Stepfather" {{ $user->guardian_role == 'Stepfather' ? 'selected' : '' }}>Stepfather</option>
+            <option value="Stepmother" {{ $user->guardian_role == 'Stepmother' ? 'selected' : '' }}>Stepmother</option>
+            <option value="Foster Parent" {{ $user->guardian_role == 'Foster Parent' ? 'selected' : '' }}>Foster Parent</option>
+            <option value="other" {{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? 'selected' : '' }}>Other</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="otherGuardianRoleField" style="display: none;">
+        <label for="other_guardian_role">Guardian Role</label>
+        <input type="text" id="other_guardian_role" name="other_guardian_role" class="form-control" 
+            value="{{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? $user->guardian_role : '' }}"
+            placeholder="Please specify the guardian role">
+    </div>
     <div class="form-group">
         <label for="contact_number">Contact Number</label>
         <input type="text" id="contact_number" name="contact_number" value="{{ old('contact_number', auth()->user()->contact_number) }}">
@@ -110,36 +138,7 @@
         <label for="home_address">Address</label>
         <input type="text" id="home_address" name="home_address" value="{{ old('home_address', auth()->user()->home_address) }}">
     </div>
-    <div class="form-group">
-    <label for="guardian_role">Guardian Role</label>
-    <select id="guardian_role" name="guardian_role" required onchange="toggleOtherGuardianRole()">
-        <option value="">Select Relationship</option>
-        <option value="Father" {{ $user->guardian_role == 'Father' ? 'selected' : '' }}>Father</option>
-        <option value="Mother" {{ $user->guardian_role == 'Mother' ? 'selected' : '' }}>Mother</option>
-        <option value="Grandfather" {{ $user->guardian_role == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
-        <option value="Grandmother" {{ $user->guardian_role == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
-        <option value="Aunt" {{ $user->guardian_role == 'Aunt' ? 'selected' : '' }}>Aunt</option>
-        <option value="Uncle" {{ $user->guardian_role == 'Uncle' ? 'selected' : '' }}>Uncle</option>
-        <option value="Sibling" {{ $user->guardian_role == 'Sibling' ? 'selected' : '' }}>Sibling</option>
-        <option value="Legal Guardian" {{ $user->guardian_role == 'Legal Guardian' ? 'selected' : '' }}>Legal Guardian</option>
-        <option value="Stepfather" {{ $user->guardian_role == 'Stepfather' ? 'selected' : '' }}>Stepfather</option>
-        <option value="Stepmother" {{ $user->guardian_role == 'Stepmother' ? 'selected' : '' }}>Stepmother</option>
-        <option value="Foster Parent" {{ $user->guardian_role == 'Foster Parent' ? 'selected' : '' }}>Foster Parent</option>
-        <option value="other" {{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? 'selected' : '' }}>Other</option>
-    </select>
-</div>
 
-<div class="form-group" id="otherGuardianRoleField" style="display: none;">
-    <label for="other_guardian_role">Guardian Role</label>
-    <input type="text" id="other_guardian_role" name="other_guardian_role" class="form-control" 
-           value="{{ !in_array($user->guardian_role, ['Father', 'Mother', 'Grandfather', 'Grandmother', 'Aunt', 'Uncle', 'Sibling', 'Legal Guardian', 'Stepfather', 'Stepmother', 'Foster Parent']) ? $user->guardian_role : '' }}"
-           placeholder="Please specify the guardian role">
-</div>
-
-        <div class="form-group">
-            <label for="guardian_name">Guardian Name</label>
-            <input type="text" id="guardian_name" name="guardian_name" value="{{ old('guardian_name', auth()->user()->guardian_name) }}" required>
-        </div>
     <div class="form-actions">
         <button type="button" class="cancel-btn" onclick="this.form.reset()">Clear</button>
         <button type="submit" class="save-btn">Save Changes</button>
@@ -185,7 +184,7 @@
                 </div>
             @endif
 
-            <form id="profileForm" class="profile-form" method="POST" action="{{ route('edit-profile.update') }}" onsubmit="event.preventDefault(); openConfirmModal()">
+            <form id="profileForm" class="profile-form s1" method="POST" action="{{ route('edit-profile.update') }}" onsubmit="event.preventDefault(); openConfirmModal()">
     @csrf
     @method('patch')
 
