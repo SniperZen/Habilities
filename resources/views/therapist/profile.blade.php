@@ -185,7 +185,7 @@
                     </div>
                     <div class="bot">
                         <div id="guardianInfo" style="display: none;">
-                            <p class="supervised-badge">Supervised</p>
+                            <p style="line-height: 1.0" class="supervised-badge">Supervised</p>
                             <p><strong>Guardian:</strong> <span id="modalGuardianName"></span></p>
                             <p><strong>Guardian Role:</strong> <span id="modalGuardianRole"></span></p>
                         </div>

@@ -245,6 +245,7 @@ body {
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .bg, .bg img{
