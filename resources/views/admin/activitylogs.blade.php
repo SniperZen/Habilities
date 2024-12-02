@@ -23,10 +23,10 @@
                 body * {
                     visibility: hidden;
                 }
-                .reports-container, .reports-container * {
+                #printableTable, #printableTable * {
                     visibility: visible;
                 }
-                .reports-container {
+                #printableTable {
                     position: absolute;
                     left: 0;
                     top: 0;
@@ -35,8 +35,8 @@
                     display: none;
                 }
                 .table-container {
-                    max-height: none;
-                    overflow: visible;
+                    max-height: none !important;
+                    overflow: visible !important;
                 }
             }
         </style>
@@ -44,75 +44,78 @@
     <body>
         <div class="reports-container">
             <div class="int">
-            <h1>Activity Logs</h1>
-            <div class="report-dropdown">
-                <label for="specificNameInput">Search: </label>
-                <input type="text" id="specificNameInput" placeholder="Search by name">
-                <div class="user">
-                    <label for="userFilterSelect">User: </label>
-                    <select id="userFilterSelect">
-                        <option value="all">All User Types</option>
-                        <option value="user">Patient</option>
-                        <option value="therapist">Therapist</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
+                <h1>Activity Logs</h1>
+                <div class="report-dropdown">
+                    <label for="specificNameInput">Search: </label>
+                    <input type="text" id="specificNameInput" placeholder="Search by name">
+                    <div class="user">
+                        <label for="userFilterSelect">User: </label>
+                        <select id="userFilterSelect">
+                            <option value="all">All User Types</option>
+                            <option value="user">Patient</option>
+                            <option value="therapist">Therapist</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
 
-                <div class="mode">
-                    <label for="modeFilterSelect">Activity: </label>
-                    <select id="modeFilterSelect">
-                        <option value="all">All Activities</option>
-                        <option value="login">Login</option>
-                        <option value="logout">Logout</option>
-                    </select>
-                </div>
+                    <div class="mode">
+                        <label for="modeFilterSelect">Activity: </label>
+                        <select id="modeFilterSelect">
+                            <option value="all">All Activities</option>
+                            <option value="login">Login</option>
+                            <option value="logout">Logout</option>
+                        </select>
+                    </div>
 
-                <div class="date-filter">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" max="<?php echo date('Y-m-d'); ?>">
+                    <div class="date-filter">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" max="<?php echo date('Y-m-d'); ?>">
+                        
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" max="<?php echo date('Y-m-d'); ?>">
+                    </div>
                     
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" max="<?php echo date('Y-m-d'); ?>">
+                    <button id="applyFilter" class="filt">Apply Filter</button>
+                    <button id="clearButton">Clear</button>
                 </div>
-                
-                <button id="applyFilter" class="filt">Apply Filter</button>
-                <button id="clearButton">Clear</button>
-            </div>
 
-            <div class="table-container">
-                <table class="report-table" id="activityTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Usertype</th>
-                            <th>Activity</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="activityTableBody">
-                        @foreach($activities as $activity)
-                        <tr>
-                            <td>{{ $activity['formatted_id'] }}</td>
-                            <td>{{ $activity['name'] }}</td>
-                            <td>{{ $activity['usertype'] === 'user' ? 'Patient' : ucfirst($activity['usertype']) }}</td>
-                            <td>{{ $activity['activity'] }}</td>
-                            <td>{{ $activity['date'] }}</td>
-                            <td>{{ $activity['time'] }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                <div class="table-container">
+                    <div id="printableTable">
+                        <table class="report-table" id="activityTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Usertype</th>
+                                    <th>Activity</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activityTableBody">
+                                @foreach($activities as $activity)
+                                <tr>
+                                    <td>{{ $activity['formatted_id'] }}</td>
+                                    <td>{{ $activity['name'] }}</td>
+                                    <td>{{ $activity['usertype'] === 'user' ? 'Patient' : ucfirst($activity['usertype']) }}</td>
+                                    <td>{{ $activity['activity'] }}</td>
+                                    <td>{{ $activity['date'] }}</td>
+                                    <td>{{ $activity['time'] }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="button-group" style="margin-top: 20px;">
-                <button class="export-btn" onclick="window.print()">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
+                <div class="button-group">
+                    <button class="export-btn" onclick="printTable()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+
         <script>
             let searchTimeout;
             let currentFilters = {
@@ -121,6 +124,10 @@
                 start_date: '',
                 end_date: ''
             };
+
+            function printTable() {
+                window.print();
+            }
 
             function updateTable(isSearch = false) {
                 clearTimeout(searchTimeout);
@@ -198,4 +205,3 @@
     </body>
     </html>
 </x-admin-layout>
-
