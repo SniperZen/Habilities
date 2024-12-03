@@ -518,7 +518,6 @@ startTimeSelect.on('change', function() {
 
     function generateAvailableTimeSlots(selectedDate, existingAppointments) {
     const timeSlots = [
-        { value: '08:00', display: '08:00 AM' },  // Added 8 AM slot
         { value: '09:00', display: '09:00 AM' },
         { value: '10:00', display: '10:00 AM' },
         { value: '11:00', display: '11:00 AM' },

@@ -143,9 +143,6 @@ const TIME_SLOTS = [
     { display: "04:00 PM", value: "16:00" },
     { display: "05:00 PM", value: "17:00" },
     { display: "06:00 PM", value: "18:00" },
-    { display: "07:00 PM", value: "19:00" },
-    { display: "08:00 PM", value: "20:00" },
-
 
 ];
 
