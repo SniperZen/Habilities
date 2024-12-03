@@ -7,7 +7,6 @@
     <title>Appointment Request</title>
     <link rel="stylesheet" href="{{ asset('css/patient/ReqApp.css')}}">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-   
 </head>
 <body>
     <container>
@@ -15,8 +14,6 @@
         <section class="appointment-request">
             <h2>Request an appointment</h2>
             <p class="p">Book a therapy session at Habilities with just easy steps! <br> Please select the therapist you’d like to request an appointment with.</p>
-            
-
             <div class="inside-content">
                 <div class="progress-bar">
                     <div class="step active">
@@ -28,7 +25,6 @@
                         <div class="step-line"></div>
                     </div>
                 </div>
-            
                 <div class="line"></div>
                     <div class="scroller">
                         <div class="therapist-cards">

@@ -10,7 +10,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
 </head>
 <body>
     <div class="container">
@@ -113,11 +112,8 @@
                     </tr>
                 @endif
             </tbody>
-
-
         </table>
         </div>
-
         <div id="appointmentModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="heads"></div>
@@ -136,8 +132,7 @@
                                 <p><label>Mode of Appointment:</label> 
                                     <input type="radio" name="mode" value="on-site" disabled id="mode-onsite"> On-site
                                     <input type="radio" name="mode" value="tele-therapy" disabled id="mode-teletherapy"> Tele-Therapy
-                                </p>
-                                
+                                </p> 
                                 <!-- Static Address Section -->
                                 <div id="address-section" style="display: none;">
                                     <p><label>Clinic Address:</label></p>
@@ -146,7 +141,6 @@
                                         <a id="google-maps-link" href="https://maps.app.goo.gl/dK1WGDNKRu9gr9jA7" target="_blank" class="maps-link">View on Google Maps</a>
                                     </div>
                                 </div>
-
                                 <!-- Teletherapy Section -->
                                 <div id="teletherapy-section">
                                     <p><label>Tele-therapy link:</label></p>
@@ -163,9 +157,6 @@
                 </div>
             </div>
         </div>
-
-
-
  <!-- Appointment Cancellation Modal -->
  <div id="cancelAppointmentModal" class="modals">
             <div class="modal-contents">
@@ -201,8 +192,6 @@
                 </div>    
             </div>
         </div>
-
-
         <div id="ConfirmationModal" class="modals">
             <div class="modal-contentss">
                 <div class="heads"></div>
@@ -226,7 +215,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     </div>
     </main>
@@ -250,40 +238,32 @@
         submitButton.style.cursor = 'not-allowed';
     }
 }
-
-// Add event listeners to form fields
-document.addEventListener('DOMContentLoaded', function() {
-    const reasonSelect = document.getElementById('cancellationReason');
-    const noteTextarea = document.getElementById('cancellationNote');
-    
-    // Initial validation
-    validateCancellationForm();
-    
-    // Validate on reason change
-    reasonSelect.addEventListener('change', validateCancellationForm);
-    
-    // Validate on note input
-    noteTextarea.addEventListener('input', validateCancellationForm);
-});
+    // Add event listeners to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        const reasonSelect = document.getElementById('cancellationReason');
+        const noteTextarea = document.getElementById('cancellationNote');
+        // Initial validation
+        validateCancellationForm();
+        // Validate on reason change
+        reasonSelect.addEventListener('change', validateCancellationForm);
+        // Validate on note input
+        noteTextarea.addEventListener('input', validateCancellationForm);
+    });
     function openModal(button) {
     const modal = document.getElementById('appointmentModal');
     const data = button.dataset;
-    
     // Set basic appointment information
     document.getElementById('therapist-name').textContent = data.therapistName;
     document.getElementById('appointment-date').textContent = data.date;
     document.getElementById('appointment-time').textContent = data.startTime === 'Pending' ? 'Pending' : `${data.startTime} - ${data.endTime}`;
     document.getElementById('appointment-status').textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
     document.getElementById('appointmentId').value = data.appointmentId;
-    
     // Set mode radio buttons
     document.getElementById('mode-onsite').checked = (data.mode === 'on-site');
     document.getElementById('mode-teletherapy').checked = (data.mode === 'tele-therapy');
-    
     const linkElement = document.getElementById('teletherapy-link');
     const addressSection = document.getElementById('address-section');
     const teletherapySection = document.getElementById('teletherapy-section');
-    
     // Handle display based on appointment mode and status
     if (data.mode === 'on-site') {
         // Show address section for on-site appointments
@@ -293,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show teletherapy section for teletherapy appointments
         addressSection.style.display = 'none';
         teletherapySection.style.display = 'block';
-        
         // Check if the appointment is pending
         if (data.status.toLowerCase() === 'pending' || data.date === 'Pending') {
             linkElement.style.display = 'inline';
@@ -305,10 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const [appointmentDate, appointmentTime] = [data.date, data.startTime];
             const appointmentDateTime = new Date(`${appointmentDate}T${appointmentTime}`);
             const appointmentEndTime = new Date(`${appointmentDate}T${data.endTime}`);
-            
             // Calculate time difference in minutes
             const timeDifferenceMinutes = (appointmentDateTime - now) / (1000 * 60);
-            
             if (data.teletherapistLink && data.teletherapistLink.trim() !== '') {
                 if (timeDifferenceMinutes <= 10 && now < appointmentEndTime) {
                     linkElement.style.display = 'inline';
@@ -334,12 +311,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
     modal.style.display = 'block';
 }
-
-
-
 // Add this function to automatically update the link status
 function updateLinkStatus() {
     if (document.getElementById('appointmentModal').style.display === 'block') {
@@ -349,7 +322,6 @@ function updateLinkStatus() {
         }
     }
 }
-
 // Update link status every minute
 setInterval(updateLinkStatus, 60000);
 
@@ -357,10 +329,8 @@ setInterval(updateLinkStatus, 60000);
     const closeModal = () => {
         appointmentModal.style.display = 'none';
     };
-
     closeBtn.addEventListener('click', closeModal);
     closeModalBtn.addEventListener('click', closeModal);
-
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -370,20 +340,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const dropdownContent = form.querySelector(`.${contentClass}`);
         const dropdownItems = dropdownContent.querySelectorAll('a');
         const filterInput = document.getElementById(inputId);
-
         filterButton.addEventListener('click', function (event) {
             event.preventDefault();
             dropdownContent.classList.toggle('open');
             filterButton.classList.toggle('active');
         });
-
         document.addEventListener('click', function (event) {
             if (!filterButton.contains(event.target) && !dropdownContent.contains(event.target)) {
                 dropdownContent.classList.remove('open');
                 filterButton.classList.remove('active');
             }
         });
-
         dropdownItems.forEach(item => {
             item.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -396,13 +363,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
     // Setup filters for both sections
     setupFilter('acceptedFilterForm', 'dropdown-btn', 'dropdown-content', 'acceptedFilterInput');
     setupFilter('historyFilterForm', 'dropdown-btn', 'dropdown-content', 'historyFilterInput');
 });
     </script>
-
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Get all cancel buttons
@@ -410,7 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelModal = document.getElementById('cancelAppointmentModal');
     const confirmationModal = document.getElementById('ConfirmationModal');
     const cancellationForm = document.getElementById('cancellationForm');
-    
     // Add click event to all cancel buttons
     cancelButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -419,7 +383,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelModal.style.display = 'block';
         });
     });
-
     // Handle back buttons
     document.querySelectorAll('.back-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -427,25 +390,21 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmationModal.style.display = 'none';
         });
     });
-
     // Handle cancellation form submission
     cancellationForm.addEventListener('submit', function(e) {
         e.preventDefault();
         confirmationModal.style.display = 'block';
         cancelModal.style.display = 'none';
     });
-
     // Handle confirmation modal buttons
     document.getElementById('no').addEventListener('click', function() {
         confirmationModal.style.display = 'none';
         cancelModal.style.display = 'block';
     });
-
     document.getElementById('yes').addEventListener('click', function() {
         const appointmentId = document.getElementById('cancelAppointmentId').value;
         const reason = document.getElementById('cancellationReason').value;
         const note = document.getElementById('cancellationNote').value;
-
         const formData = new FormData();
         formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
         formData.append('cancellationReason', reason);
@@ -467,11 +426,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // Store the success message in localStorage
             localStorage.setItem('toastMessage', 'Appointment cancelled successfully!');
-            
             // Hide modals
             confirmationModal.style.display = 'none';
             cancelModal.style.display = 'none';
-            
             // Reload the page immediately
             window.location.reload();
         })
@@ -480,12 +437,10 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('toastMessage', 'Error cancelling appointment. Please try again.');
             localStorage.setItem('toastType', 'error');
             console.error('Error:', error);
-            
             // Reload the page
             window.location.reload();
         });
     });
-
     // Check for stored toast message on page load
     const storedToastMessage = localStorage.getItem('toastMessage');
     const storedToastType = localStorage.getItem('toastType') || 'success';
@@ -494,7 +449,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem('toastMessage');
         localStorage.removeItem('toastType');
     }
-
     // Toast function using Toastify
     function showToast(message, type = 'success') {
         Toastify({
@@ -508,13 +462,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
     </script>
-
      @if(session('success'))
         <script>
             showToast("{{ session('success') }}");
         </script>
     @endif
-
     @if(session('error'))
         <script>
             showToast("{{ session('error') }}", 'error');
