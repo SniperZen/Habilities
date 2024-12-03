@@ -236,12 +236,12 @@
                     <label for="last_name">Last Name</label>
                 </div>
                 <div class="form-group">
-    <input type="date" 
-           id="date_of_birth" 
-           name="date_of_birth" 
-           x-bind:value="therapist ? formatDate(therapist.date_of_birth) : ''">
-    <label for="date_of_birth">Birthday</label>
-</div>
+                    <input type="date" 
+                        id="date_of_birth" 
+                        name="date_of_birth" 
+                        x-bind:value="therapist ? formatDate(therapist.date_of_birth) : ''">
+                    <label for="date_of_birth">Birthday</label>
+                </div>
 
                 <div class="form-group gender">
                     <select id="gender" name="gender" x-model="therapist.gender">
