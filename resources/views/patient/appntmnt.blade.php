@@ -137,8 +137,8 @@
                                 <div id="address-section" style="display: none;">
                                     <p><label>Clinic Address:</label></p>
                                     <div class="address-container">
-                                        <p id="address-text">2nd Floor, SM City San Jose Del Monte, Quirino Highway, San Jose del Monte City, Bulacan</p>
-                                        <a id="google-maps-link" href="https://maps.app.goo.gl/dK1WGDNKRu9gr9jA7" target="_blank" class="maps-link">View on Google Maps</a>
+                                        <p id="address-text">Phase 1, Malolos Heights Alido, 112 Sampaguita St, Malolos, 3000 Bulacan</p>
+                                        <a id="google-maps-link" href="https://www.google.com/maps/place/Habilities+Center+For+Intervention/@14.861108,120.8040372,17z/data=!3m1!4b1!4m6!3m5!1s0x339653df18a2d6a5:0xac6ca8ce5b8e66fb!8m2!3d14.861108!4d120.8066121!16s%2Fg%2F11bwy6h48c?entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="maps-link">View on Google Maps</a>
                                     </div>
                                 </div>
                                 <!-- Teletherapy Section -->
