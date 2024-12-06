@@ -237,8 +237,6 @@ public function addAppointment(Request $request)
                 'message' => 'The selected time slot conflicts with an existing appointment.'
             ], 422);
         }
-
-
         // Create new appointment
         $appointment = new Appointment();
         $appointment->appointment_date = $appointmentDate;

@@ -35,7 +35,6 @@ class InquiryController extends Controller
         // Redirect to the next step
         return redirect()->route('patient.inquiry2');
     }
-
     /**
      * Store the second step of the inquiry process.
      *
@@ -99,7 +98,6 @@ class InquiryController extends Controller
         return redirect()->route('patient.inquiry01')->with('success', 'Inquiry confirmed successfully!');
     }
     
-    
     public function showInquiries(Request $request)
     {
         $historyFilter = $request->input('history_filter', 'all');
@@ -143,7 +141,6 @@ class InquiryController extends Controller
                 return $query;
         }
     }
-    
     public function showMessage($id)
     {
         $inquiry = Inquiry::with('user')->findOrFail($id);
@@ -165,7 +162,6 @@ class InquiryController extends Controller
             
             return redirect()->back()->with('success', 'Inquiry marked as Responded.');
         }
-    
         if (request()->ajax()) {
             return response()->json([
                 'success' => false,

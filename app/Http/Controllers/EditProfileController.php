@@ -29,9 +29,6 @@ class EditProfileController extends Controller
         abort(403, 'Unauthorized action.');
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
